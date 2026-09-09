@@ -1,0 +1,86 @@
+# Architecture
+
+## Execution path
+
+The default path stays linear:
+
+```text
+parse arguments
+  -> construct PipelineConfig
+  -> ReanchorPipeline.run()
+  -> validate capture
+  -> extract transition features
+  -> calibrate and freeze episodes
+  -> trace episode anchors
+  -> join labels and report
+```
+
+`cli.py` owns only external parameters and presentation. `pipeline.py` owns stage
+ordering and resume rules; it contains no attention mathematics.
+
+## Modules and interfaces
+
+| Module | Responsibility | Main interface |
+|---|---|---|
+| `capture.protocol` | Validate and read versioned v3 capture artifacts | `AuditDataset(root)` |
+| `capture.attention` | Reconstruct complete attention rows from Q/K plus native history | `AttentionReader.rows(sample)` |
+| `capture.writer` | Record a fixed trajectory into the canonical capture protocol | `TrajectoryCapture.run(...)` |
+| `discovery.features` | Produce label-free read-site transition measurements | `TransitionExtractor.run(sample)` |
+| `discovery.calibration` | Empirical strata, Simes aggregation and BY-FDR | `EventCalibrator.fit_select(features)` |
+| `discovery.events` | Collapse significant transitions into episodes and anchors | `EventDiscovery.run(dataset)` |
+| `discovery.morphology` | Describe frozen anchors without reselection | `MorphologyProfiler.run(...)` |
+| `tracing.propagation` | Propagate anchor messages with analytic JVPs | `CausalTracer.run(...)` |
+| `tracing.cuts` | Persist and certify signed last-crossing transport edges | `TransportCut.write(...)` |
+| `reporting.evaluation` | Join labels and compute source-balanced estimates | `ReportBuilder.run(...)` |
+| `artifacts.store` | Atomic, versioned output persistence and resume identity | `ArtifactStore` |
+
+These are package-internal modules. The supported user interface is the CLI and
+the three workflow classes `EventDiscovery`, `CausalTracer`, and `ReportBuilder`.
+
+## Dependency direction
+
+```text
+cli -> pipeline
+pipeline -> capture, discovery, tracing, reporting, artifacts
+discovery -> capture
+tracing -> capture, discovery, artifacts
+reporting -> discovery, tracing, artifacts
+capture -> artifacts
+```
+
+No lower module imports the CLI or pipeline. Discovery cannot import labels or
+reporting. This dependency rule is the label-leakage firewall.
+
+## Artifact ownership
+
+The input capture is immutable. A run writes to a distinct output root:
+
+```text
+run/
+|-- index.json
+|-- calibration.json
+|-- samples/<split>/<task>/<sample>/
+|   |-- transitions.npz
+|   |-- events.npz
+|   |-- morphology.npz
+|   |-- traces/event_<position>.npz
+|   `-- edges/event_<position>.npz
+`-- reports/
+    |-- summary.json
+    |-- reanchor.json
+    |-- transport.json
+    `-- tables/
+```
+
+Every artifact includes schema, capture identity and frozen method settings.
+Temporary files are committed by atomic rename only after validation.
+
+## Testing seams
+
+- Pure feature extraction is tested from attention rows to named measurements.
+- Calibration is tested from synthetic read-site cohorts to corrected token
+  decisions, including the former any-head over-selection failure.
+- Capture compatibility is tested against a minimal v3 directory.
+- Tracing is tested against finite differences and independent autograd oracles.
+- One small end-to-end fixture crosses the public pipeline interface.
+

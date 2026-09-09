@@ -69,7 +69,8 @@ class HuggingFaceBackend:
         for _ in range(sampling.max_new_tokens):
             output = self.model(input_ids=sequence, use_cache=False, return_dict=True)
             logits = output.logits[0, -1].float()
-            probability = logits.softmax(dim=-1)
+            log_probability = logits.log_softmax(dim=-1)
+            probability = log_probability.exp()
             sampling_probability = self._sampling_distribution(logits, sampling)
             token_id = int(
                 torch.multinomial(sampling_probability, 1, generator=generator).item()
@@ -79,9 +80,9 @@ class HuggingFaceBackend:
 
             raw_logits.append(logits.cpu())
             selected_logits.append(float(logits[token_id]))
-            model_logprobs.append(float(probability[token_id].log()))
+            model_logprobs.append(float(log_probability[token_id]))
             sampling_logprobs.append(float(sampling_probability[token_id].log()))
-            entropies.append(float(-(probability * probability.log()).sum()))
+            entropies.append(float(-(probability * log_probability).sum()))
             top_ids.append(indices.cpu())
             top_logits.append(values.cpu())
             next_token = torch.tensor([[token_id]], dtype=torch.long, device=self.device)

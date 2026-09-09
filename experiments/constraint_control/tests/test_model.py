@@ -23,6 +23,9 @@ class TinyTokenizer:
 
 
 class TinyCausalModel:
+    def __init__(self, floor=-4.0):
+        self.floor = floor
+
     def eval(self):
         return self
 
@@ -35,7 +38,7 @@ class TinyCausalModel:
         **kwargs,
     ):
         batch, length = input_ids.shape
-        logits = torch.full((batch, length, 5), -4.0)
+        logits = torch.full((batch, length, 5), self.floor)
         next_by_token = {2: 3, 3: 4}
         for position, token_id in enumerate(input_ids[0].tolist()):
             logits[0, position, next_by_token.get(token_id, 0)] = 4.0
@@ -75,3 +78,19 @@ def test_huggingface_backend_samples_then_replays_the_exact_tokens():
     assert capture.residual_states.shape == (2, 2, 3)
     assert capture.attention_weights.shape == (1, 1, 2, 4)
     np.testing.assert_array_equal(capture.top_token_ids[:, 0], [3, 4])
+
+
+def test_huggingface_backend_reports_finite_entropy_for_underflowed_probabilities():
+    backend = HuggingFaceBackend(
+        "tiny-model",
+        device="cpu",
+        model=TinyCausalModel(floor=-1000.0),
+        tokenizer=TinyTokenizer(),
+    )
+
+    capture = backend.sample_and_replay(
+        (ChatMessage(role="user", content="Question"),),
+        SamplingConfig(max_new_tokens=1, top_k=1, trace_top_k=2),
+    )
+
+    assert np.isfinite(capture.entropy).all()

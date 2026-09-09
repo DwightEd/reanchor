@@ -63,7 +63,8 @@ def test_recorder_persists_a_label_free_free_run_trajectory(tmp_path):
     assert artifact.sample_key == "discovery/QA/question/1"
     assert artifact.response_tokens == 2
     metadata = json.loads(artifact.metadata_path.read_text(encoding="utf-8"))
-    assert metadata["schema"] == "constraint_control_trajectory_v1"
+    assert metadata["schema"] == "constraint_control_trajectory_v2"
+    assert metadata["replay_mode"] == "same_prefix"
     assert metadata["labels_used_for_capture"] is False
     assert metadata["sampling"]["seed"] == 7
     assert metadata["model"]["model"] == "deterministic-test-model"

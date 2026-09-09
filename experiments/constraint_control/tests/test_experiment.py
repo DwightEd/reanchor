@@ -85,7 +85,8 @@ def test_experiment_captures_each_source_and_seed_then_publishes_manifest(tmp_pa
     ]
     assert progress[-1][2] == "discovery/QA/q2 seed=2"
     manifest = json.loads((output / "index.json").read_text(encoding="utf-8"))
-    assert manifest["schema"] == "constraint_control_run_v1"
+    assert manifest["schema"] == "constraint_control_run_v2"
+    assert manifest["replay_mode"] == "same_prefix"
     assert manifest["labels_used_for_capture"] is False
     assert [sample["status"] for sample in manifest["samples"]] == ["completed"] * 4
     assert all((output / sample["trajectory"]).is_file() for sample in manifest["samples"])

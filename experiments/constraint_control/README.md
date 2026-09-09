@@ -1,6 +1,6 @@
 # Constraint-control mechanism discovery
 
-这个子项目实现答案条件化的约束控制实验。当前完成的是 P001 捕获阶段：让模型自由采样答案，再对完全相同的 token 序列做 teacher-forced replay，验证两条执行路径的 logits 一致后保存中间状态。
+这个子项目实现答案条件化的约束控制实验。当前完成的是 P001 捕获阶段：让模型自由采样答案，再逐 token 使用与生成时相同长度的 prefix 做 teacher-forced replay，验证两条执行路径的 logits 一致后保存中间状态。相同 prefix shape 避免了 BF16 下短 prefix 生成与完整序列矩阵 replay 之间的系统性数值漂移。
 
 后续的错误标注、首个分歧 token、答案条件化因果骨架和双向干预会沿新的公开 seam 逐项加入；当前入口不会把尚未实现的阶段报告为已完成。
 
@@ -126,11 +126,11 @@ runs/p001_llama/
 `trajectory.json` 保存输入 identity、模型 revision、采样参数、回答、停止原因和 replay 误差。`capture.npz` 当前包含：
 
 - 完整 `token_ids`、token pieces、`special_mask`、`response_start` 和 prediction row positions；
-- generation/replay 的 emitted-token logits；
+- generation/same-prefix replay 的 emitted-token logits；
 - raw-model log probability、sampling-distribution log probability 和 entropy；
 - 每步 raw logits 的 top-k token ids/logits；
-- replay 的逐层 residual states；
-- replay 的 eager attention weights。
+- same-prefix replay 的逐层 residual states；
+- same-prefix replay 的 eager attention weights，未来 token 列补零以保持固定张量形状。
 
 生成完成前不读取任何结果标签，manifest 明确记录 `labels_used_for_capture=false`。如果 generation 与 replay 的全词表最大 logit 误差超过 `--replay-atol`，该 source/seed 会标成 `rejected`，不会进入后续机制分析。
 
@@ -138,7 +138,7 @@ runs/p001_llama/
 
 ## 当前资源边界
 
-P001 使用 eager attention 验证语义和索引，因此适合 20 条左右的短上下文 sanity run。attention 存储量约为 `layers × heads × response_tokens × sequence_tokens`；不要直接把它用于完整数据集。P002 将以目标 token 为终点，改为分层 Q/K/V 捕获和按需重建，避免长期保存所有 token 的完整 attention DAG。
+P001 使用 eager attention 和逐 token same-prefix replay 验证语义与索引，因此适合 20 条左右的短上下文 sanity run。它的 replay 计算量接近再次执行一遍生成，attention 存储量约为 `layers × heads × response_tokens × sequence_tokens`；不要直接把它用于完整数据集。P002 将以目标 token 为终点，只重放对应 prefix，并改为分层 Q/K/V 捕获和按需重建，避免长期保存所有 token 的完整 attention DAG。
 
 ## 文件职责
 

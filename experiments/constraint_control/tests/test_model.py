@@ -62,6 +62,15 @@ class TinyCausalModel:
         )
 
 
+class ShapeSensitiveCausalModel(TinyCausalModel):
+    """Emulate low-precision drift when the forward matrix shape changes."""
+
+    def __call__(self, *, input_ids, **kwargs):
+        output = super().__call__(input_ids=input_ids, **kwargs)
+        output.logits += input_ids.shape[1] * 0.25
+        return output
+
+
 def test_huggingface_backend_explains_how_to_access_a_gated_model(monkeypatch):
     def gated_repository(*_args, **_kwargs):
         raise OSError(
@@ -101,6 +110,26 @@ def test_huggingface_backend_samples_then_replays_the_exact_tokens():
     assert capture.residual_states.shape == (2, 2, 3)
     assert capture.attention_weights.shape == (1, 1, 2, 4)
     np.testing.assert_array_equal(capture.top_token_ids[:, 0], [3, 4])
+
+
+def test_huggingface_backend_replays_each_generation_prefix_at_the_same_shape():
+    backend = HuggingFaceBackend(
+        "shape-sensitive-model",
+        device="cpu",
+        model=ShapeSensitiveCausalModel(),
+        tokenizer=TinyTokenizer(),
+    )
+
+    capture = backend.sample_and_replay(
+        (ChatMessage(role="user", content="Question"),),
+        SamplingConfig(seed=3, max_new_tokens=4, top_k=1, trace_top_k=2),
+    )
+
+    assert capture.replay_max_abs_logit_error == 0.0
+    np.testing.assert_array_equal(
+        capture.attention_weights,
+        [[[[1.0, 1.0, 0.0, 0.0], [1.0, 1.0, 1.0, 0.0]]]],
+    )
 
 
 def test_huggingface_backend_reports_finite_entropy_for_underflowed_probabilities():

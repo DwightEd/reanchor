@@ -97,7 +97,8 @@ class ConstraintControlExperiment:
         ArtifactStore(self.config.output).write_json(
             self.config.output / "index.json",
             {
-                "schema": "constraint_control_run_v1",
+                "schema": "constraint_control_run_v2",
+                "replay_mode": "same_prefix",
                 "labels_used_for_capture": False,
                 "input": str(self.config.input_path.resolve()),
                 "input_format": self.config.input_format,

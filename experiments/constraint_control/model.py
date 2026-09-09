@@ -69,7 +69,8 @@ class HuggingFaceBackend:
 
         for _ in range(sampling.max_new_tokens):
             output = self.model(input_ids=sequence, use_cache=False, return_dict=True)
-            logits = output.logits[0, -1].float()
+            logits = output.logits[0, -1].float().clone()
+            del output
             log_probability = logits.log_softmax(dim=-1)
             probability = log_probability.exp()
             sampling_probability = self._sampling_distribution(logits, sampling)
@@ -94,31 +95,13 @@ class HuggingFaceBackend:
 
         response_start = prompt_ids.shape[1]
         response_ids = sequence[0, response_start:]
-        replay = self.model(
-            input_ids=sequence,
-            use_cache=False,
-            output_hidden_states=True,
-            output_attentions=True,
-            return_dict=True,
+        replay_logits, residual_states, attention_weights = self._replay_prefixes(
+            sequence,
+            response_start,
         )
-        if replay.hidden_states is None or replay.attentions is None:
-            raise ValueError("model replay did not return hidden states and eager attention")
-
-        prediction_rows = torch.arange(
-            response_start - 1,
-            sequence.shape[1] - 1,
-            device=self.device,
-        )
-        replay_logits = replay.logits[0, prediction_rows].float().cpu()
         generation_logits = torch.stack(raw_logits)
         replay_error = float((generation_logits - replay_logits).abs().max())
         replay_selected = replay_logits.gather(1, response_ids.cpu()[:, None]).squeeze(1)
-        residual_states = torch.stack(
-            [state[0, prediction_rows] for state in replay.hidden_states]
-        )
-        attention_weights = torch.stack(
-            [attention[0, :, prediction_rows, :] for attention in replay.attentions]
-        )
         token_ids = sequence[0].cpu().numpy().astype(np.int64, copy=False)
         pieces = self.tokenizer.convert_ids_to_tokens(token_ids.tolist())
         special_ids = set(self.tokenizer.all_special_ids)
@@ -143,6 +126,55 @@ class HuggingFaceBackend:
             replay_max_abs_logit_error=replay_error,
             stop_reason=stop_reason,
         )
+
+    def _replay_prefixes(
+        self,
+        sequence: torch.Tensor,
+        response_start: int,
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        """Replay each decision with the same matrix shape used during generation."""
+
+        replay_logits = []
+        residual_steps = []
+        attention_steps = []
+        response_tokens = sequence.shape[1] - response_start
+
+        for response_index in range(response_tokens):
+            prefix_end = response_start + response_index
+            replay = self.model(
+                input_ids=sequence[:, :prefix_end],
+                use_cache=False,
+                output_hidden_states=True,
+                output_attentions=True,
+                return_dict=True,
+            )
+            if replay.hidden_states is None or replay.attentions is None:
+                raise ValueError("model replay did not return hidden states and eager attention")
+            replay_logits.append(replay.logits[0, -1].float().cpu())
+            residual_steps.append(
+                torch.stack([state[0, -1] for state in replay.hidden_states]).to(
+                    device="cpu",
+                    dtype=torch.float16,
+                )
+            )
+            attention_steps.append(
+                torch.stack([attention[0, :, -1] for attention in replay.attentions]).to(
+                    device="cpu",
+                    dtype=torch.float16,
+                )
+            )
+            del replay
+
+        residual_states = torch.stack(residual_steps, dim=1)
+        layers, heads = attention_steps[0].shape[:2]
+        attention_weights = torch.zeros(
+            (layers, heads, response_tokens, sequence.shape[1]),
+            dtype=torch.float16,
+        )
+        for response_index, weights in enumerate(attention_steps):
+            attention_weights[:, :, response_index, : weights.shape[-1]] = weights
+
+        return torch.stack(replay_logits), residual_states, attention_weights
 
     def _load_model(self, model_name: str, dtype: str, revision: str | None):
         from transformers import AutoModelForCausalLM, AutoTokenizer

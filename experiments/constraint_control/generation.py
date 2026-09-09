@@ -170,7 +170,8 @@ class GenerationRecorder:
         self.store.write_json(
             metadata_path,
             {
-                "schema": "constraint_control_trajectory_v1",
+                "schema": "constraint_control_trajectory_v2",
+                "replay_mode": "same_prefix",
                 "identity": identity,
                 "sample_key": record.key,
                 "source_id": record.source_id,

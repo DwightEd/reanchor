@@ -32,6 +32,12 @@ class DiscoveryConfig:
     device: str = "cuda:0"
     query_chunk: int = 8
 
+    def __post_init__(self):
+        self.transition()
+        self.selection()
+        if self.query_chunk < 1 or not self.device:
+            raise ValueError("query_chunk and device must be valid")
+
     def transition(self) -> TransitionConfig:
         return TransitionConfig(
             window=self.window,

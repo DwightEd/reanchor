@@ -22,8 +22,10 @@ class SelectionConfig:
             raise ValueError("position_bins and calibration source count are invalid")
         if not 0 < self.family_alpha < 1:
             raise ValueError("family_alpha must be in (0, 1)")
-        if min(self.sparse_gain_floor, self.broad_gain_floor, self.episode_gap) < 0:
-            raise ValueError("gain floors and episode_gap must be nonnegative")
+        if not all(0 <= floor <= 1 for floor in (self.sparse_gain_floor, self.broad_gain_floor)):
+            raise ValueError("gain floors must be in [0, 1]")
+        if self.episode_gap < 0:
+            raise ValueError("episode_gap must be nonnegative")
 
 
 @dataclass(frozen=True)

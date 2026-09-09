@@ -1,10 +1,16 @@
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from reanchor.capture.protocol import AuditSample
 from reanchor.discovery.events import DiscoveryConfig, EventDiscovery
 from reanchor.discovery.extractor import TransitionFeatures
+
+
+def test_discovery_rejects_invalid_configuration_at_construction():
+    with pytest.raises(ValueError, match="gain floors"):
+        DiscoveryConfig(broad_gain_floor=1.1)
 
 
 class SampleDataset:

@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import argparse
 import json
-import sys
 from pathlib import Path
+
+from tqdm.auto import tqdm
 
 from .config import ExperimentConfig
 from .experiment import ConstraintControlExperiment
@@ -59,10 +60,19 @@ def main(argv: list[str] | None = None) -> None:
         max_samples=arguments.max_samples,
     )
 
-    def progress(message: str) -> None:
-        print(message, file=sys.stderr, flush=True)
+    with tqdm(desc="capture", unit="trajectory", dynamic_ncols=True) as bar:
 
-    result = ConstraintControlExperiment(config, progress=progress).run()
+        def progress(completed: int, total: int, sample: str) -> None:
+            if bar.total != total:
+                bar.total = total
+            if sample:
+                bar.set_postfix_str(sample, refresh=False)
+            if completed > bar.n:
+                bar.update(completed - bar.n)
+            else:
+                bar.refresh()
+
+        result = ConstraintControlExperiment(config, progress=progress).run()
     print(json.dumps(result, indent=2, sort_keys=True, allow_nan=False))
 
 

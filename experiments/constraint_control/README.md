@@ -72,6 +72,8 @@ runs/p001_llama/
 
 生成完成前不读取任何结果标签，manifest 明确记录 `labels_used_for_capture=false`。如果 generation 与 replay 的全词表最大 logit 误差超过 `--replay-atol`，该 source/seed 会标成 `rejected`，不会进入后续机制分析。
 
+运行时 `tqdm` 以 trajectory 为单位显示总进度，并在 postfix 中显示当前 `sample_key` 与 seed。脚本会在输入文件不存在或目标目录已经包含完整 `index.json` 时直接退出，避免误跑和覆盖已完成实验。
+
 ## 当前资源边界
 
 P001 使用 eager attention 验证语义和索引，因此适合 20 条左右的短上下文 sanity run。attention 存储量约为 `layers × heads × response_tokens × sequence_tokens`；不要直接把它用于完整数据集。P002 将以目标 token 为终点，改为分层 Q/K/V 捕获和按需重建，避免长期保存所有 token 的完整 attention DAG。

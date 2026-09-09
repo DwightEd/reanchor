@@ -12,8 +12,18 @@ MODEL=$3
 DEVICE=${4:-cuda:0}
 REPO_ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 
+if [[ ! -f "$INPUT_JSONL" ]]; then
+  echo "Input JSONL does not exist: $INPUT_JSONL" >&2
+  exit 2
+fi
+if [[ -f "$OUTPUT_ROOT/index.json" ]]; then
+  echo "Refusing to overwrite completed run: $OUTPUT_ROOT/index.json" >&2
+  exit 2
+fi
+
 cd "$REPO_ROOT"
 python -m pip install -e . --no-deps
+python -c 'import tqdm' >/dev/null
 python -u -m experiments.constraint_control.main \
   --input "$INPUT_JSONL" \
   --output "$OUTPUT_ROOT" \

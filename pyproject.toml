@@ -12,6 +12,7 @@ dependencies = [
   "numpy",
   "safetensors",
   "torch",
+  "tqdm",
   "transformers>=4.46,<4.58",
 ]
 

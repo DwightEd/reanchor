@@ -22,7 +22,7 @@ class ConstraintControlExperiment:
         config: ExperimentConfig,
         *,
         backend: GenerationBackend | None = None,
-        progress: Callable[[str], None] | None = None,
+        progress: Callable[[int, int, str], None] | None = None,
     ):
         self.config = config
         self.backend = backend
@@ -42,11 +42,13 @@ class ConstraintControlExperiment:
             self.config.output,
             replay_atol=self.config.replay_atol,
         )
+        total = len(records) * len(self.config.samplings)
+        if self.progress:
+            self.progress(0, total, "")
+        completed_jobs = 0
         samples = []
         for record in records:
             for sampling in self.config.samplings:
-                if self.progress:
-                    self.progress(f"capture {record.key} seed={sampling.seed}")
                 try:
                     artifact = recorder.run(record, sampling)
                 except ReplayMismatchError as error:
@@ -59,18 +61,25 @@ class ConstraintControlExperiment:
                             "reason": str(error),
                         }
                     )
-                    continue
-                samples.append(
-                    {
-                        "sample_key": artifact.sample_key,
-                        "source_id": record.source_id,
-                        "seed": sampling.seed,
-                        "status": "completed",
-                        "trajectory": self._relative(artifact.metadata_path),
-                        "capture": self._relative(artifact.capture_path),
-                        "response_tokens": artifact.response_tokens,
-                    }
-                )
+                else:
+                    samples.append(
+                        {
+                            "sample_key": artifact.sample_key,
+                            "source_id": record.source_id,
+                            "seed": sampling.seed,
+                            "status": "completed",
+                            "trajectory": self._relative(artifact.metadata_path),
+                            "capture": self._relative(artifact.capture_path),
+                            "response_tokens": artifact.response_tokens,
+                        }
+                    )
+                completed_jobs += 1
+                if self.progress:
+                    self.progress(
+                        completed_jobs,
+                        total,
+                        f"{record.key} seed={sampling.seed}",
+                    )
 
         summary = {
             "planned": len(records) * len(self.config.samplings),

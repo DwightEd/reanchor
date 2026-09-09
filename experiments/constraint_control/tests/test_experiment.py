@@ -55,6 +55,7 @@ def test_experiment_captures_each_source_and_seed_then_publishes_manifest(tmp_pa
     )
     output = tmp_path / "run"
     backend = RecordingBackend()
+    progress = []
     config = ExperimentConfig(
         input_path=source,
         output=output,
@@ -65,10 +66,24 @@ def test_experiment_captures_each_source_and_seed_then_publishes_manifest(tmp_pa
         ),
     )
 
-    summary = ConstraintControlExperiment(config, backend=backend).run()
+    summary = ConstraintControlExperiment(
+        config,
+        backend=backend,
+        progress=lambda completed, total, sample: progress.append(
+            (completed, total, sample)
+        ),
+    ).run()
 
     assert summary == {"planned": 4, "completed": 4, "rejected": 0}
     assert backend.seeds == [0, 2, 0, 2]
+    assert [(completed, total) for completed, total, _ in progress] == [
+        (0, 4),
+        (1, 4),
+        (2, 4),
+        (3, 4),
+        (4, 4),
+    ]
+    assert progress[-1][2] == "discovery/QA/q2 seed=2"
     manifest = json.loads((output / "index.json").read_text(encoding="utf-8"))
     assert manifest["schema"] == "constraint_control_run_v1"
     assert manifest["labels_used_for_capture"] is False

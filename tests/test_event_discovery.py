@@ -86,6 +86,13 @@ def test_discovery_calibrates_on_train_and_writes_one_held_out_anchor(tmp_path):
     assert summary["significant_transitions"] == 1
     assert summary["anchors"] == 1
     assert summary["calibration_sources"] == 40
+    assert summary["selection_funnel"] == {
+        "eligible_tokens": 82,
+        "floor_candidates": 82,
+        "significant_transitions": 1,
+        "anchors": 1,
+        "samples_with_anchors": 1,
+    }
     event_path = tmp_path / "run/samples/test/QA/held/events.npz"
     with np.load(event_path, allow_pickle=False) as events:
         assert np.flatnonzero(events["anchor"]).tolist() == [2]

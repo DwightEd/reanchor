@@ -192,6 +192,9 @@ class CausalTracer:
             sample_summaries.append(
                 {"key": sample.key, "anchors_traced": len(event_rows), "traces": paths}
             )
+        samples_with_anchors = sum(
+            int(sample["anchors_traced"] > 0) for sample in sample_summaries
+        )
         summary = {
             "trace_schema": self.SCHEMA,
             "discovery_schema": discovery["method_schema"],
@@ -199,6 +202,9 @@ class CausalTracer:
             "anchors_traced": traced_count,
             "anchors_computed": computed_count,
             "anchors_resumed": resumed_count,
+            "samples_considered": len(sample_summaries),
+            "samples_with_anchors": samples_with_anchors,
+            "samples_without_anchors": len(sample_summaries) - samples_with_anchors,
             "labels_used_for_tracing": False,
             "settings": identity,
             "sample_artifacts": sample_summaries,

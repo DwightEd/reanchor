@@ -105,6 +105,9 @@ def test_tracer_consumes_only_frozen_anchors_and_publishes_one_trace(tmp_path, m
 
     np.testing.assert_array_equal(seen["coordinates"], np.array([[0, 0, 2]]))
     assert summary["anchors_traced"] == 1
+    assert summary["samples_considered"] == 1
+    assert summary["samples_with_anchors"] == 1
+    assert summary["samples_without_anchors"] == 0
     trace_path = sample_folder / "traces/event_5.npz"
     with np.load(trace_path, allow_pickle=False) as trace:
         assert not bool(trace["labels_used"])

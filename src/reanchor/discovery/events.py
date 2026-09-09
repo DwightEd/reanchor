@@ -127,7 +127,8 @@ class EventDiscovery:
             )
         )
         manifest_samples = []
-        significant_count = anchor_count = 0
+        eligible_count = floor_candidate_count = 0
+        significant_count = anchor_count = samples_with_anchors = 0
         for sample, record in zip(samples, records):
             values = store.read_npz(transition_paths[sample.key])
             if str(values["settings"]) != settings or str(values["sample_key"]) != sample.key:
@@ -158,8 +159,11 @@ class EventDiscovery:
             )
             significant = int(selection.significant.sum())
             anchors = int(selection.anchor.sum())
+            eligible_count += int(record.eligible.sum())
+            floor_candidate_count += int((selection.channel != "none").sum())
             significant_count += significant
             anchor_count += anchors
+            samples_with_anchors += int(anchors > 0)
             manifest_samples.append(
                 {
                     "key": sample.key,
@@ -179,6 +183,13 @@ class EventDiscovery:
             "calibration_sources": len({record.source_id for record in calibration_records}),
             "significant_transitions": significant_count,
             "anchors": anchor_count,
+            "selection_funnel": {
+                "eligible_tokens": eligible_count,
+                "floor_candidates": floor_candidate_count,
+                "significant_transitions": significant_count,
+                "anchors": anchor_count,
+                "samples_with_anchors": samples_with_anchors,
+            },
             "resumed_transitions": resumed_transitions,
             "labels_used_for_discovery": False,
             "settings": asdict(self.config),

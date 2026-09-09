@@ -98,6 +98,35 @@ Pass it with `--contrasts contrasts.json`. `target` is an absolute predicted
 token position. The file content hash becomes part of trace identity, so a
 changed contrast cannot silently reuse an old trace.
 
+To ask how the selected attention transition affected that candidate decision,
+run the mechanism audit with the exact same contrast file:
+
+```bash
+python -m reanchor audit \
+  --capture /path/to/attention_audit_v3 \
+  --output outputs/reanchor_v1 \
+  --contrasts contrasts.json \
+  --device cuda:0
+
+python -m reanchor report \
+  --capture /path/to/attention_audit_v3 \
+  --output outputs/reanchor_v1
+```
+
+This audit propagates the adjacent-row remote attention innovation that discovery
+actually selected. It reports normal/onset/continuing targets symmetrically and
+keeps exact `0`/`1`/`2+` position-hop effects. Four coarse source groups are only a
+complete provenance partition, not four hallucination mechanisms; annotated
+`source_unit_id` effects are retained separately. The prior current-remote-write
+trace remains a reference estimand. Pointwise additive closure is required.
+
+The audit is still a fixed-trajectory linearized candidate-route test. A causal or
+general mechanism claim requires matched pseudo-onsets, bidirectional exact route
+interventions with shams, free-run endpoints, and held-out cross-model/task
+replication. Binding claims additionally require matched constraint
+counterfactuals.
+See [the mechanism-audit specification](docs/mechanism_audit.md).
+
 ## What gets selected
 
 A raw read-site threshold is never called a reanchor event. The workflow first

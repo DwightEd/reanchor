@@ -12,6 +12,7 @@ parse arguments
   -> extract transition features
   -> calibrate and freeze episodes
   -> trace episode anchors
+  -> optionally audit the frozen transition innovation by phase and provenance
   -> join labels and report
 ```
 
@@ -32,6 +33,7 @@ ordering and resume rules; it contains no attention mathematics.
 | `tracing.tracer` | Load frozen anchors and orchestrate one sample at a time | `CausalTracer.run(...)` |
 | `tracing.jacobian` | Native RMSNorm, attention and SwiGLU JVP/VJP operators | `DifferentialLayer` |
 | `tracing.propagation` | Propagate messages with exact position-hop accounting | `trace_events(...)` |
+| `tracing.mechanism` | Propagate the discovery-aligned transition seed; retain coarse groups and source units; certify pointwise closure | `MechanismAuditor.run(...)` |
 | `tracing.cuts` | Persist and certify signed last-crossing transport edges | `CutRecorder` |
 | `reporting.evaluation` | Join labels, future outcomes and source-balanced estimates | `ReportBuilder.run(...)` |
 | `artifacts.store` | Atomic, versioned output persistence and resume identity | `ArtifactStore` |
@@ -67,16 +69,23 @@ run/
 |   |-- events.npz
 |   |-- local_readout.npz
 |   |-- traces/event_<position>.npz
+|   |-- mechanisms/event_<position>.npz
 |   `-- edges/event_<position>.npz
+|-- mechanism.json
 `-- reports/
     |-- summary.json
-    `-- events.csv
+    |-- events.csv
+    |-- mechanisms.csv
+    `-- mechanism_source_units.csv
 ```
 
 Every decision and trace artifact includes schema, sample identity and frozen
-method settings. Streamed edge artifacts include their cut schema and event
-coordinates. Temporary files are committed by atomic rename only after
-validation.
+method settings. Mechanism resume identity also hashes the discovery/trace
+manifests, transition/event artifacts, QK/history/state captures, source
+annotations, full trace and explicit contrast. The model revision recorded by the
+immutable capture manifest remains a trust boundary. Streamed edge artifacts
+include their cut schema and event coordinates.
+Temporary files are committed by atomic rename only after validation.
 
 ## Testing seams
 

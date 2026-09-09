@@ -18,6 +18,7 @@ META_FIELDS = (
     "token_text",
     "special_mask",
     "source_unit_id",
+    "source_kind",
     "evidence_mask",
     "row_position",
     "response_start",

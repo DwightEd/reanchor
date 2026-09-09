@@ -25,6 +25,15 @@ For a compact path such as `train/QA/11859.npz`, companions use the same stem:
 | `11859.labels.npz` | response-token labels `-1/0/1` | reporting only |
 | `11859.attention.npz` | optional full dense attention rows | diagnostics only; not required |
 
+The compact file may additionally contain token-level `source_kind` values from
+`constraint`, `content`, `other` or the empty string. This field is label-free: it
+describes prompt provenance, not answer correctness. Mechanism audit uses it to
+separate coarse constraint and content provenance. These roles are not mechanism
+labels. Every nonnegative token-level `source_unit_id` is also propagated and
+reported separately, so different material units cannot cancel invisibly inside a
+coarse group. When `source_kind` is absent, `evidence_mask` is treated as content and
+the audit explicitly reports that constraint roles are unavailable.
+
 Q, K and V here are computed activations. They are outputs of the checkpoint's
 projection layers (Q/K are also after RoPE), not `q_proj`, `k_proj` or `v_proj`
 weight matrices. The tracing stage loads those matrices separately and lazily

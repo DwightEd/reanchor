@@ -8,6 +8,7 @@ from pathlib import Path
 from reanchor.capture.protocol import AuditDataset
 from reanchor.discovery.events import DiscoveryConfig, EventDiscovery
 from reanchor.reporting.evaluation import ReportBuilder, ReportConfig
+from reanchor.tracing.mechanism import MechanismAuditor, MechanismConfig
 from reanchor.tracing.tracer import CausalTracer, TraceConfig
 
 
@@ -18,11 +19,12 @@ class PipelineConfig:
     command: str = "run"
     discovery: DiscoveryConfig = DiscoveryConfig()
     tracing: TraceConfig = TraceConfig()
+    mechanism: MechanismConfig = MechanismConfig()
     reporting: ReportConfig = ReportConfig()
 
     def __post_init__(self):
-        if self.command not in {"discover", "trace", "report", "run"}:
-            raise ValueError("command must be discover, trace, report, or run")
+        if self.command not in {"discover", "trace", "audit", "report", "run"}:
+            raise ValueError("command must be discover, trace, audit, report, or run")
 
 
 class ReanchorPipeline:
@@ -43,6 +45,10 @@ class ReanchorPipeline:
             result["tracing"] = CausalTracer(self.config.tracing, progress=self.progress).run(
                 dataset, self.config.output
             )
+        if self.config.command == "audit":
+            result["mechanism"] = MechanismAuditor(
+                self.config.mechanism, progress=self.progress
+            ).run(dataset, self.config.output)
         if self.config.command in {"report", "run"}:
             result["report"] = ReportBuilder(self.config.reporting).run(dataset, self.config.output)
         return result

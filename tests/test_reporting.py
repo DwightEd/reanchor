@@ -53,7 +53,7 @@ class FakeDataset:
 def test_report_is_the_first_stage_that_joins_labels(tmp_path):
     sample = AuditSample("test", "QA", "7", "source-7", Path("7.npz"), 4, 2)
     labels_path = tmp_path / "7.labels.npz"
-    np.savez_compressed(labels_path, labels=np.array([0, 0, 1, 0]))
+    np.savez_compressed(labels_path, labels=np.array([0, 0, 1, 1]))
     run = tmp_path / "run"
     store = ArtifactStore(run)
     folder = store.sample_path(sample, "events.npz").parent
@@ -96,11 +96,58 @@ def test_report_is_the_first_stage_that_joins_labels(tmp_path):
         target_position=np.array([3, 4, 5]),
         margin_response=np.zeros((3, 3, 3)),
         layer_margin_response=layer_response,
-        explicit_contrast=np.array([False, True, False]),
+        explicit_contrast=np.array([False, True, True]),
     )
     store.write_json(
         run / "tracing.json",
         {"sample_artifacts": [{"key": sample.key, "traces": [str(trace_path.relative_to(run))]}]},
+    )
+    source_margin = np.zeros((4, 3, 3, 3), dtype=np.float32)
+    source_margin[3, 0, 0, 1] = -0.5
+    source_margin[3, 0, 2, 2] = -0.4
+    source_layers = np.zeros((4, 3, 3, 4, 3), dtype=np.float32)
+    source_layers[3, 0, 0, -1, 1] = -0.5
+    source_roots = np.zeros((4, 6), dtype=np.float32)
+    source_roots[1, 1] = 0.4
+    source_roots[3, 2] = 0.6
+    mechanism_path = folder / "mechanisms/event_3.npz"
+    store.write_npz(
+        mechanism_path,
+        event_position=np.array(3),
+        target_position=np.array([3, 4, 5]),
+        source_group_names=np.array(["constraint", "content", "other_prompt", "response_history"]),
+        source_group_margin_response=source_margin,
+        source_group_layer_margin_response=source_layers,
+        source_group_root_coefficient=source_roots,
+        source_group_seed_norm=np.array([0.0, 0.2, 0.0, 0.4]),
+        source_unit_ids=np.array([3]),
+        source_unit_roles=np.array(["content"]),
+        source_unit_margin_response=source_margin[1:2],
+        source_unit_root_coefficient=source_roots[1:2],
+        source_unit_seed_norm=np.array([0.2]),
+        transition_margin_response=source_margin.sum(0),
+        current_remote_margin_response=source_margin.sum(0),
+        baseline_margin=np.array([0.0, -1.0, 0.0]),
+        positive_id=np.array([1, 2, 3]),
+        negative_id=np.array([4, 5, 6]),
+        explicit_contrast=np.array([False, True, True]),
+        semantic_source_roles_available=np.array(True),
+        closure_pass=np.array(True),
+        closure_margin_max_abs=np.array(0.0),
+        closure_layer_max_abs=np.array(0.0),
+        closure_root_max_abs=np.array(0.0),
+    )
+    store.write_json(
+        run / "mechanism.json",
+        {
+            "mechanism_schema": "reanchor/transition-mechanism-audit@2",
+            "sample_artifacts": [
+                {
+                    "key": sample.key,
+                    "mechanisms": [str(mechanism_path.relative_to(run))],
+                }
+            ],
+        },
     )
 
     summary = ReportBuilder(ReportConfig(bootstrap=100)).run(FakeDataset(sample, labels_path), run)
@@ -110,12 +157,27 @@ def test_report_is_the_first_stage_that_joins_labels(tmp_path):
     assert summary["groups"]["test/QA"]["event_incidence_hallucinated"]["estimate"] == 1.0
     assert summary["groups"]["test/QA"]["anchor_target_hallucination"]["estimate"] == 1.0
     outcomes = summary["groups"]["test/QA"]["morphology_outcomes"]["broad_convergent"]
-    assert outcomes["future_hallucination"]["1-4"]["estimate"] == 0.0
+    assert outcomes["future_hallucination"]["1-4"]["estimate"] == 1.0
     causal = summary["causal_response"]
-    assert causal["explicit_candidate_received_then_overridden"]["estimate"] == 1.0
+    assert causal["explicit_candidate_received_then_overridden"]["estimate"] == 0.5
     assert causal["observed_runner_margin_effect_hallucinated"]["observations"] == 0
-    assert causal["explicit_candidate_margin_effect_hallucinated"]["observations"] == 1
+    assert causal["explicit_candidate_margin_effect_hallucinated"]["observations"] == 2
+    mechanism = summary["mechanism_audit"]
+    assert mechanism["hallucinated_targets"] == 2
+    assert mechanism["closure_failures"] == 0
+    assert mechanism["phase_effects"]["onset"]["transition_remote_effect"]["estimate"] == -0.5
+    chain = mechanism["same_event_onset_to_rollout"]
+    assert chain["candidate_chain_rate"]["estimate"] == 1.0
+    assert chain["claim_supported"] is False
+    assert mechanism["binding_identified"] is False
+    with (run / "reports/mechanisms.csv").open(newline="", encoding="utf-8") as handle:
+        mechanism_rows = list(csv.DictReader(handle))
+    assert mechanism_rows[0]["target_phase"] == "onset"
+    assert mechanism_rows[1]["target_phase"] == "continuing"
+    with (run / "reports/mechanism_source_units.csv").open(newline="", encoding="utf-8") as handle:
+        source_rows = list(csv.DictReader(handle))
+    assert [row["source_unit_id"] for row in source_rows] == ["3", "3"]
     assert json.loads((run / "index.json").read_text()) == index
     with (run / "reports/events.csv").open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
-    assert [row["label"] for row in rows] == ["1", "0"]
+    assert [row["label"] for row in rows] == ["1", "1"]

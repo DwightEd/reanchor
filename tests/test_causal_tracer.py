@@ -82,10 +82,12 @@ def test_tracer_consumes_only_frozen_anchors_and_publishes_one_trace(tmp_path, m
         assert options["window"] == 2
         assert options["contrasts"] == [{"target": 6, "positive_id": 11, "negative_id": 12}]
         return [
-            {
-                "event_row": np.array(2),
+                {
+                    "event_sites": coordinates.copy(),
+                    "event_row": np.array(2),
                 "event_position": np.array(5),
                 "margin_response": np.zeros((3, 3, 3)),
+                "seed_kind": np.array("current_remote"),
                 "labels_used": np.array(False),
             }
         ]

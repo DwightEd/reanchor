@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 from contextlib import ExitStack, contextmanager
 from dataclasses import asdict, dataclass
-from hashlib import sha256
 from pathlib import Path
 
 import numpy as np
@@ -16,6 +15,7 @@ from reanchor.capture.protocol import AuditDataset
 from .anchors import anchor_coordinates
 from .cache import NativeCache
 from .checkpoint import CheckpointWeights
+from .contrasts import read_contrasts
 from .cuts import CutRecorder, prepare_local_readout
 from .propagation import trace_events
 
@@ -66,7 +66,7 @@ def open_cut_resources(
 class CausalTracer:
     """Trace native remote messages from discovered anchors to future margins."""
 
-    SCHEMA = "reanchor/analytic-trace@1"
+    SCHEMA = "reanchor/analytic-trace@2"
 
     def __init__(self, config: TraceConfig = TraceConfig(), *, progress=None):
         self.config = config
@@ -92,7 +92,7 @@ class CausalTracer:
         traced_count = 0
         resumed_count = 0
         computed_count = 0
-        contrasts, contrast_digest = self._contrasts()
+        contrasts, contrast_digest = read_contrasts(self.config.contrast_file)
         discovery_keys = {entry["key"] for entry in discovery["sample_artifacts"]}
         unknown_contrasts = sorted(set(contrasts) - discovery_keys)
         if unknown_contrasts:
@@ -129,11 +129,14 @@ class CausalTracer:
                 edge_path = folder / f"edges/event_{position}.npz"
                 if trace_path.is_file() and (not self.config.save_edges or edge_path.is_file()):
                     trace = store.read_npz(trace_path)
+                    expected_sites = coordinates[coordinates[:, 2] == row]
                     if (
                         str(trace.get("trace_schema", "")) != self.SCHEMA
                         or str(trace.get("trace_settings", "")) != settings
                         or str(trace.get("sample_key", "")) != sample.key
                         or int(trace.get("event_row", -1)) != row
+                        or not np.array_equal(trace.get("event_sites"), expected_sites)
+                        or str(trace.get("seed_kind", "")) != "current_remote"
                         or bool(trace.get("labels_used", True))
                     ):
                         raise ValueError(
@@ -192,9 +195,7 @@ class CausalTracer:
             sample_summaries.append(
                 {"key": sample.key, "anchors_traced": len(event_rows), "traces": paths}
             )
-        samples_with_anchors = sum(
-            int(sample["anchors_traced"] > 0) for sample in sample_summaries
-        )
+        samples_with_anchors = sum(int(sample["anchors_traced"] > 0) for sample in sample_summaries)
         summary = {
             "trace_schema": self.SCHEMA,
             "discovery_schema": discovery["method_schema"],
@@ -211,24 +212,6 @@ class CausalTracer:
         }
         store.write_json(run_root / "tracing.json", summary)
         return summary
-
-    def _contrasts(self) -> tuple[dict[str, list[dict]], str | None]:
-        if self.config.contrast_file is None:
-            return {}, None
-        path = Path(self.config.contrast_file)
-        payload = path.read_bytes()
-        values = json.loads(payload)
-        if not isinstance(values, dict):
-            raise ValueError("contrast file must map sample keys to candidate lists")
-        required = {"target", "positive_id", "negative_id"}
-        for sample_key, entries in values.items():
-            if not isinstance(sample_key, str) or not isinstance(entries, list):
-                raise ValueError("contrast file must map sample keys to candidate lists")
-            if any(
-                not isinstance(entry, dict) or not required <= entry.keys() for entry in entries
-            ):
-                raise ValueError("each contrast needs target, positive_id and negative_id")
-        return values, sha256(payload).hexdigest()
 
     @staticmethod
     def _inside(root: Path, relative: str) -> Path:

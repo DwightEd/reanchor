@@ -179,14 +179,20 @@ class DifferentialLayer(NativeLayer):
             cross[:, begin:end] = F.linear(cross_code.transpose(1, 2).flatten(-2), self.w["output"])
         return same, cross, codes
 
-    def remote_seeds(self, sites, window):
-        """Batch native head writes; one CPU weight transfer per query chunk."""
+    def remote_seeds(self, sites, window, *, source_mask=None):
+        """Batch native head writes, optionally restricted to a token source group."""
         sites = np.asarray(sites, int).reshape(-1, 2)  # head, row
         result = {}
         if not len(sites):
             return result
-        source = torch.arange(len(self.cache.trace["token_ids"]), device=self.device)
+        token_count = len(self.cache.trace["token_ids"])
+        source = torch.arange(token_count, device=self.device)
         ordinary = ~torch.as_tensor(self.cache.trace["special_mask"], device=self.device)
+        if source_mask is not None:
+            source_mask = np.asarray(source_mask, dtype=bool)
+            if source_mask.shape != (token_count,):
+                raise ValueError("source_mask must have one value per captured token")
+            ordinary &= torch.as_tensor(source_mask, device=self.device)
         for begin, end, a in self.rows_attention(int(sites[:, 1].max()) + 1):
             take = sites[(sites[:, 1] >= begin) & (sites[:, 1] < end)]
             if not len(take):
@@ -205,8 +211,66 @@ class DifferentialLayer(NativeLayer):
             raise ValueError("duplicate/absent read site")
         return result
 
-    def remote_seed(self, head, row, window):
-        return self.remote_seeds([(head, row)], window)[int(head), int(row)]
+    def remote_transition_seeds(self, sites, window, *, source_mask=None):
+        """Write the discovery-aligned remote attention innovation.
+
+        Discovery compares adjacent attention rows after normalizing over the
+        current query's legal ordinary sources.  This seed applies that same
+        signed coefficient delta to the current layer's native V/O paths.  It is
+        an attribution estimand for the selected transition, not an exact model
+        intervention and not the current native remote write.
+        """
+
+        sites = np.asarray(sites, int).reshape(-1, 2)  # head, row
+        result = {}
+        if not len(sites):
+            return result
+        if np.any(sites[:, 1] < 1):
+            raise ValueError("attention-transition seeds require a previous query row")
+        if len(np.unique(sites, axis=0)) != len(sites):
+            raise ValueError("duplicate read site")
+        token_count = len(self.cache.trace["token_ids"])
+        source = torch.arange(token_count, device=self.device)
+        ordinary = ~torch.as_tensor(self.cache.trace["special_mask"], device=self.device)
+        attribution = ordinary.clone()
+        if source_mask is not None:
+            source_mask = np.asarray(source_mask, dtype=bool)
+            if source_mask.shape != (token_count,):
+                raise ValueError("source_mask must have one value per captured token")
+            attribution &= torch.as_tensor(source_mask, device=self.device)
+
+        needed = set(map(int, sites[:, 1])) | set(map(int, sites[:, 1] - 1))
+        attention_rows = {}
+        for begin, end, attention in self.rows_attention(int(sites[:, 1].max()) + 1):
+            for row in needed.intersection(range(begin, end)):
+                attention_rows[row] = attention[:, row - begin]
+        if set(attention_rows) != needed:
+            raise ValueError("capture is missing an adjacent attention row")
+
+        for head, row in sites:
+            query = self.rows[int(row)]
+            legal_ordinary = (source <= query) & ordinary
+            current_raw = attention_rows[int(row)] * legal_ordinary[None]
+            previous_raw = attention_rows[int(row) - 1] * legal_ordinary[None]
+            current_total = current_raw.sum(-1, keepdim=True)
+            previous_total = previous_raw.sum(-1, keepdim=True)
+            if torch.any(current_total <= 0) or torch.any(previous_total <= 0):
+                raise ValueError("ordinary attention normalization is undefined")
+            delta = current_raw / current_total - previous_raw / previous_total
+            remote = (query - source) > window
+            weights = delta * (remote & attribution)[None]
+            code = torch.einsum("hs,hsd->hd", weights, self.v)
+            messages = torch.einsum("hc,hdc->hd", code, self.output_blocks)
+            result[int(head), int(row)] = (
+                messages[int(head)],
+                weights[int(head)].cpu().numpy(),
+            )
+        return result
+
+    def remote_seed(self, head, row, window, *, source_mask=None):
+        return self.remote_seeds([(head, row)], window, source_mask=source_mask)[
+            int(head), int(row)
+        ]
 
 
 def final_directions(cache, contrasts=None):

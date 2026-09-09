@@ -17,7 +17,7 @@ def route_hops(state, same, cross):
     return post
 
 
-def _step(op, state, rows, sites, seeds):
+def _step(op, state, rows, injections):
     """Advance independent GPU events through ONE shared native layer."""
     count, r, d = state.shape[2:]
     post = torch.empty_like(state)
@@ -31,12 +31,11 @@ def _step(op, state, rows, sites, seeds):
             energy = torch.einsum("bhrd,hde,bhre->bh", code, op.output_gram, code).clamp_min(0)
     injected = torch.zeros((count, op.h, d), device=op.device)
     roots = np.zeros((count, len(op.cache.trace["token_ids"])), np.float32)
-    if len(sites):
-        owners = np.searchsorted(rows, sites[:, 2])
-        pairs = [seeds[int(h), int(row)] for _, h, row in sites]
+    if injections:
+        owners, injection_heads, pairs = zip(*injections, strict=True)
         injected[
             torch.as_tensor(owners, device=op.device),
-            torch.as_tensor(sites[:, 1], device=op.device),
+            torch.as_tensor(injection_heads, device=op.device),
         ] = torch.stack([p[0] for p in pairs])
         np.add.at(roots, owners, np.stack([p[1] for p in pairs]))
     ids = torch.arange(count, device=op.device)
@@ -89,6 +88,9 @@ def trace_events(
     cut_recorders=None,
     event_batch=None,
     profile=None,
+    source_mask=None,
+    source_masks=None,
+    seed_kind="current_remote",
 ):
     """Layer-major propagation; event_batch bounds GPU work, not coverage.
 
@@ -102,9 +104,13 @@ def trace_events(
         return []
     if len(np.unique(coordinates, axis=0)) != len(coordinates):
         raise ValueError("duplicate read sites")
+    if seed_kind not in {"current_remote", "transition_delta_remote"}:
+        raise ValueError("unsupported seed_kind")
+    if source_mask is not None and source_masks is not None:
+        raise ValueError("use source_mask or source_masks, not both")
     event_rows = np.unique(coordinates[:, 2])
     groups = [coordinates[coordinates[:, 2] == row] for row in event_rows]
-    count = len(groups)
+    event_count = len(groups)
     cfg = cache.weights.config
     row_count = cache.rows
     hidden_size = cfg["hidden_size"]
@@ -114,6 +120,22 @@ def trace_events(
         coordinates >= np.array([layer_count, head_count, row_count])
     ):
         raise ValueError("event coordinate outside native layer/head/row bounds")
+    token_count = len(cache.trace["token_ids"])
+    if source_masks is None:
+        partition_masks = [source_mask]
+        partitioned = False
+    else:
+        masks = np.asarray(source_masks, dtype=bool)
+        if masks.ndim != 2 or masks.shape[1] != token_count or not len(masks):
+            raise ValueError("source_masks must have shape [partition, captured token]")
+        partition_masks = list(masks)
+        partitioned = True
+    partition_count = len(partition_masks)
+    if partitioned and cut_readout is not None:
+        raise ValueError("edge recording does not support source_masks partitions")
+    count = event_count * partition_count
+    flat_event_rows = np.tile(event_rows, partition_count)
+    flat_partitions = np.repeat(np.arange(partition_count), event_count)
     batch_size = count if event_batch is None else event_batch
     if batch_size < 1:
         raise ValueError("event_batch must be positive")
@@ -152,18 +174,36 @@ def trace_events(
         record("operator_and_attention_seconds", started)
         started = clock()
         layer_sites = coordinates[coordinates[:, 0] == layer]
-        seeds = op.remote_seeds(layer_sites[:, 1:], window)
+        if seed_kind == "current_remote":
+            seeds = [
+                op.remote_seeds(layer_sites[:, 1:], window, source_mask=mask)
+                for mask in partition_masks
+            ]
+        else:
+            seeds = [
+                op.remote_transition_seeds(layer_sites[:, 1:], window, source_mask=mask)
+                for mask in partition_masks
+            ]
         record("native_seed_seconds", started)
         started = clock()
         for begin in range(0, count, batch_size):
             end = min(begin + batch_size, count)
-            rows = event_rows[begin:end]
+            rows = flat_event_rows[begin:end]
+            partitions = flat_partitions[begin:end]
             current = state[:, :, begin:end].to(device, memory_format=torch.contiguous_format)
             if reader is not None:
                 _record_cut(op, current, reader, cut_recorders, rows)
-            stats, roots = _step(
-                op, current, rows, layer_sites[np.isin(layer_sites[:, 2], rows)], seeds
-            )
+            injections = []
+            for owner, (row, partition) in enumerate(zip(rows, partitions, strict=True)):
+                for _, head, site_row in layer_sites[layer_sites[:, 2] == row]:
+                    injections.append(
+                        (
+                            owner,
+                            int(head),
+                            seeds[int(partition)][int(head), int(site_row)],
+                        )
+                    )
+            stats, roots = _step(op, current, rows, injections)
             state[:, :, begin:end].copy_(current)
             injection_norm[begin:end, layer] = stats["injection"]
             injection_cancellation[begin:end, layer] = stats["cancellation"]
@@ -195,11 +235,13 @@ def trace_events(
             torch.einsum("vkbrd,rd->bvkr", current, direction).cpu().numpy()[..., :-1]
         )
         del current
-    result = []
-    for i, row in enumerate(event_rows):
-        result.append(
+    partition_results = [[] for _ in range(partition_count)]
+    for i, row in enumerate(flat_event_rows):
+        event_index = i % event_count
+        partition_index = i // event_count
+        partition_results[partition_index].append(
             dict(
-                event_sites=groups[i],
+                event_sites=groups[event_index],
                 event_row=np.array(row),
                 event_position=np.array(cache.trace["row_position"][row]),
                 target_position=cache.trace["row_position"][:-1] + 1,
@@ -219,10 +261,12 @@ def trace_events(
                 negative_id=negative,
                 explicit_contrast=semantic,
                 baseline_margin=baseline,
+                seed_kind=np.array(seed_kind),
                 labels_used=np.array(False),
             )
         )
         if cut_readout is not None:
-            result[-1].update(cut_recorders[int(row)].finish(result[-1]))
+            current_result = partition_results[partition_index][-1]
+            current_result.update(cut_recorders[int(row)].finish(current_result))
     record("readout_and_finalize_seconds", started)
-    return result
+    return partition_results if partitioned else partition_results[0]

@@ -10,6 +10,7 @@ from pathlib import Path
 from reanchor.discovery.events import DiscoveryConfig
 from reanchor.pipeline import PipelineConfig, ReanchorPipeline
 from reanchor.reporting.evaluation import ReportConfig
+from reanchor.tracing.mechanism import MechanismConfig
 from reanchor.tracing.tracer import TraceConfig
 
 
@@ -18,7 +19,7 @@ def parser() -> argparse.ArgumentParser:
         prog="reanchor",
         description="Discover calibrated reanchor episodes and trace their causal messages.",
     )
-    command.add_argument("command", choices=("discover", "trace", "report", "run"))
+    command.add_argument("command", choices=("discover", "trace", "audit", "report", "run"))
     command.add_argument("--capture", type=Path, required=True, help="attention_audit_v3 root")
     command.add_argument("--output", type=Path, required=True, help="separate run directory")
     command.add_argument("--device", default="cuda:0")
@@ -40,6 +41,8 @@ def parser() -> argparse.ArgumentParser:
         type=Path,
         help="optional JSON mapping sample keys to explicit candidate-token contrasts",
     )
+    command.add_argument("--closure-atol", type=float, default=1e-5)
+    command.add_argument("--closure-rtol", type=float, default=1e-3)
     command.add_argument("--bootstrap", type=int, default=1000)
     return command
 
@@ -67,12 +70,21 @@ def main(argv: list[str] | None = None) -> None:
         save_edges=not arguments.no_edges,
         contrast_file=str(arguments.contrasts) if arguments.contrasts else None,
     )
+    mechanism = MechanismConfig(
+        device=arguments.device,
+        query_chunk=arguments.query_chunk,
+        event_batch=arguments.event_batch,
+        contrast_file=str(arguments.contrasts) if arguments.contrasts else None,
+        closure_atol=arguments.closure_atol,
+        closure_rtol=arguments.closure_rtol,
+    )
     config = PipelineConfig(
         capture=arguments.capture,
         output=arguments.output,
         command=arguments.command,
         discovery=discovery,
         tracing=tracing,
+        mechanism=mechanism,
         reporting=ReportConfig(bootstrap=arguments.bootstrap),
     )
 

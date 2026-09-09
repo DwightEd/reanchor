@@ -143,7 +143,31 @@ retain:
 Cut closure must reconstruct the complete one-or-more-hop local response before
 an edge artifact is committed.
 
-## Stage 6: outcome reporting
+## Stage 6: reanchor-conditioned mechanism audit
+
+For independently supplied correct/error candidate contrasts, the audit first
+constructs the remote attention innovation that matches Stage 1 exactly: adjacent
+rows are ordinary-normalized with the current legal source set, subtracted, and
+restricted to the current remote set. That signed V/O write is propagated through
+the same native JVP. The existing trace of the whole current native remote write is
+retained as a distinct reference estimand.
+
+The transition seed is decomposed into disjoint `constraint`, `content`,
+`other_prompt`, and `response_history` provenance groups. These four groups are
+predeclared bookkeeping axes, not mechanism classes. Every annotated material
+`source_unit_id` is also retained separately. All partitions share each layer and
+attention reconstruction. Group margin, layer-trajectory, and root-coefficient
+responses must close independently and pointwise to the full transition trace.
+
+Only reporting joins labels and aligns each explicit target as normal, `N -> H`
+onset, continuing `H`, or unknown boundary. The primary sequence is an onset target
+at `q+1` followed by continuing-H targets reached through `2+` position hops before
+the next reanchor. This is an exploratory linearized candidate route, not a named
+hallucination cause. Binding and causal claims require matched counterfactuals and
+bidirectional exact interventions. See
+[the mechanism-audit specification](mechanism_audit.md).
+
+## Stage 7: outcome reporting
 
 Only after anchors and edges are frozen are token labels joined. Reports keep
 separate:
@@ -169,6 +193,9 @@ the observed token may itself be hallucinated.
 - Capture is teacher-forced analysis of a fixed trajectory, not a new free run.
 - Attention redistribution is a discovery signal, not proof of information use.
 - JVP tracing is a local first-order causal sensitivity, not a finite ablation.
+- Transition/source-decomposed JVP attributes a local candidate route; it does not
+  prove constraint/content binding, finite necessity/sufficiency, or a universal
+  cause of hallucination.
 - Observed-versus-runner margins are not truth contrasts. Truth claims require
   explicit, independently defined correct/incorrect candidates.
 - The source-max family correction controls the declared selection family under

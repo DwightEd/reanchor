@@ -40,3 +40,34 @@ def test_pipeline_keeps_the_default_execution_path_linear(monkeypatch, tmp_path)
 
     assert [name for name, _ in calls] == ["dataset", "discover", "trace", "report"]
     assert set(result) == {"discovery", "tracing", "report"}
+
+
+def test_pipeline_runs_mechanism_audit_as_an_explicit_post_trace_stage(monkeypatch, tmp_path):
+    calls = []
+
+    class Dataset:
+        def __init__(self, path):
+            calls.append(("dataset", Path(path)))
+
+    class Auditor:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def run(self, dataset, output):
+            calls.append(("audit", Path(output)))
+            return {"stage": "audit"}
+
+    import reanchor.pipeline as module
+
+    monkeypatch.setattr(module, "AuditDataset", Dataset)
+    monkeypatch.setattr(module, "MechanismAuditor", Auditor)
+    config = PipelineConfig(
+        capture=tmp_path / "capture",
+        output=tmp_path / "run",
+        command="audit",
+    )
+
+    result = ReanchorPipeline(config).run()
+
+    assert [name for name, _ in calls] == ["dataset", "audit"]
+    assert result == {"mechanism": {"stage": "audit"}}

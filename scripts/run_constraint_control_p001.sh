@@ -6,10 +6,11 @@ if [[ $# -gt 4 ]]; then
   exit 2
 fi
 
-RAGTRUTH_ROOT=${1:-/share/home/tm902089733300000/a903202310/lys/data/RAGTruth/dataset}
-OUTPUT_ROOT=${2:-runs/p001_ragtruth_qa_llama31_8b}
-MODEL=${3:-meta-llama/Llama-3.1-8B-Instruct}
-DEVICE=${4:-cuda:0}
+DEFAULT_DATA=/share/home/tm902089733300000/a903202310/lys/data/RAGTruth/dataset
+RAGTRUTH_ROOT=${1:-${RAGTRUTH_ROOT:-$DEFAULT_DATA}}
+OUTPUT_ROOT=${2:-${OUTPUT_ROOT:-runs/p001_ragtruth_qa_llama31_8b}}
+MODEL=${3:-${MODEL:-meta-llama/Llama-3.1-8B-Instruct}}
+DEVICE=${4:-${DEVICE:-cuda:0}}
 TASK=${TASK:-QA}
 SPLIT=${SPLIT:-train}
 MAX_SAMPLES=${MAX_SAMPLES:-20}
@@ -31,6 +32,10 @@ fi
 
 python -m pip install -e . --no-deps
 python -c 'import tqdm' >/dev/null
+echo "RAGTruth: $RAGTRUTH_ROOT"
+echo "Model: $MODEL"
+echo "Task/split/sources: $TASK/$SPLIT/$MAX_SAMPLES"
+echo "Output: $OUTPUT_ROOT"
 python -u -m experiments.constraint_control.main \
   --input "$RAGTRUTH_ROOT" \
   --input-format ragtruth \

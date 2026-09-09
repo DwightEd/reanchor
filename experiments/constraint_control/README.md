@@ -14,6 +14,24 @@ conda run --no-capture-output -n research \
   bash scripts/run_constraint_control_p001.sh
 ```
 
+`meta-llama/Llama-3.1-8B-Instruct` 是 gated model。首次使用时，先在其
+[Hugging Face 页面](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct)
+接受许可，再在同一个 `research` 环境登录并确认身份：
+
+```bash
+conda run --no-capture-output -n research hf auth login
+conda run --no-capture-output -n research hf auth whoami
+```
+
+如果服务器已有可访问的本地权重，不需要登录 Hub：
+
+```bash
+MODEL=/absolute/path/to/Llama-3.1-8B-Instruct \
+OUTPUT_ROOT=runs/p001_ragtruth_qa_local \
+  conda run --no-capture-output -n research \
+  bash scripts/run_constraint_control_p001.sh
+```
+
 脚本默认读取
 `/share/home/tm902089733300000/a903202310/lys/data/RAGTruth/dataset`，输出到
 `runs/p001_ragtruth_qa_llama31_8b`，并运行 Llama-3.1-8B-Instruct、RAGTruth

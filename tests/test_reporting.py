@@ -45,6 +45,10 @@ class FakeDataset:
         assert sample == self.sample
         return SimpleNamespace(labels=self.label_path)
 
+    def load_metadata(self, sample, *fields):
+        assert sample == self.sample
+        return {"special_mask": np.zeros(6, dtype=bool)}
+
 
 def test_report_is_the_first_stage_that_joins_labels(tmp_path):
     sample = AuditSample("test", "QA", "7", "source-7", Path("7.npz"), 4, 2)
@@ -83,14 +87,34 @@ def test_report_is_the_first_stage_that_joins_labels(tmp_path):
         ],
     }
     store.write_json(run / "index.json", index)
+    layer_response = np.zeros((3, 3, 4, 3))
+    layer_response[0, 0, :, 1] = [0.0, 0.4, 0.2, -0.1]
+    trace_path = folder / "traces/event_3.npz"
+    store.write_npz(
+        trace_path,
+        event_position=np.array(3),
+        target_position=np.array([3, 4, 5]),
+        margin_response=np.zeros((3, 3, 3)),
+        layer_margin_response=layer_response,
+        explicit_contrast=np.array([False, True, False]),
+    )
+    store.write_json(
+        run / "tracing.json",
+        {"sample_artifacts": [{"key": sample.key, "traces": [str(trace_path.relative_to(run))]}]},
+    )
 
     summary = ReportBuilder(ReportConfig(bootstrap=100)).run(FakeDataset(sample, labels_path), run)
 
     assert summary["labels_joined_only_in_reporting"] is True
     assert summary["groups"]["test/QA"]["event_incidence"]["estimate"] == 1.0
+    assert summary["groups"]["test/QA"]["event_incidence_hallucinated"]["estimate"] == 1.0
     assert summary["groups"]["test/QA"]["anchor_target_hallucination"]["estimate"] == 1.0
     outcomes = summary["groups"]["test/QA"]["morphology_outcomes"]["broad_convergent"]
     assert outcomes["future_hallucination"]["1-4"]["estimate"] == 0.0
+    causal = summary["causal_response"]
+    assert causal["explicit_candidate_received_then_overridden"]["estimate"] == 1.0
+    assert causal["observed_runner_margin_effect_hallucinated"]["observations"] == 0
+    assert causal["explicit_candidate_margin_effect_hallucinated"]["observations"] == 1
     assert json.loads((run / "index.json").read_text()) == index
     with (run / "reports/events.csv").open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))

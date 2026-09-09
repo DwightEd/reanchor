@@ -5,12 +5,14 @@ from __future__ import annotations
 import json
 from contextlib import contextmanager
 from pathlib import Path
+from typing import TYPE_CHECKING
 from urllib.parse import quote
 from uuid import uuid4
 
 import numpy as np
 
-from reanchor.capture.protocol import AuditSample
+if TYPE_CHECKING:
+    from reanchor.capture.protocol import AuditSample
 
 
 class ArtifactStore:

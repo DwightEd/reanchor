@@ -35,6 +35,12 @@ docs/
 The initial input adapter reads existing `attention_audit_v3` captures, so the
 completed capture does not need to be regenerated during migration.
 
+The mechanism-discovery work lives in
+[`experiments/constraint_control`](experiments/constraint_control). Its first
+vertical slice samples new answers autoregressively, replays the exact sampled
+tokens, verifies logit fidelity, and stores label-free intermediate states. It
+does not treat the old audit answers as free-run trajectories.
+
 See [the method specification](docs/method.md) and
 [the architecture](docs/architecture.md). The exact input arrays are documented
 in [the data contract](docs/data.md).

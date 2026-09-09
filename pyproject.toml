@@ -27,7 +27,7 @@ where = ["src"]
 [tool.pytest.ini_options]
 addopts = "-ra"
 pythonpath = ["src"]
-testpaths = ["tests"]
+testpaths = ["tests", "experiments/constraint_control/tests"]
 
 [tool.ruff]
 line-length = 100

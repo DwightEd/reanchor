@@ -40,7 +40,7 @@ parse arguments
 输入是 UTF-8 JSONL，每行一个 source-grouped record：
 
 ```json
-{"sample_id":"q1","source_id":"doc-1","split":"discovery","task":"QA","messages":[{"role":"system","content":"Answer only from the supplied evidence."},{"role":"user","content":"Evidence: Ada won under the 2020 rule. Question: Who won under the 2020 rule?"}],"evidence_units":[{"unit_id":"constraint-1","kind":"constraint","text":"under the 2020 rule"},{"unit_id":"content-1","kind":"content","text":"Ada won"}]}
+{"sample_id":"q1","source_id":"doc-1","split":"discovery","task":"QA","messages":[{"role":"system","content":"Answer only from the supplied evidence."},{"role":"user","content":"Use 2020. Ada won. Who won?"}],"evidence_units":[{"unit_id":"constraint-1","kind":"constraint","text":"2020","message_index":1,"char_start":4,"char_end":8},{"unit_id":"content-1","kind":"content","text":"Ada won","message_index":1,"char_start":10,"char_end":17}]}
 ```
 
 约束如下：
@@ -49,6 +49,7 @@ parse arguments
 - 同一 source 的多个采样 seed 始终由同一次运行产生并留在同一 split；
 - capture 输入不包含 correctness、error span 或 gold candidate；
 - `evidence_units.kind` 只能是 `constraint`、`content` 或 `other`。
+- 每个 evidence unit 必须用 `message_index` 和左闭右开的字符区间定位；区间文本必须与 `text` 完全一致。
 
 ## 输出格式
 
@@ -62,7 +63,7 @@ runs/p001_llama/
 
 `trajectory.json` 保存输入 identity、模型 revision、采样参数、回答、停止原因和 replay 误差。`capture.npz` 当前包含：
 
-- 完整 `token_ids`、token pieces、`response_start` 和 prediction row positions；
+- 完整 `token_ids`、token pieces、`special_mask`、`response_start` 和 prediction row positions；
 - generation/replay 的 emitted-token logits；
 - raw-model log probability、sampling-distribution log probability 和 entropy；
 - 每步 raw logits 的 top-k token ids/logits；

@@ -14,7 +14,10 @@ conda run --no-capture-output -n research \
   bash scripts/run_constraint_control_p001.sh
 ```
 
-`meta-llama/Llama-3.1-8B-Instruct` 是 gated model。首次使用时，先在其
+脚本默认使用服务器本地权重
+`/share/home/tm902089733300000/a903202310/lys/models/Meta-Llama-3.1-8B-Instruct`，
+因此不需要登录 Hugging Face。如果显式把 `MODEL` 改回 Hub ID
+`meta-llama/Llama-3.1-8B-Instruct`，则需要先在其
 [Hugging Face 页面](https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct)
 接受许可，再在同一个 `research` 环境登录并确认身份：
 
@@ -23,10 +26,10 @@ conda run --no-capture-output -n research hf auth login
 conda run --no-capture-output -n research hf auth whoami
 ```
 
-如果服务器已有可访问的本地权重，不需要登录 Hub：
+其他本地权重也可以通过 `MODEL` 覆盖：
 
 ```bash
-MODEL=/absolute/path/to/Llama-3.1-8B-Instruct \
+MODEL=/absolute/path/to/another-model \
 OUTPUT_ROOT=runs/p001_ragtruth_qa_local \
   conda run --no-capture-output -n research \
   bash scripts/run_constraint_control_p001.sh
@@ -53,7 +56,7 @@ python -m experiments.constraint_control.main \
   --task QA \
   --split train \
   --output runs/p001_llama \
-  --model meta-llama/Llama-3.1-8B-Instruct \
+  --model /share/home/tm902089733300000/a903202310/lys/models/Meta-Llama-3.1-8B-Instruct \
   --device cuda:0 \
   --dtype bfloat16 \
   --seeds 0 1 2 \

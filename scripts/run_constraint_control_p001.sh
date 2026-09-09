@@ -7,9 +7,10 @@ if [[ $# -gt 4 ]]; then
 fi
 
 DEFAULT_DATA=/share/home/tm902089733300000/a903202310/lys/data/RAGTruth/dataset
+DEFAULT_MODEL=/share/home/tm902089733300000/a903202310/lys/models/Meta-Llama-3.1-8B-Instruct
 RAGTRUTH_ROOT=${1:-${RAGTRUTH_ROOT:-$DEFAULT_DATA}}
 OUTPUT_ROOT=${2:-${OUTPUT_ROOT:-runs/p001_ragtruth_qa_llama31_8b}}
-MODEL=${3:-${MODEL:-meta-llama/Llama-3.1-8B-Instruct}}
+MODEL=${3:-${MODEL:-$DEFAULT_MODEL}}
 DEVICE=${4:-${DEVICE:-cuda:0}}
 TASK=${TASK:-QA}
 SPLIT=${SPLIT:-train}
@@ -23,6 +24,10 @@ if [[ ! -f "$RAGTRUTH_ROOT/source_info.jsonl" ]]; then
 fi
 if [[ ! -f "$RAGTRUTH_ROOT/response.jsonl" ]]; then
   echo "RAGTruth response file does not exist: $RAGTRUTH_ROOT/response.jsonl" >&2
+  exit 2
+fi
+if [[ "$MODEL" = /* && ! -d "$MODEL" ]]; then
+  echo "Local model directory does not exist: $MODEL" >&2
   exit 2
 fi
 if [[ -f "$OUTPUT_ROOT/index.json" ]]; then

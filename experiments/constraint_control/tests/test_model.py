@@ -2,6 +2,7 @@ from types import SimpleNamespace
 
 import numpy as np
 import torch
+from transformers import LlamaConfig, LlamaForCausalLM
 
 from experiments.constraint_control.generation import SamplingConfig
 from experiments.constraint_control.model import HuggingFaceBackend
@@ -24,6 +25,8 @@ class TinyTokenizer:
 
 
 class TinyCausalModel:
+    config = SimpleNamespace(_commit_hash="resolved-hash")
+
     def __init__(self, floor=-4.0):
         self.floor = floor
 
@@ -96,3 +99,45 @@ def test_huggingface_backend_reports_finite_entropy_for_underflowed_probabilitie
     )
 
     assert np.isfinite(capture.entropy).all()
+
+
+def test_huggingface_backend_records_the_resolved_model_revision():
+    backend = HuggingFaceBackend(
+        "tiny-model",
+        device="cpu",
+        model=TinyCausalModel(),
+        tokenizer=TinyTokenizer(),
+    )
+
+    assert backend.metadata["revision"] == "resolved-hash"
+
+
+def test_huggingface_backend_replay_matches_a_real_transformer_forward():
+    config = LlamaConfig(
+        vocab_size=5,
+        hidden_size=8,
+        intermediate_size=16,
+        num_hidden_layers=1,
+        num_attention_heads=2,
+        num_key_value_heads=1,
+        bos_token_id=1,
+        eos_token_id=4,
+        attention_dropout=0.0,
+        attn_implementation="eager",
+    )
+    backend = HuggingFaceBackend(
+        "random-tiny-llama",
+        device="cpu",
+        model=LlamaForCausalLM(config).eval(),
+        tokenizer=TinyTokenizer(),
+        revision="test-weights",
+    )
+
+    capture = backend.sample_and_replay(
+        (ChatMessage(role="user", content="Question"),),
+        SamplingConfig(seed=5, max_new_tokens=2, top_k=1, trace_top_k=2),
+    )
+
+    assert capture.replay_max_abs_logit_error < 1e-6
+    assert capture.residual_states.shape[0] == 2
+    assert capture.attention_weights.shape[:2] == (1, 2)

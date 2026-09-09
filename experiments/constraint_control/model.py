@@ -28,13 +28,14 @@ class HuggingFaceBackend:
         if (model is None) != (tokenizer is None):
             raise ValueError("model and tokenizer must be supplied together")
         self.model_name = model_name
-        self.revision = revision or "main"
         self.device = torch.device(device)
         self.dtype = dtype
         if model is None:
             model, tokenizer = self._load_model(model_name, dtype, revision)
         self.model = model.eval()
         self.tokenizer = tokenizer
+        resolved_revision = getattr(getattr(model, "config", None), "_commit_hash", None)
+        self.revision = revision or resolved_revision or "unresolved"
 
     @property
     def metadata(self) -> dict[str, str]:

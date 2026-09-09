@@ -28,6 +28,7 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"
+pythonpath = ["src"]
 testpaths = ["tests"]
 
 [tool.ruff]
@@ -36,4 +37,3 @@ target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W"]
-

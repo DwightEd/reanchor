@@ -1,8 +1,9 @@
 from types import SimpleNamespace
 
 import numpy as np
+import pytest
 import torch
-from transformers import LlamaConfig, LlamaForCausalLM
+from transformers import AutoTokenizer, LlamaConfig, LlamaForCausalLM
 
 from experiments.constraint_control.generation import SamplingConfig
 from experiments.constraint_control.model import HuggingFaceBackend
@@ -57,6 +58,22 @@ class TinyCausalModel:
             logits=logits,
             hidden_states=hidden_states,
             attentions=attentions,
+        )
+
+
+def test_huggingface_backend_explains_how_to_access_a_gated_model(monkeypatch):
+    def gated_repository(*_args, **_kwargs):
+        raise OSError(
+            "401 Client Error. Cannot access gated repo for "
+            "meta-llama/Llama-3.1-8B-Instruct"
+        )
+
+    monkeypatch.setattr(AutoTokenizer, "from_pretrained", gated_repository)
+
+    with pytest.raises(RuntimeError, match=r"hf auth login.*local model path"):
+        HuggingFaceBackend(
+            "meta-llama/Llama-3.1-8B-Instruct",
+            device="cpu",
         )
 
 

@@ -155,13 +155,23 @@ class HuggingFaceBackend:
                 dtype_value = getattr(torch, dtype)
             except AttributeError as error:
                 raise ValueError(f"unsupported torch dtype: {dtype}") from error
-        tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)
-        model = AutoModelForCausalLM.from_pretrained(
-            model_name,
-            revision=revision,
-            torch_dtype=dtype_value,
-            attn_implementation="eager",
-        ).to(self.device)
+        try:
+            tokenizer = AutoTokenizer.from_pretrained(model_name, revision=revision)
+            model = AutoModelForCausalLM.from_pretrained(
+                model_name,
+                revision=revision,
+                torch_dtype=dtype_value,
+                attn_implementation="eager",
+            ).to(self.device)
+        except OSError as error:
+            message = str(error).casefold()
+            if "gated repo" not in message and "access to model" not in message:
+                raise
+            raise RuntimeError(
+                f"Cannot access gated Hugging Face model {model_name}. Accept its model "
+                "license with your Hugging Face account, then run `hf auth login` in the "
+                "research environment; alternatively pass an accessible local model path."
+            ) from error
         return model, tokenizer
 
     def _tokenize(self, messages: tuple[ChatMessage, ...]) -> torch.Tensor:

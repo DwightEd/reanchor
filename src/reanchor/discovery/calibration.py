@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import asdict, dataclass
 
 import numpy as np
@@ -91,6 +92,9 @@ class MaxNullCalibrator:
                     pooled[key] = max(pooled.get(key, -np.inf), float(values[take].max()))
 
         tasks = {record.task for record in records}
+        family_tests = len(self._CHANNELS) * self.config.position_bins
+        resolution_sources = math.ceil(family_tests / self.config.family_alpha) - 1
+        required_sources = max(self.config.min_calibration_sources, resolution_sources)
         for task in tasks:
             for channel in self._CHANNELS:
                 values = [
@@ -98,10 +102,10 @@ class MaxNullCalibrator:
                     for (candidate_task, candidate_channel, _), value in pooled.items()
                     if (candidate_task, candidate_channel) == (task, channel)
                 ]
-                if len(values) < self.config.min_calibration_sources:
+                if len(values) < required_sources:
                     raise ValueError(
-                        f"{task}/{channel}: need at least "
-                        f"{self.config.min_calibration_sources} independent calibration sources"
+                        f"{task}/{channel}: need at least {required_sources} independent "
+                        "calibration sources to resolve family alpha"
                     )
                 self._nulls[task, -1, channel] = np.sort(values)
                 for position_bin in range(self.config.position_bins):
@@ -116,7 +120,7 @@ class MaxNullCalibrator:
                         if (candidate_task, candidate_bin, candidate_channel)
                         == (task, position_bin, channel)
                     ]
-                    if len(exact) >= self.config.min_calibration_sources:
+                    if len(exact) >= required_sources:
                         self._nulls[task, position_bin, channel] = np.sort(exact)
         return self
 

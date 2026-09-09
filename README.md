@@ -66,6 +66,20 @@ bash scripts/run_v3.sh \
 transition and trace artifacts are identity-checked and resumed. The output is
 always separate from the immutable capture.
 
+An optional candidate file makes correctness-oriented tracing explicit:
+
+```json
+{
+  "test/QA/11859": [
+    {"target": 123, "positive_id": 42, "negative_id": 91}
+  ]
+}
+```
+
+Pass it with `--contrasts contrasts.json`. `target` is an absolute predicted
+token position. The file content hash becomes part of trace identity, so a
+changed contrast cannot silently reuse an old trace.
+
 ## What gets selected
 
 A raw read-site threshold is never called a reanchor event. The workflow first

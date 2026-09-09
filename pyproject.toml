@@ -12,7 +12,7 @@ dependencies = [
   "numpy",
   "safetensors",
   "torch",
-  "transformers>=4.57,<4.58",
+  "transformers>=4.46,<4.58",
 ]
 
 [project.optional-dependencies]

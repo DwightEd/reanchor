@@ -93,6 +93,10 @@ class CausalTracer:
         resumed_count = 0
         computed_count = 0
         contrasts, contrast_digest = self._contrasts()
+        discovery_keys = {entry["key"] for entry in discovery["sample_artifacts"]}
+        unknown_contrasts = sorted(set(contrasts) - discovery_keys)
+        if unknown_contrasts:
+            raise ValueError(f"contrast file contains unknown sample keys: {unknown_contrasts[:5]}")
         identity = {**asdict(self.config), "contrast_sha256": contrast_digest}
         settings = json.dumps(identity, sort_keys=True)
         for entry in discovery["sample_artifacts"]:

@@ -36,12 +36,13 @@ next-token outcome, so causal reports exclude it as a target.
 
 ## Why both Q/K and native history are stored
 
-Q/K plus scale and the causal mask reconstruct the complete attention row,
-including all prompt sources, without storing a very large dense tensor. A
-reconstruction on another device can differ slightly because of kernel and
-dtype arithmetic. Therefore the response-history block is overwritten with
-the probabilities recorded in the original forward pass. No source is
-imputed, thresholded or replaced with a top-k approximation.
+Q/K plus scale and the causal mask reconstruct the complete-source attention
+row, including all prompt sources, without storing a very large dense tensor.
+The reconstructed prompt block is a numerical replay from stored activations;
+another device can differ slightly because of kernel and dtype arithmetic.
+Therefore the response-history block is overwritten with probabilities from
+the original forward pass. No source is imputed, thresholded or replaced with
+a top-k approximation.
 
 ## Label firewall
 

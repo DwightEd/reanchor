@@ -85,6 +85,9 @@ p = (1 + count(source maxima >= observed)) / (n_sources + 1).
 
 If a position stratum is too small, calibration falls back to a task/channel
 source maximum and records that fallback. It never uses N/H labels.
+The fit also rejects a calibration cohort whose empirical p-value resolution
+cannot reach the requested family alpha after correction; such a run cannot
+quietly return a structurally guaranteed empty selection.
 
 ## Stage 3: token selection and episodes
 

@@ -65,6 +65,18 @@ def test_calibration_requires_enough_independent_sources():
         MaxNullCalibrator(config).fit(records)
 
 
+def test_calibration_requires_enough_sources_to_resolve_family_alpha():
+    config = SelectionConfig(
+        position_bins=4,
+        family_alpha=0.05,
+        min_calibration_sources=32,
+    )
+    records = [score_record(f"source-{index}", np.full(8, 0.2)) for index in range(100)]
+
+    with pytest.raises(ValueError, match="resolve family alpha"):
+        MaxNullCalibrator(config).fit(records)
+
+
 def test_broad_channel_does_not_depend_on_the_sparse_site_count():
     config = SelectionConfig(position_bins=1, min_calibration_sources=64)
     calibration = [

@@ -44,10 +44,11 @@ the three workflow classes `EventDiscovery`, `CausalTracer`, and `ReportBuilder`
 ```text
 cli -> pipeline
 pipeline -> capture, discovery, tracing, reporting, artifacts
-discovery -> capture
-tracing -> capture, discovery, artifacts
-reporting -> discovery, tracing, artifacts
-capture -> artifacts
+discovery -> capture, artifacts
+tracing -> capture, artifacts
+reporting -> capture, artifacts
+capture -> (no project package dependency)
+artifacts -> (no project package dependency)
 ```
 
 No lower module imports the CLI or pipeline. Discovery cannot import labels or
@@ -72,8 +73,10 @@ run/
     `-- events.csv
 ```
 
-Every artifact includes schema, capture identity and frozen method settings.
-Temporary files are committed by atomic rename only after validation.
+Every decision and trace artifact includes schema, sample identity and frozen
+method settings. Streamed edge artifacts include their cut schema and event
+coordinates. Temporary files are committed by atomic rename only after
+validation.
 
 ## Testing seams
 

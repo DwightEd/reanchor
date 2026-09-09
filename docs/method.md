@@ -56,37 +56,47 @@ Each read site records:
 
 No correctness or hallucination label is available in this stage.
 
-## Stage 2: empirical null calibration
+## Stage 2: independent-source max-null calibration
 
 Raw thresholds are not event definitions. With `L x H` read sites at every
 token, an `any(layer, head)` rule makes token selection approach one as model
 size grows.
 
-Read-site remote gains are calibrated within predeclared strata:
+Two predeclared token statistics are computed before calibration:
 
 ```text
-(task, layer, head, relative-position bin)
+sparse(q) := maximum gated remote gain over all layers and heads
+broad(q)  := maximum layer-wise mean of the strongest head fraction
 ```
 
-Only eligible transitions with sufficient previous local mass enter the null.
-The one-sided empirical p-value uses the finite-sample correction
+The sparse channel detects an exceptional specialized head. The broad channel
+detects a coordinated layer even when no single head is extreme. Because both
+statistics already include their layer/head maximization, their null
+distributions include the same multiplicity.
+
+Within each `(task, relative-position bin, channel)`, every independent
+`source_id` contributes its maximum score over all of its samples and tokens.
+This makes the calibration unit an independent source rather than a correlated
+token or head. The one-sided empirical max-null p-value uses
 
 ```text
-p = (1 + count(null >= observed)) / (n + 1).
+p = (1 + count(source maxima >= observed)) / (n_sources + 1).
 ```
 
-If a position stratum is too small, calibration falls back to
-`(task, layer, head)` and records that fallback. It never uses N/H labels.
+If a position stratum is too small, calibration falls back to a task/channel
+source maximum and records that fallback. It never uses N/H labels.
 
 ## Stage 3: token selection and episodes
 
-For one query, Simes combines its calibrated layer/head p-values into one token
-p-value. Benjamini-Yekutieli correction controls token-level false discovery
-under arbitrary dependence within each split/task cohort.
+Bonferroni correction covers the two score channels and all predeclared
+relative-position bins. The resulting family p-value controls the probability
+that a null independent source produces any selected token under exchangeability
+with the calibration sources. This is deliberately more conservative than
+per-token FDR.
 
 An eligible token is significant only if it satisfies all frozen requirements:
 
-- corrected `q <= fdr`;
+- corrected family `p <= alpha`;
 - a positive remote-gain effect-size floor;
 - the previous-local precondition;
 - at least one calibrated supporting read site.
@@ -152,4 +162,3 @@ intervals resample sources, not correlated tokens, heads or events.
   explicit, independently defined correct/incorrect candidates.
 - FDR controls the declared selection family; it does not remove dataset shift,
   label error or causal-identification assumptions.
-

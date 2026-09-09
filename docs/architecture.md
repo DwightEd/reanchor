@@ -26,7 +26,8 @@ ordering and resume rules; it contains no attention mathematics.
 | `capture.attention` | Reconstruct complete attention rows from Q/K plus native history | `AttentionReader.rows(sample)` |
 | `capture.writer` | Record a fixed trajectory into the canonical capture protocol | `TrajectoryCapture.run(...)` |
 | `discovery.features` | Produce label-free read-site transition measurements | `TransitionExtractor.run(sample)` |
-| `discovery.calibration` | Empirical strata, Simes aggregation and BY-FDR | `EventCalibrator.fit_select(features)` |
+| `discovery.scores` | Collapse layer/head features into sparse and broad token statistics | `score_transitions(...)` |
+| `discovery.calibration` | Independent-source max null and episode selection | `MaxNullCalibrator.fit(...).select(...)` |
 | `discovery.events` | Collapse significant transitions into episodes and anchors | `EventDiscovery.run(dataset)` |
 | `discovery.morphology` | Describe frozen anchors without reselection | `MorphologyProfiler.run(...)` |
 | `tracing.propagation` | Propagate anchor messages with analytic JVPs | `CausalTracer.run(...)` |
@@ -83,4 +84,3 @@ Temporary files are committed by atomic rename only after validation.
 - Capture compatibility is tested against a minimal v3 directory.
 - Tracing is tested against finite differences and independent autograd oracles.
 - One small end-to-end fixture crosses the public pipeline interface.
-

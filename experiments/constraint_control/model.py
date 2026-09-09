@@ -138,8 +138,8 @@ class HuggingFaceBackend:
             entropy=np.asarray(entropies, dtype=np.float32),
             top_token_ids=torch.stack(top_ids).numpy().astype(np.int64, copy=False),
             top_logits=torch.stack(top_logits).numpy().astype(np.float32, copy=False),
-            residual_states=residual_states.cpu().numpy().astype(np.float16, copy=False),
-            attention_weights=attention_weights.cpu().numpy().astype(np.float16, copy=False),
+            residual_states=residual_states.to(device="cpu", dtype=torch.float16).numpy(),
+            attention_weights=attention_weights.to(device="cpu", dtype=torch.float16).numpy(),
             replay_max_abs_logit_error=replay_error,
             stop_reason=stop_reason,
         )

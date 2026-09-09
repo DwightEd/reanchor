@@ -28,8 +28,9 @@ class TinyTokenizer:
 class TinyCausalModel:
     config = SimpleNamespace(_commit_hash="resolved-hash")
 
-    def __init__(self, floor=-4.0):
+    def __init__(self, floor=-4.0, state_dtype=torch.float32):
         self.floor = floor
+        self.state_dtype = state_dtype
 
     def eval(self):
         return self
@@ -50,10 +51,10 @@ class TinyCausalModel:
         hidden_states = None
         attentions = None
         if output_hidden_states:
-            state = torch.arange(length * 3, dtype=torch.float32).reshape(1, length, 3)
+            state = torch.arange(length * 3, dtype=self.state_dtype).reshape(1, length, 3)
             hidden_states = (state, state + 1)
         if output_attentions:
-            attentions = (torch.ones((1, 1, length, length), dtype=torch.float32),)
+            attentions = (torch.ones((1, 1, length, length), dtype=self.state_dtype),)
         return SimpleNamespace(
             logits=logits,
             hidden_states=hidden_states,
@@ -116,6 +117,23 @@ def test_huggingface_backend_reports_finite_entropy_for_underflowed_probabilitie
     )
 
     assert np.isfinite(capture.entropy).all()
+
+
+def test_huggingface_backend_serializes_bfloat16_replay_tensors():
+    backend = HuggingFaceBackend(
+        "tiny-model",
+        device="cpu",
+        model=TinyCausalModel(state_dtype=torch.bfloat16),
+        tokenizer=TinyTokenizer(),
+    )
+
+    capture = backend.sample_and_replay(
+        (ChatMessage(role="user", content="Question"),),
+        SamplingConfig(max_new_tokens=1, top_k=1, trace_top_k=2),
+    )
+
+    assert capture.residual_states.dtype == np.float16
+    assert capture.attention_weights.dtype == np.float16
 
 
 def test_huggingface_backend_records_the_resolved_model_revision():

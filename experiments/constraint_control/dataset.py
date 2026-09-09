@@ -19,6 +19,9 @@ class SourceDataset:
         )
         if not self.records:
             raise ValueError("source dataset contains no records")
+        keys = [record.key for record in self.records]
+        if len(keys) != len(set(keys)):
+            raise ValueError("source dataset contains duplicate sample keys")
         splits_by_source: dict[str, set[str]] = {}
         for record in self.records:
             splits_by_source.setdefault(record.source_id, set()).add(record.split)

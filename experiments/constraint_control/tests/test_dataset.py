@@ -75,3 +75,24 @@ def test_dataset_rejects_the_same_source_across_experimental_splits(tmp_path):
 
     with pytest.raises(ValueError, match="source_id appears in multiple splits"):
         SourceDataset(path)
+
+
+def test_dataset_rejects_duplicate_sample_keys_before_they_overwrite_artifacts(tmp_path):
+    path = tmp_path / "questions.jsonl"
+    records = [
+        {
+            "sample_id": "q1",
+            "source_id": source_id,
+            "split": "discovery",
+            "task": "QA",
+            "messages": [{"role": "user", "content": "Question"}],
+        }
+        for source_id in ("source-a", "source-b")
+    ]
+    path.write_text(
+        "".join(json.dumps(record) + "\n" for record in records),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="duplicate sample keys"):
+        SourceDataset(path)

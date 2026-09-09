@@ -45,6 +45,18 @@ See [the method specification](docs/method.md) and
 [the architecture](docs/architecture.md). The exact input arrays are documented
 in [the data contract](docs/data.md).
 
+The current free-generation P001 experiment reads the original RAGTruth
+`source_info.jsonl` directly; no hand-written `data/questions.jsonl` is needed.
+On the configured GPU server it can be launched with:
+
+```bash
+conda run --no-capture-output -n research \
+  bash scripts/run_constraint_control_p001.sh
+```
+
+RAGTruth's existing responses and hallucination spans are not reused as labels
+for the newly sampled answers.
+
 ## Install and run
 
 ```bash

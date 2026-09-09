@@ -6,11 +6,34 @@
 
 ## 入口与主接口
 
-唯一入口是 `main.py`：
+唯一 Python 入口是 `main.py`。服务器上直接运行默认的 RAGTruth QA
+smoke capture：
+
+```bash
+conda run --no-capture-output -n research \
+  bash scripts/run_constraint_control_p001.sh
+```
+
+脚本默认读取
+`/share/home/tm902089733300000/a903202310/lys/data/RAGTruth/dataset`，输出到
+`runs/p001_ragtruth_qa_llama31_8b`，并运行 Llama-3.1-8B-Instruct、RAGTruth
+train split 的 20 个 QA source、每个 source 三个采样 seed。需要改变任务、划分
+或数量时使用环境变量，例如：
+
+```bash
+TASK=Summary SPLIT=test MAX_SAMPLES=5 \
+  conda run --no-capture-output -n research \
+  bash scripts/run_constraint_control_p001.sh
+```
+
+完整参数调用为：
 
 ```bash
 python -m experiments.constraint_control.main \
-  --input data/questions.jsonl \
+  --input /share/home/tm902089733300000/a903202310/lys/data/RAGTruth/dataset \
+  --input-format ragtruth \
+  --task QA \
+  --split train \
   --output runs/p001_llama \
   --model meta-llama/Llama-3.1-8B-Instruct \
   --device cuda:0 \
@@ -29,13 +52,31 @@ python -m experiments.constraint_control.main \
 parse arguments
 -> ExperimentConfig
 -> ConstraintControlExperiment(config).run()
--> SourceDataset
+-> RagTruthDataset（或通用 SourceDataset）
 -> HuggingFaceBackend.sample_and_replay()
 -> GenerationRecorder.run()
 -> run/index.json
 ```
 
-## 输入格式
+## RAGTruth 输入边界
+
+RAGTruth 原始目录必须同时包含：
+
+- `source_info.jsonl`：读取 `prompt`、`task_type`、问题和外部材料；
+- `response.jsonl`：只读取 `source_id` 和 `split`，用于保留官方 train/test
+  source 划分。
+
+P001 不把 RAGTruth 已有的 `response`、`labels`、`quality` 或 generator model
+输入模型，也不靠这些字段选择样本。原因是本实验会让 Llama-3.1-8B-Instruct
+重新自由采样，新答案与 RAGTruth 原答案不是同一段文本，原有字符级标签不能直接
+移植。新答案是否幻觉必须在捕获后单独判定。
+
+适配器把 RAGTruth prompt 转成两条消息，并给出可复核的字符区间：QA question
+和任务指令为 `constraint`，每个 passage 为 `content`；Summary 的任务指令为
+`constraint`、文章为 `content`；Data2txt 的任务指令为 `constraint`、structured
+data 为 `content`。
+
+## 通用 JSONL 输入格式
 
 输入是 UTF-8 JSONL，每行一个 source-grouped record：
 
@@ -86,6 +127,7 @@ P001 使用 eager attention 验证语义和索引，因此适合 20 条左右的
 | `config.py` | 显式配置与参数验证 |
 | `records.py` | label-free message/evidence domain records |
 | `dataset.py` | JSONL 读取与 source split 防泄漏 |
+| `ragtruth.py` | 原始 RAGTruth prompt、官方 split 与证据/约束单元适配 |
 | `model.py` | Hugging Face 自由采样与精确 replay |
 | `generation.py` | fidelity gate、artifact schema 与原子落盘 |
 | `experiment.py` | records × seeds 的线性编排及 manifest |

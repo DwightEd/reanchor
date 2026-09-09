@@ -12,6 +12,7 @@ from .config import ExperimentConfig
 from .dataset import SourceDataset
 from .generation import GenerationBackend, GenerationRecorder, ReplayMismatchError
 from .model import HuggingFaceBackend
+from .ragtruth import RagTruthDataset
 
 
 class ConstraintControlExperiment:
@@ -29,7 +30,14 @@ class ConstraintControlExperiment:
         self.progress = progress
 
     def run(self) -> dict[str, int]:
-        dataset = SourceDataset(self.config.input_path)
+        if self.config.input_format == "ragtruth":
+            dataset = RagTruthDataset(
+                self.config.input_path,
+                task=self.config.task,
+                split=self.config.split,
+            )
+        else:
+            dataset = SourceDataset(self.config.input_path)
         records = dataset.records[: self.config.max_samples]
         backend = self.backend or HuggingFaceBackend(
             self.config.model,
@@ -92,6 +100,9 @@ class ConstraintControlExperiment:
                 "schema": "constraint_control_run_v1",
                 "labels_used_for_capture": False,
                 "input": str(self.config.input_path.resolve()),
+                "input_format": self.config.input_format,
+                "task": self.config.task,
+                "split": self.config.split,
                 "model": dict(backend.metadata),
                 "samplings": [asdict(sampling) for sampling in self.config.samplings],
                 "replay_atol": self.config.replay_atol,

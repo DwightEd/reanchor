@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
 from .generation import SamplingConfig
 
@@ -14,6 +15,9 @@ class ExperimentConfig:
     output: Path
     model: str
     samplings: tuple[SamplingConfig, ...]
+    input_format: Literal["jsonl", "ragtruth"] = "jsonl"
+    task: str = "all"
+    split: str = "all"
     device: str = "cuda:0"
     dtype: str = "auto"
     revision: str | None = None
@@ -25,6 +29,14 @@ class ExperimentConfig:
             raise ValueError("model must be nonempty")
         if not self.samplings:
             raise ValueError("at least one sampling configuration is required")
+        if self.input_format not in {"jsonl", "ragtruth"}:
+            raise ValueError("input_format must be jsonl or ragtruth")
+        if self.input_format == "jsonl" and (self.task != "all" or self.split != "all"):
+            raise ValueError("task and split filtering are only available for RAGTruth input")
+        if self.task not in {"all", "QA", "Summary", "Data2txt"}:
+            raise ValueError("unsupported RAGTruth task")
+        if self.split not in {"all", "train", "test"}:
+            raise ValueError("RAGTruth split must be all, train, or test")
         seeds = [sampling.seed for sampling in self.samplings]
         if len(seeds) != len(set(seeds)):
             raise ValueError("sampling seeds must be unique")

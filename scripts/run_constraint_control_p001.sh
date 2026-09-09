@@ -1,19 +1,27 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ $# -lt 3 || $# -gt 4 ]]; then
-  echo "Usage: $0 INPUT_JSONL OUTPUT_ROOT MODEL [DEVICE]" >&2
+if [[ $# -gt 4 ]]; then
+  echo "Usage: $0 [RAGTRUTH_ROOT] [OUTPUT_ROOT] [MODEL] [DEVICE]" >&2
   exit 2
 fi
 
-INPUT_JSONL=$1
-OUTPUT_ROOT=$2
-MODEL=$3
+RAGTRUTH_ROOT=${1:-/share/home/tm902089733300000/a903202310/lys/data/RAGTruth/dataset}
+OUTPUT_ROOT=${2:-runs/p001_ragtruth_qa_llama31_8b}
+MODEL=${3:-meta-llama/Llama-3.1-8B-Instruct}
 DEVICE=${4:-cuda:0}
+TASK=${TASK:-QA}
+SPLIT=${SPLIT:-train}
+MAX_SAMPLES=${MAX_SAMPLES:-20}
 REPO_ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+cd "$REPO_ROOT"
 
-if [[ ! -f "$INPUT_JSONL" ]]; then
-  echo "Input JSONL does not exist: $INPUT_JSONL" >&2
+if [[ ! -f "$RAGTRUTH_ROOT/source_info.jsonl" ]]; then
+  echo "RAGTruth source file does not exist: $RAGTRUTH_ROOT/source_info.jsonl" >&2
+  exit 2
+fi
+if [[ ! -f "$RAGTRUTH_ROOT/response.jsonl" ]]; then
+  echo "RAGTruth response file does not exist: $RAGTRUTH_ROOT/response.jsonl" >&2
   exit 2
 fi
 if [[ -f "$OUTPUT_ROOT/index.json" ]]; then
@@ -21,11 +29,13 @@ if [[ -f "$OUTPUT_ROOT/index.json" ]]; then
   exit 2
 fi
 
-cd "$REPO_ROOT"
 python -m pip install -e . --no-deps
 python -c 'import tqdm' >/dev/null
 python -u -m experiments.constraint_control.main \
-  --input "$INPUT_JSONL" \
+  --input "$RAGTRUTH_ROOT" \
+  --input-format ragtruth \
+  --task "$TASK" \
+  --split "$SPLIT" \
   --output "$OUTPUT_ROOT" \
   --model "$MODEL" \
   --device "$DEVICE" \
@@ -36,4 +46,4 @@ python -u -m experiments.constraint_control.main \
   --top-p 0.9 \
   --top-k 20 \
   --trace-top-k 20 \
-  --max-samples 20
+  --max-samples "$MAX_SAMPLES"

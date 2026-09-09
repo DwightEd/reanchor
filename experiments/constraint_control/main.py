@@ -18,7 +18,29 @@ def parser() -> argparse.ArgumentParser:
         prog="constraint-control",
         description="Sample answers freely, replay them, and capture inspectable trajectories.",
     )
-    command.add_argument("--input", type=Path, required=True, help="source-grouped JSONL")
+    command.add_argument(
+        "--input",
+        type=Path,
+        required=True,
+        help="source-grouped JSONL or original RAGTruth dataset directory",
+    )
+    command.add_argument(
+        "--input-format",
+        choices=("jsonl", "ragtruth"),
+        default="jsonl",
+    )
+    command.add_argument(
+        "--task",
+        choices=("all", "QA", "Summary", "Data2txt"),
+        default="all",
+        help="RAGTruth task filter; the one-click script defaults to QA",
+    )
+    command.add_argument(
+        "--split",
+        choices=("all", "train", "test"),
+        default="all",
+        help="RAGTruth source split; the one-click script defaults to train",
+    )
     command.add_argument("--output", type=Path, required=True, help="new run directory")
     command.add_argument("--model", required=True, help="Hugging Face model name or path")
     command.add_argument("--revision", help="optional immutable model revision")
@@ -53,6 +75,9 @@ def main(argv: list[str] | None = None) -> None:
         output=arguments.output,
         model=arguments.model,
         samplings=samplings,
+        input_format=arguments.input_format,
+        task=arguments.task,
+        split=arguments.split,
         device=arguments.device,
         dtype=arguments.dtype,
         revision=arguments.revision,

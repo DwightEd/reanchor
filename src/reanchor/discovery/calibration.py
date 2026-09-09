@@ -107,8 +107,12 @@ class MaxNullCalibrator:
                 for position_bin in range(self.config.position_bins):
                     exact = [
                         value
-                        for (candidate_task, candidate_bin, candidate_channel, _), value
-                        in maxima.items()
+                        for (
+                            candidate_task,
+                            candidate_bin,
+                            candidate_channel,
+                            _,
+                        ), value in maxima.items()
                         if (candidate_task, candidate_bin, candidate_channel)
                         == (task, position_bin, channel)
                     ]

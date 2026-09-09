@@ -61,10 +61,7 @@ def measure_attention_transitions(
     if window < 1 or not 0 < response_start < token_count:
         raise ValueError("window and response_start are invalid")
 
-    result = {
-        name: np.full((heads, row_count), np.nan, dtype=np.float32)
-        for name in SITE_METRICS
-    }
+    result = {name: np.full((heads, row_count), np.nan, dtype=np.float32) for name in SITE_METRICS}
     result["peak_source"] = np.full((heads, row_count), -1, dtype=np.int32)
     eligible = np.zeros(row_count, dtype=bool)
     source = np.arange(token_count)

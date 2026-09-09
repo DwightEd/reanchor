@@ -3,4 +3,3 @@
 from .protocol import AuditDataset, AuditSample, CapturePaths
 
 __all__ = ["AuditDataset", "AuditSample", "CapturePaths"]
-

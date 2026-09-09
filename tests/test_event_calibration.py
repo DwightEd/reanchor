@@ -68,8 +68,7 @@ def test_calibration_requires_enough_independent_sources():
 def test_broad_channel_does_not_depend_on_the_sparse_site_count():
     config = SelectionConfig(position_bins=1, min_calibration_sources=64)
     calibration = [
-        score_record(f"source-{index}", np.zeros(8), broad=np.full(8, 0.02))
-        for index in range(128)
+        score_record(f"source-{index}", np.zeros(8), broad=np.full(8, 0.02)) for index in range(128)
     ]
     target = score_record(
         "held-out",

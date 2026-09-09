@@ -110,9 +110,7 @@ class MorphologyProfiler:
             active_layer_fraction[row] = current.any(1).mean()
             focality = features.gain_focality[layer, selected, row]
             head_focality[row] = _weighted_mean(focality, weights)
-            focal_head_fraction[row] = np.mean(
-                focality >= self.config.head_focality_threshold
-            )
+            focal_head_fraction[row] = np.mean(focality >= self.config.head_focality_threshold)
             effective_sources[row] = _weighted_mean(
                 features.effective_sources[layer, selected, row], weights
             )
@@ -120,9 +118,7 @@ class MorphologyProfiler:
                 features.mean_distance[layer, selected, row], weights
             )
             votes = np.bincount(peaks, minlength=len(features.special_mask))
-            gain_votes = np.bincount(
-                peaks, weights=weights, minlength=len(features.special_mask)
-            )
+            gain_votes = np.bincount(peaks, weights=weights, minlength=len(features.special_mask))
             dominant_source_position[row] = int(votes.argmax())
             source_agreement[row] = votes.max() / votes.sum()
             gain_source_agreement[row] = gain_votes.max() / gain_votes.sum()

@@ -25,13 +25,12 @@ class AttentionReader:
         paths = self.dataset.paths(sample)
         metadata = self.dataset.load_metadata(sample, "row_position")
         rows = np.asarray(metadata["row_position"], dtype=np.int64)
-        with np.load(paths.qk, allow_pickle=False) as qk, np.load(
-            paths.history, allow_pickle=False
-        ) as history:
+        with (
+            np.load(paths.qk, allow_pickle=False) as qk,
+            np.load(paths.history, allow_pickle=False) as history,
+        ):
             layers = sorted(
-                int(name.removeprefix("query_"))
-                for name in qk.files
-                if name.startswith("query_")
+                int(name.removeprefix("query_")) for name in qk.files if name.startswith("query_")
             )
             if not layers:
                 raise ValueError(f"{sample.key}: Q/K archive contains no layers")
@@ -57,9 +56,10 @@ class AttentionReader:
                 for begin in range(0, len(rows), self.query_chunk):
                     end = min(begin + self.query_chunk, len(rows))
                     scores = (query[:, begin:end] @ key.transpose(-1, -2)) * scale
-                    future = sources[None, None] > torch.as_tensor(
-                        rows[begin:end], device=self.device
-                    )[None, :, None]
+                    future = (
+                        sources[None, None]
+                        > torch.as_tensor(rows[begin:end], device=self.device)[None, :, None]
+                    )
                     scores.masked_fill_(future, torch.finfo(dtype).min)
                     probability = scores.softmax(-1, dtype=torch.float32).to(dtype).float()
                     output[:, begin:end] = probability.cpu().numpy()

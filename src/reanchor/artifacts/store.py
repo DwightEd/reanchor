@@ -50,4 +50,3 @@ class ArtifactStore:
             temporary.replace(destination)
         finally:
             temporary.unlink(missing_ok=True)
-

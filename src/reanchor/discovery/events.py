@@ -100,9 +100,7 @@ class EventDiscovery:
         calibrator = MaxNullCalibrator(self.config.selection()).fit(calibration_records)
         profiler = MorphologyProfiler(
             MorphologyConfig(
-                active_gain_floor=min(
-                    self.config.site_gain_floor, self.config.broad_gain_floor
-                ),
+                active_gain_floor=min(self.config.site_gain_floor, self.config.broad_gain_floor),
                 local_floor=self.config.local_floor,
             )
         )

@@ -9,12 +9,10 @@ description = "Label-free discovery and causal tracing of reanchor transitions i
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-  "matplotlib",
   "numpy",
-  "scikit-learn",
+  "safetensors",
   "torch",
   "transformers>=4.57,<4.58",
-  "tqdm",
 ]
 
 [project.optional-dependencies]

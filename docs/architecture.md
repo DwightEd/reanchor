@@ -24,14 +24,15 @@ ordering and resume rules; it contains no attention mathematics.
 |---|---|---|
 | `capture.protocol` | Validate and read versioned v3 capture artifacts | `AuditDataset(root)` |
 | `capture.attention` | Reconstruct complete attention rows from Q/K plus native history | `AttentionReader.rows(sample)` |
-| `capture.writer` | Record a fixed trajectory into the canonical capture protocol | `TrajectoryCapture.run(...)` |
 | `discovery.features` | Produce label-free read-site transition measurements | `TransitionExtractor.run(sample)` |
 | `discovery.scores` | Collapse layer/head features into sparse and broad token statistics | `score_transitions(...)` |
 | `discovery.calibration` | Independent-source max null and episode selection | `MaxNullCalibrator.fit(...).select(...)` |
 | `discovery.events` | Collapse significant transitions into episodes and anchors | `EventDiscovery.run(dataset)` |
 | `discovery.morphology` | Describe frozen anchors without reselection | `MorphologyProfiler.run(...)` |
-| `tracing.propagation` | Propagate anchor messages with analytic JVPs | `CausalTracer.run(...)` |
-| `tracing.cuts` | Persist and certify signed last-crossing transport edges | `TransportCut.write(...)` |
+| `tracing.tracer` | Load frozen anchors and orchestrate one sample at a time | `CausalTracer.run(...)` |
+| `tracing.jacobian` | Native RMSNorm, attention and SwiGLU JVP/VJP operators | `DifferentialLayer` |
+| `tracing.propagation` | Propagate messages with exact position-hop accounting | `trace_events(...)` |
+| `tracing.cuts` | Persist and certify signed last-crossing transport edges | `CutRecorder` |
 | `reporting.evaluation` | Join labels and compute source-balanced estimates | `ReportBuilder.run(...)` |
 | `artifacts.store` | Atomic, versioned output persistence and resume identity | `ArtifactStore` |
 

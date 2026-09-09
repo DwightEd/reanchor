@@ -45,4 +45,3 @@ def score_transitions(
         "broad_score": broad.astype(np.float32),
         "supporting_sites": support,
     }
-

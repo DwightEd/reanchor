@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from experiments.constraint_control.dataset import SourceDataset
 
 
@@ -33,3 +35,24 @@ def test_dataset_reads_messages_and_typed_evidence_units(tmp_path):
         ("c1", "constraint"),
         ("f1", "content"),
     ]
+
+
+def test_dataset_rejects_the_same_source_across_experimental_splits(tmp_path):
+    path = tmp_path / "questions.jsonl"
+    records = [
+        {
+            "sample_id": sample_id,
+            "source_id": "shared-document",
+            "split": split,
+            "task": "QA",
+            "messages": [{"role": "user", "content": "Question"}],
+        }
+        for sample_id, split in (("q1", "discovery"), ("q2", "confirmation"))
+    ]
+    path.write_text(
+        "".join(json.dumps(record) + "\n" for record in records),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="source_id appears in multiple splits"):
+        SourceDataset(path)

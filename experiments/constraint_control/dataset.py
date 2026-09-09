@@ -19,6 +19,14 @@ class SourceDataset:
         )
         if not self.records:
             raise ValueError("source dataset contains no records")
+        splits_by_source: dict[str, set[str]] = {}
+        for record in self.records:
+            splits_by_source.setdefault(record.source_id, set()).add(record.split)
+        leaked = sorted(
+            source_id for source_id, splits in splits_by_source.items() if len(splits) > 1
+        )
+        if leaked:
+            raise ValueError(f"source_id appears in multiple splits: {leaked[:5]}")
 
     def _parse(self, value: dict) -> SourceRecord:
         messages = tuple(ChatMessage(**message) for message in value["messages"])

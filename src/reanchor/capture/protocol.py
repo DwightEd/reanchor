@@ -47,6 +47,7 @@ class AuditDataset:
         self.samples = tuple(self._sample(entry) for entry in self.manifest.get("samples", ()))
         if not self.samples:
             raise ValueError("capture manifest contains no samples")
+        self._validate_samples()
 
     @property
     def model_path(self) -> Path:
@@ -110,3 +111,16 @@ class AuditDataset:
             path.relative_to(self.root)
         except ValueError as error:
             raise ValueError(f"capture path is outside capture root: {path}") from error
+
+    def _validate_samples(self) -> None:
+        keys = [sample.key for sample in self.samples]
+        if len(keys) != len(set(keys)):
+            raise ValueError("capture manifest contains duplicate sample keys")
+        splits_by_source: dict[str, set[str]] = {}
+        for sample in self.samples:
+            if not sample.source_id:
+                raise ValueError(f"{sample.key}: source_id must be nonempty")
+            splits_by_source.setdefault(sample.source_id, set()).add(sample.split)
+        leaked = sorted(source for source, splits in splits_by_source.items() if len(splits) > 1)
+        if leaked:
+            raise ValueError(f"source_id appears in multiple splits: {leaked[:5]}")

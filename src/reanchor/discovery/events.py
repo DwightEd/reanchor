@@ -80,17 +80,32 @@ class EventDiscovery:
         settings = json.dumps(asdict(self.config), sort_keys=True)
         records = []
         transition_paths = {}
+        resumed_transitions = 0
         for sample in samples:
-            features = extractor.run(sample)
             path = store.sample_path(sample, "transitions.npz")
-            store.write_npz(
-                path,
-                **features.arrays(),
-                method_schema=np.array(self.SCHEMA),
-                settings=np.array(settings),
-                sample_key=np.array(sample.key),
-                labels_used=np.array(False),
-            )
+            if path.is_file():
+                values = store.read_npz(path)
+                if (
+                    str(values.get("method_schema", "")) != self.SCHEMA
+                    or str(values.get("settings", "")) != settings
+                    or str(values.get("sample_key", "")) != sample.key
+                    or bool(values.get("labels_used", True))
+                ):
+                    raise ValueError(
+                        f"{sample.key}: existing transition artifact has different identity"
+                    )
+                features = TransitionFeatures.from_arrays(sample, values)
+                resumed_transitions += 1
+            else:
+                features = extractor.run(sample)
+                store.write_npz(
+                    path,
+                    **features.arrays(),
+                    method_schema=np.array(self.SCHEMA),
+                    settings=np.array(settings),
+                    sample_key=np.array(sample.key),
+                    labels_used=np.array(False),
+                )
             transition_paths[sample.key] = path
             records.append(features.token_scores(self.config.transition()))
 
@@ -98,6 +113,7 @@ class EventDiscovery:
             record for record in records if record.split == self.config.calibration_split
         ]
         calibrator = MaxNullCalibrator(self.config.selection()).fit(calibration_records)
+        store.write_json(output / "calibration.json", calibrator.artifact())
         profiler = MorphologyProfiler(
             MorphologyConfig(
                 active_gain_floor=min(self.config.site_gain_floor, self.config.broad_gain_floor),
@@ -157,6 +173,7 @@ class EventDiscovery:
             "calibration_sources": len({record.source_id for record in calibration_records}),
             "significant_transitions": significant_count,
             "anchors": anchor_count,
+            "resumed_transitions": resumed_transitions,
             "labels_used_for_discovery": False,
             "settings": asdict(self.config),
             "sample_artifacts": manifest_samples,

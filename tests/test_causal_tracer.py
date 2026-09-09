@@ -26,6 +26,10 @@ class FakeDataset:
 
 def test_tracer_consumes_only_frozen_anchors_and_publishes_one_trace(tmp_path, monkeypatch):
     sample = AuditSample("test", "QA", "7", "source-7", Path("7.npz"), 4, 2)
+    contrast_path = tmp_path / "contrasts.json"
+    contrast_path.write_text(
+        json.dumps({sample.key: [{"target": 6, "positive_id": 11, "negative_id": 12}]})
+    )
     run = tmp_path / "run"
     store = ArtifactStore(run)
     sample_folder = store.sample_path(sample, "events.npz").parent
@@ -58,7 +62,7 @@ def test_tracer_consumes_only_frozen_anchors_and_publishes_one_trace(tmp_path, m
             ],
         },
     )
-    seen = {}
+    seen = {"calls": 0}
 
     class FakeCache:
         def __init__(self, paths, weights):
@@ -71,8 +75,12 @@ def test_tracer_consumes_only_frozen_anchors_and_publishes_one_trace(tmp_path, m
             return None
 
     def fake_trace(cache, coordinates, **options):
+        seen["calls"] += 1
+        if seen["calls"] > 1:
+            raise AssertionError("committed traces should be resumed")
         seen["coordinates"] = coordinates.copy()
         assert options["window"] == 2
+        assert options["contrasts"] == [{"target": 6, "positive_id": 11, "negative_id": 12}]
         return [
             {
                 "event_row": np.array(2),
@@ -92,9 +100,8 @@ def test_tracer_consumes_only_frozen_anchors_and_publishes_one_trace(tmp_path, m
         module, "open_cut_resources", lambda *args, **kwargs: nullcontext((None, None))
     )
 
-    summary = CausalTracer(TraceConfig(device="cpu", save_edges=False)).run(
-        FakeDataset(sample), run
-    )
+    config = TraceConfig(device="cpu", save_edges=False, contrast_file=str(contrast_path))
+    summary = CausalTracer(config).run(FakeDataset(sample), run)
 
     np.testing.assert_array_equal(seen["coordinates"], np.array([[0, 0, 2]]))
     assert summary["anchors_traced"] == 1
@@ -102,3 +109,6 @@ def test_tracer_consumes_only_frozen_anchors_and_publishes_one_trace(tmp_path, m
     with np.load(trace_path, allow_pickle=False) as trace:
         assert not bool(trace["labels_used"])
     assert json.loads((run / "tracing.json").read_text())["labels_used_for_tracing"] is False
+
+    resumed = CausalTracer(config).run(FakeDataset(sample), run)
+    assert resumed["anchors_resumed"] == 1

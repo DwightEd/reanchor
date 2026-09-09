@@ -18,7 +18,12 @@ class SampleDataset:
 
 
 class FeatureExtractor:
+    def __init__(self):
+        self.fail = False
+
     def run(self, sample):
+        if self.fail:
+            raise AssertionError("committed transitions should be resumed")
         rows = np.arange(1, 5)
         shape = (1, 2, len(rows))
         remote_gain = np.zeros(shape, dtype=np.float32)
@@ -67,9 +72,9 @@ def test_discovery_calibrates_on_train_and_writes_one_held_out_anchor(tmp_path):
         broad_head_fraction=0.5,
     )
 
-    summary = EventDiscovery(config, extractor=FeatureExtractor()).run(
-        SampleDataset(samples), tmp_path / "run"
-    )
+    extractor = FeatureExtractor()
+    workflow = EventDiscovery(config, extractor=extractor)
+    summary = workflow.run(SampleDataset(samples), tmp_path / "run")
 
     assert summary["samples"] == 41
     assert summary["significant_transitions"] == 1
@@ -81,3 +86,8 @@ def test_discovery_calibrates_on_train_and_writes_one_held_out_anchor(tmp_path):
         assert str(events["reanchor_type"][2]) == "broad_convergent"
         assert not bool(events["labels_used"])
     assert (tmp_path / "run/index.json").is_file()
+    assert (tmp_path / "run/calibration.json").is_file()
+
+    extractor.fail = True
+    resumed = workflow.run(SampleDataset(samples), tmp_path / "run")
+    assert resumed["resumed_transitions"] == 41

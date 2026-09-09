@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
 import numpy as np
 
@@ -177,3 +177,21 @@ class MaxNullCalibrator:
             previous = position
         close_episode()
         return CalibratedSelection(family_p, channel, significant, episode_id, anchor)
+
+    def artifact(self) -> dict:
+        """Return the complete fitted null needed to audit every empirical p-value."""
+
+        return {
+            "calibration_schema": "reanchor/source-max-null@1",
+            "labels_used": False,
+            "settings": asdict(self.config),
+            "strata": [
+                {
+                    "task": task,
+                    "position_bin": position_bin,
+                    "channel": channel,
+                    "source_maxima": values.tolist(),
+                }
+                for (task, position_bin, channel), values in sorted(self._nulls.items())
+            ],
+        }

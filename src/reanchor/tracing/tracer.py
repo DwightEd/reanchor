@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from contextlib import ExitStack, contextmanager
 from dataclasses import asdict, dataclass
+from hashlib import sha256
 from pathlib import Path
 
 import numpy as np
@@ -25,6 +26,7 @@ class TraceConfig:
     query_chunk: int = 8
     event_batch: int = 2
     save_edges: bool = True
+    contrast_file: str | None = None
 
     def __post_init__(self):
         if self.query_chunk < 1 or self.event_batch < 1:
@@ -32,14 +34,25 @@ class TraceConfig:
 
 
 @contextmanager
-def open_cut_resources(cache, folder: Path, event_rows: np.ndarray, config: TraceConfig):
+def open_cut_resources(
+    cache,
+    folder: Path,
+    event_rows: np.ndarray,
+    config: TraceConfig,
+    contrasts=None,
+):
     """Open one shared suffix readout and one streaming edge writer per anchor."""
 
     if not config.save_edges:
         yield None, None
         return
     readout_path = folder / "local_readout.npz"
-    prepare_local_readout(cache, readout_path, query_chunk=config.query_chunk)
+    prepare_local_readout(
+        cache,
+        readout_path,
+        query_chunk=config.query_chunk,
+        contrasts=contrasts,
+    )
     with np.load(readout_path, allow_pickle=False) as readout, ExitStack() as stack:
         recorders = {}
         for row in event_rows:
@@ -77,6 +90,11 @@ class CausalTracer:
         weights = None
         sample_summaries = []
         traced_count = 0
+        resumed_count = 0
+        computed_count = 0
+        contrasts, contrast_digest = self._contrasts()
+        identity = {**asdict(self.config), "contrast_sha256": contrast_digest}
+        settings = json.dumps(identity, sort_keys=True)
         for entry in discovery["sample_artifacts"]:
             sample = sample_by_key.get(entry["key"])
             if sample is None:
@@ -97,30 +115,61 @@ class CausalTracer:
             if not len(coordinates):
                 sample_summaries.append({"key": sample.key, "anchors_traced": 0})
                 continue
-            if weights is None:
-                weights = CheckpointWeights(dataset.model_path, self.config.device)
             folder = store.sample_path(sample, "traces").parent
             event_rows = np.unique(coordinates[:, 2])
-            with NativeCache(dataset.paths(sample), weights) as cache:
-                with open_cut_resources(cache, folder, event_rows, self.config) as (
-                    readout,
-                    recorders,
-                ):
-                    results = trace_events(
+            committed = {}
+            pending_rows = []
+            for row in event_rows:
+                position = int(events["row_position"][row])
+                trace_path = folder / f"traces/event_{position}.npz"
+                edge_path = folder / f"edges/event_{position}.npz"
+                if trace_path.is_file() and (not self.config.save_edges or edge_path.is_file()):
+                    trace = store.read_npz(trace_path)
+                    if (
+                        str(trace.get("trace_schema", "")) != self.SCHEMA
+                        or str(trace.get("trace_settings", "")) != settings
+                        or str(trace.get("sample_key", "")) != sample.key
+                        or int(trace.get("event_row", -1)) != row
+                        or bool(trace.get("labels_used", True))
+                    ):
+                        raise ValueError(
+                            f"{sample.key}: existing trace artifact has different identity"
+                        )
+                    committed[int(row)] = trace_path
+                else:
+                    pending_rows.append(int(row))
+            pending_rows = np.asarray(pending_rows, dtype=int)
+            if len(pending_rows) and weights is None:
+                weights = CheckpointWeights(dataset.model_path, self.config.device)
+            pending = coordinates[np.isin(coordinates[:, 2], pending_rows)]
+            results = []
+            if len(pending):
+                sample_contrasts = contrasts.get(sample.key)
+                with NativeCache(dataset.paths(sample), weights) as cache:
+                    with open_cut_resources(
                         cache,
-                        coordinates,
-                        window=window,
-                        query_chunk=self.config.query_chunk,
-                        cut_readout=readout,
-                        cut_recorders=recorders,
-                        event_batch=self.config.event_batch,
-                        progress=self.progress,
-                    )
+                        folder,
+                        pending_rows,
+                        self.config,
+                        sample_contrasts,
+                    ) as (
+                        readout,
+                        recorders,
+                    ):
+                        results = trace_events(
+                            cache,
+                            pending,
+                            window=window,
+                            query_chunk=self.config.query_chunk,
+                            cut_readout=readout,
+                            cut_recorders=recorders,
+                            contrasts=sample_contrasts,
+                            event_batch=self.config.event_batch,
+                            progress=self.progress,
+                        )
             returned_rows = np.array([int(result["event_row"]) for result in results])
-            if not np.array_equal(returned_rows, event_rows):
+            if not np.array_equal(returned_rows, pending_rows):
                 raise ValueError(f"{sample.key}: tracing returned different anchor rows")
-            paths = []
-            settings = json.dumps(asdict(self.config), sort_keys=True)
             for result in results:
                 position = int(result["event_position"])
                 path = folder / f"traces/event_{position}.npz"
@@ -131,22 +180,45 @@ class CausalTracer:
                     trace_settings=np.array(settings),
                     sample_key=np.array(sample.key),
                 )
-                paths.append(str(path.relative_to(run_root)))
-            traced_count += len(results)
+                committed[int(result["event_row"])] = path
+            paths = [str(committed[int(row)].relative_to(run_root)) for row in event_rows]
+            traced_count += len(event_rows)
+            resumed_count += len(event_rows) - len(results)
+            computed_count += len(results)
             sample_summaries.append(
-                {"key": sample.key, "anchors_traced": len(results), "traces": paths}
+                {"key": sample.key, "anchors_traced": len(event_rows), "traces": paths}
             )
         summary = {
             "trace_schema": self.SCHEMA,
             "discovery_schema": discovery["method_schema"],
             "coverage": coverage,
             "anchors_traced": traced_count,
+            "anchors_computed": computed_count,
+            "anchors_resumed": resumed_count,
             "labels_used_for_tracing": False,
-            "settings": asdict(self.config),
+            "settings": identity,
             "sample_artifacts": sample_summaries,
         }
         store.write_json(run_root / "tracing.json", summary)
         return summary
+
+    def _contrasts(self) -> tuple[dict[str, list[dict]], str | None]:
+        if self.config.contrast_file is None:
+            return {}, None
+        path = Path(self.config.contrast_file)
+        payload = path.read_bytes()
+        values = json.loads(payload)
+        if not isinstance(values, dict):
+            raise ValueError("contrast file must map sample keys to candidate lists")
+        required = {"target", "positive_id", "negative_id"}
+        for sample_key, entries in values.items():
+            if not isinstance(sample_key, str) or not isinstance(entries, list):
+                raise ValueError("contrast file must map sample keys to candidate lists")
+            if any(
+                not isinstance(entry, dict) or not required <= entry.keys() for entry in entries
+            ):
+                raise ValueError("each contrast needs target, positive_id and negative_id")
+        return values, sha256(payload).hexdigest()
 
     @staticmethod
     def _inside(root: Path, relative: str) -> Path:

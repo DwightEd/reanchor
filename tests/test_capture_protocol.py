@@ -87,3 +87,24 @@ def test_dataset_rejects_capture_paths_outside_the_root(tmp_path):
 
     with pytest.raises(ValueError, match="outside capture root"):
         AuditDataset(tmp_path)
+
+
+def test_dataset_rejects_source_leakage_across_splits(tmp_path):
+    sample = {
+        "task_type": "QA",
+        "sample_id": "a",
+        "source_id": "shared-source",
+        "path": "a.npz",
+        "response_tokens": 1,
+        "response_start": 1,
+    }
+    manifest = {
+        "audit_schema": 3,
+        "labels_used_for_capture": False,
+        "settings": {},
+        "samples": [dict(sample, split="train"), dict(sample, split="test", sample_id="b")],
+    }
+    (tmp_path / "index.json").write_text(json.dumps(manifest))
+
+    with pytest.raises(ValueError, match="appears in multiple splits"):
+        AuditDataset(tmp_path)

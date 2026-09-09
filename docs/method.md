@@ -99,10 +99,10 @@ An eligible token is significant only if it satisfies all frozen requirements:
 - corrected family `p <= alpha`;
 - a positive remote-gain effect-size floor;
 - the previous-local precondition;
-- at least one calibrated supporting read site.
+- at least one active sparse or broad read-site pattern.
 
 Consecutive significant positions are one episode. The position with the
-smallest corrected q-value, then largest remote gain, is its anchor. Only anchors
+smallest corrected family p-value, then largest remote gain, is its anchor. Only anchors
 enter expensive causal tracing; all episode members remain in the artifact.
 
 ## Stage 4: morphology
@@ -153,6 +153,14 @@ separate:
 Token observations are summarized within an independent source first. Confidence
 intervals resample sources, not correlated tokens, heads or events.
 
+Morphology-conditioned reports separate the anchor target from later horizons.
+Signed candidate-margin responses are also retained after every layer. A
+positive intermediate explicit-candidate effect followed by a nonpositive final
+effect is reported as `received_then_overridden`. This name is used only for an
+externally defined positive/negative candidate contrast. Under the default
+observed-versus-runner contrast, the same number is only a preference reversal:
+the observed token may itself be hallucinated.
+
 ## Interpretation limits
 
 - Capture is teacher-forced analysis of a fixed trajectory, not a new free run.
@@ -160,5 +168,6 @@ intervals resample sources, not correlated tokens, heads or events.
 - JVP tracing is a local first-order causal sensitivity, not a finite ablation.
 - Observed-versus-runner margins are not truth contrasts. Truth claims require
   explicit, independently defined correct/incorrect candidates.
-- FDR controls the declared selection family; it does not remove dataset shift,
-  label error or causal-identification assumptions.
+- The source-max family correction controls the declared selection family under
+  source exchangeability; it does not remove dataset shift, label error or
+  causal-identification assumptions.

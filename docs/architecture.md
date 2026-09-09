@@ -33,7 +33,7 @@ ordering and resume rules; it contains no attention mathematics.
 | `tracing.jacobian` | Native RMSNorm, attention and SwiGLU JVP/VJP operators | `DifferentialLayer` |
 | `tracing.propagation` | Propagate messages with exact position-hop accounting | `trace_events(...)` |
 | `tracing.cuts` | Persist and certify signed last-crossing transport edges | `CutRecorder` |
-| `reporting.evaluation` | Join labels and compute source-balanced estimates | `ReportBuilder.run(...)` |
+| `reporting.evaluation` | Join labels, future outcomes and source-balanced estimates | `ReportBuilder.run(...)` |
 | `artifacts.store` | Atomic, versioned output persistence and resume identity | `ArtifactStore` |
 
 These are package-internal modules. The supported user interface is the CLI and
@@ -64,14 +64,12 @@ run/
 |-- samples/<split>/<task>/<sample>/
 |   |-- transitions.npz
 |   |-- events.npz
-|   |-- morphology.npz
+|   |-- local_readout.npz
 |   |-- traces/event_<position>.npz
 |   `-- edges/event_<position>.npz
 `-- reports/
     |-- summary.json
-    |-- reanchor.json
-    |-- transport.json
-    `-- tables/
+    `-- events.csv
 ```
 
 Every artifact includes schema, capture identity and frozen method settings.

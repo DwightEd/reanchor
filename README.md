@@ -36,5 +36,45 @@ The initial input adapter reads existing `attention_audit_v3` captures, so the
 completed capture does not need to be regenerated during migration.
 
 See [the method specification](docs/method.md) and
-[the architecture](docs/architecture.md).
+[the architecture](docs/architecture.md). The exact input arrays are documented
+in [the data contract](docs/data.md).
 
+## Install and run
+
+```bash
+git clone https://github.com/DwightEd/reanchor.git
+cd reanchor
+python -m pip install -e .
+
+python -m reanchor run \
+  --capture /path/to/attention_audit_v3 \
+  --output outputs/reanchor_v1 \
+  --device cuda:0
+```
+
+The portable one-command script accepts the capture root, output root and an
+optional device:
+
+```bash
+bash scripts/run_v3.sh \
+  /path/to/graph/experiments/reanchor_flow/outputs/attention_audit_v3 \
+  outputs/reanchor_v1 \
+  cuda:0
+```
+
+`discover`, `trace` and `report` can be run separately in that order. Completed
+transition and trace artifacts are identity-checked and resumed. The output is
+always separate from the immutable capture.
+
+## What gets selected
+
+A raw read-site threshold is never called a reanchor event. The workflow first
+forms two token statistics: a sparse exceptional-head score and a broad
+coordinated-head score. Each independent training `source_id` then contributes
+its maximum score across its correlated samples and tokens. Empirical
+source-max p-values are corrected across the predeclared score channels and
+relative-position bins. Consecutive significant tokens form an episode, and
+only its strongest anchor is causally traced.
+
+This directly addresses the former `any(layer, head)` trap, where the chance of
+selecting a token grows toward one as the number of read sites grows.

@@ -42,6 +42,11 @@ class ArtifactStore:
                 encoding="utf-8",
             )
 
+    def write_text(self, path: Path, value: str) -> None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with self._temporary(path, ".tmp") as temporary:
+            temporary.write_text(value, encoding="utf-8")
+
     @contextmanager
     def _temporary(self, destination: Path, suffix: str):
         temporary = destination.with_name(f".{destination.name}.{uuid4().hex}{suffix}")

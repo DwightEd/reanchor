@@ -20,6 +20,7 @@ class RecordingBackend:
         return CapturedGeneration(
             token_ids=np.array([1, 2, 3], dtype=np.int64),
             token_text=("prompt", " answer", " end"),
+            special_mask=np.array([False, False, True]),
             response_start=1,
             response_text="answer end",
             generation_selected_logits=np.array([3.0, 4.0], dtype=np.float32),

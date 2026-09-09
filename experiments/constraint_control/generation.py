@@ -44,6 +44,7 @@ class CapturedGeneration:
 
     token_ids: np.ndarray
     token_text: tuple[str, ...]
+    special_mask: np.ndarray
     response_start: int
     response_text: str
     generation_selected_logits: np.ndarray
@@ -65,6 +66,8 @@ class CapturedGeneration:
             raise ValueError("response_start must point inside token_ids")
         if len(self.token_text) != token_count:
             raise ValueError("token_text and token_ids must have equal length")
+        if self.special_mask.shape != (token_count,):
+            raise ValueError("special_mask must match token_ids")
         vectors = (
             self.generation_selected_logits,
             self.replay_selected_logits,
@@ -150,6 +153,7 @@ class GenerationRecorder:
             capture_path,
             token_ids=np.asarray(capture.token_ids, dtype=np.int64),
             token_text=np.asarray(capture.token_text),
+            special_mask=np.asarray(capture.special_mask, dtype=bool),
             response_start=np.asarray(capture.response_start, dtype=np.int64),
             row_position=row_position,
             generation_selected_logits=capture.generation_selected_logits,
@@ -172,6 +176,7 @@ class GenerationRecorder:
                 "source_id": record.source_id,
                 "labels_used_for_capture": False,
                 "messages": [asdict(message) for message in record.messages],
+                "evidence_units": [asdict(unit) for unit in record.evidence_units],
                 "sampling": asdict(sampling),
                 "model": dict(self.backend.metadata),
                 "response_text": capture.response_text,
@@ -189,6 +194,7 @@ class GenerationRecorder:
             "sample_key": record.key,
             "source_id": record.source_id,
             "messages": [asdict(message) for message in record.messages],
+            "evidence_units": [asdict(unit) for unit in record.evidence_units],
             "sampling": asdict(sampling),
             "model": dict(self.backend.metadata),
         }

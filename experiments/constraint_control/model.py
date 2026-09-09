@@ -120,10 +120,14 @@ class HuggingFaceBackend:
         )
         token_ids = sequence[0].cpu().numpy().astype(np.int64, copy=False)
         pieces = self.tokenizer.convert_ids_to_tokens(token_ids.tolist())
+        special_ids = set(self.tokenizer.all_special_ids)
 
         return CapturedGeneration(
             token_ids=token_ids,
             token_text=tuple(str(piece) for piece in pieces),
+            special_mask=np.asarray(
+                [token_id in special_ids for token_id in token_ids], dtype=bool
+            ),
             response_start=response_start,
             response_text=self.tokenizer.decode(response_ids.tolist(), skip_special_tokens=True),
             generation_selected_logits=np.asarray(selected_logits, dtype=np.float32),

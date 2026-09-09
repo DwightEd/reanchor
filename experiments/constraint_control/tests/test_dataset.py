@@ -14,10 +14,29 @@ def test_dataset_reads_messages_and_typed_evidence_units(tmp_path):
                 "source_id": "document-1",
                 "split": "discovery",
                 "task": "QA",
-                "messages": [{"role": "user", "content": "Who won under the 2020 rule?"}],
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": "Use the 2020 rule. Ada won in 2020. Who won?",
+                    }
+                ],
                 "evidence_units": [
-                    {"unit_id": "c1", "kind": "constraint", "text": "Use the 2020 rule."},
-                    {"unit_id": "f1", "kind": "content", "text": "Ada won in 2020."},
+                    {
+                        "unit_id": "c1",
+                        "kind": "constraint",
+                        "text": "Use the 2020 rule.",
+                        "message_index": 0,
+                        "char_start": 0,
+                        "char_end": 18,
+                    },
+                    {
+                        "unit_id": "f1",
+                        "kind": "content",
+                        "text": "Ada won in 2020.",
+                        "message_index": 0,
+                        "char_start": 19,
+                        "char_end": 35,
+                    },
                 ],
             }
         )
@@ -30,7 +49,7 @@ def test_dataset_reads_messages_and_typed_evidence_units(tmp_path):
     assert len(dataset.records) == 1
     record = dataset.records[0]
     assert record.key == "discovery/QA/q1"
-    assert record.messages[0].content == "Who won under the 2020 rule?"
+    assert record.messages[0].content.endswith("Who won?")
     assert [(unit.unit_id, unit.kind) for unit in record.evidence_units] == [
         ("c1", "constraint"),
         ("f1", "content"),

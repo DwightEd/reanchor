@@ -10,6 +10,7 @@ from experiments.constraint_control.records import ChatMessage
 
 class TinyTokenizer:
     eos_token_id = 4
+    all_special_ids = [4]
 
     def apply_chat_template(self, messages, **kwargs):
         assert messages == [{"role": "user", "content": "Question"}]
@@ -75,6 +76,7 @@ def test_huggingface_backend_samples_then_replays_the_exact_tokens():
     assert capture.response_text == "3 4"
     assert capture.stop_reason == "eos"
     assert capture.replay_max_abs_logit_error == 0.0
+    np.testing.assert_array_equal(capture.special_mask, [False, False, False, True])
     assert capture.residual_states.shape == (2, 2, 3)
     assert capture.attention_weights.shape == (1, 1, 2, 4)
     np.testing.assert_array_equal(capture.top_token_ids[:, 0], [3, 4])

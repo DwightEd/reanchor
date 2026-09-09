@@ -7,7 +7,7 @@ from experiments.constraint_control.generation import (
     GenerationRecorder,
     SamplingConfig,
 )
-from experiments.constraint_control.records import ChatMessage, SourceRecord
+from experiments.constraint_control.records import ChatMessage, EvidenceUnit, SourceRecord
 
 
 class DeterministicBackend:
@@ -21,6 +21,7 @@ class DeterministicBackend:
         return CapturedGeneration(
             token_ids=np.array([10, 11, 12, 13], dtype=np.int64),
             token_text=("Use", " fact", " A", "."),
+            special_mask=np.array([False, False, False, True]),
             response_start=2,
             response_text=" A.",
             generation_selected_logits=np.array([4.0, 5.0], dtype=np.float32),
@@ -44,6 +45,16 @@ def test_recorder_persists_a_label_free_free_run_trajectory(tmp_path):
         split="discovery",
         task="QA",
         messages=(ChatMessage(role="user", content="Use fact A."),),
+        evidence_units=(
+            EvidenceUnit(
+                unit_id="constraint-1",
+                kind="constraint",
+                text="fact A",
+                message_index=0,
+                char_start=4,
+                char_end=10,
+            ),
+        ),
     )
     recorder = GenerationRecorder(DeterministicBackend(), tmp_path, replay_atol=1e-4)
 
@@ -56,8 +67,19 @@ def test_recorder_persists_a_label_free_free_run_trajectory(tmp_path):
     assert metadata["labels_used_for_capture"] is False
     assert metadata["sampling"]["seed"] == 7
     assert metadata["model"]["model"] == "deterministic-test-model"
+    assert metadata["evidence_units"] == [
+        {
+            "char_end": 10,
+            "char_start": 4,
+            "kind": "constraint",
+            "message_index": 0,
+            "text": "fact A",
+            "unit_id": "constraint-1",
+        }
+    ]
     with np.load(artifact.capture_path, allow_pickle=False) as capture:
         np.testing.assert_array_equal(capture["token_ids"], [10, 11, 12, 13])
+        np.testing.assert_array_equal(capture["special_mask"], [False, False, False, True])
         np.testing.assert_array_equal(capture["row_position"], [1, 2])
         assert capture["residual_states"].shape == (3, 2, 4)
         assert capture["attention_weights"].shape == (2, 1, 2, 4)

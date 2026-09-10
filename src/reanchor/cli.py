@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import argparse
 import json
-import sys
 from pathlib import Path
 
 from reanchor.discovery.events import DiscoveryConfig
 from reanchor.pipeline import PipelineConfig, ReanchorPipeline
+from reanchor.progress import TqdmProgress
 from reanchor.reporting.report import ReportConfig
 from reanchor.tracing.mechanism import MechanismConfig
 from reanchor.tracing.tracer import TraceConfig
@@ -88,10 +88,7 @@ def main(argv: list[str] | None = None) -> None:
         reporting=ReportConfig(bootstrap=arguments.bootstrap),
     )
 
-    def progress(message):
-        print(message, file=sys.stderr, flush=True)
-
-    result = ReanchorPipeline(config, progress=progress).run()
+    result = ReanchorPipeline(config, progress=TqdmProgress()).run()
     print(json.dumps(result, indent=2, sort_keys=True, allow_nan=False))
 
 

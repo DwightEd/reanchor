@@ -99,7 +99,13 @@ class MechanismAuditor:
         sample_summaries = []
         audited = computed = resumed = 0
 
-        for entry in discovery["sample_artifacts"]:
+        entries = discovery["sample_artifacts"]
+        audited_entries = (
+            self.progress.track(entries, description="audit reanchor samples")
+            if self.progress
+            else entries
+        )
+        for entry in audited_entries:
             key = entry["key"]
             sample = samples.get(key)
             trace_entry = trace_entries.get(key)
@@ -259,7 +265,9 @@ class MechanismAuditor:
 
     def _trace_partitions(self, cache, pending, window, contrasts, masks):
         if self.progress:
-            self.progress(f"mechanism audit: shared propagation for {len(masks)} partitions")
+            self.progress.detail(
+                f"mechanism audit: shared propagation for {len(masks)} partitions"
+            )
         return trace_events(
             cache,
             pending,

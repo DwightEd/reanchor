@@ -38,9 +38,9 @@ class ReanchorPipeline:
         dataset = AuditDataset(self.config.capture)
         result = {}
         if self.config.command in {"discover", "run"}:
-            result["discovery"] = EventDiscovery(self.config.discovery).run(
-                dataset, self.config.output
-            )
+            result["discovery"] = EventDiscovery(
+                self.config.discovery, progress=self.progress
+            ).run(dataset, self.config.output)
         if self.config.command in {"trace", "run"}:
             result["tracing"] = CausalTracer(self.config.tracing, progress=self.progress).run(
                 dataset, self.config.output

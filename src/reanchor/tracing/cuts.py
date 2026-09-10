@@ -24,7 +24,7 @@ def prepare_local_readout(cache, path, *, query_chunk=8, contrasts=None, progres
         ) as archive:
             for layer in reversed(range(cache.layers)):
                 if progress:
-                    progress(f"local output readers L{layer + 1}/{cache.layers}")
+                    progress.detail(f"local output readers L{layer + 1}/{cache.layers}")
                 operator = DifferentialLayer(cache, layer, query_chunk)
                 post = reader + operator.mlp_vjp(reader)
                 write_array(archive, f"L{layer}", post.cpu().numpy())

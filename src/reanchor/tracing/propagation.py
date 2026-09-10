@@ -33,11 +33,12 @@ def _step(op, state, rows, injections):
     roots = np.zeros((count, len(op.cache.trace["token_ids"])), np.float32)
     if injections:
         owners, injection_heads, pairs = zip(*injections, strict=True)
+        owner_index = np.asarray(owners, dtype=int)
         injected[
-            torch.as_tensor(owners, device=op.device),
+            torch.as_tensor(owner_index, device=op.device),
             torch.as_tensor(injection_heads, device=op.device),
         ] = torch.stack([p[0] for p in pairs])
-        np.add.at(roots, owners, np.stack([p[1] for p in pairs]))
+        np.add.at(roots, owner_index, np.stack([p[1] for p in pairs]))
     ids = torch.arange(count, device=op.device)
     seed_rows = torch.as_tensor(rows, device=op.device)
     existing = torch.einsum("bhc,hdc->bhd", code[ids, :, seed_rows], op.output_blocks)
@@ -166,7 +167,9 @@ def trace_events(
     layer_response = np.zeros((count, 3, 3, layer_count + 1, row_count - 1), np.float32)
     for layer in range(int(coordinates[:, 0].min()), layer_count):
         if progress:
-            progress(f"differential DAG L{layer + 1}/{layer_count}, shared events={count}")
+            progress.detail(
+                f"differential DAG L{layer + 1}/{layer_count}, shared events={count}"
+            )
         started = clock()
         op = DifferentialLayer(cache, layer, query_chunk)
         op.cache_attention()
@@ -217,7 +220,7 @@ def trace_events(
                 torch.einsum("vkbrd,rd->bvkr", current, direction).cpu().numpy()[..., :-1]
             )
             if progress:
-                progress(
+                progress.detail(
                     f"differential DAG L{layer + 1}/{layer_count}, "
                     f"events {end}/{count}, batch={end - begin}"
                 )

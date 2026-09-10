@@ -40,6 +40,7 @@ def open_cut_resources(
     event_rows: np.ndarray,
     config: TraceConfig,
     contrasts=None,
+    progress=None,
 ):
     """Open one shared suffix readout and one streaming edge writer per anchor."""
 
@@ -52,6 +53,7 @@ def open_cut_resources(
         readout_path,
         query_chunk=config.query_chunk,
         contrasts=contrasts,
+        progress=progress,
     )
     with np.load(readout_path, allow_pickle=False) as readout, ExitStack() as stack:
         recorders = {}
@@ -99,7 +101,13 @@ class CausalTracer:
             raise ValueError(f"contrast file contains unknown sample keys: {unknown_contrasts[:5]}")
         identity = {**asdict(self.config), "contrast_sha256": contrast_digest}
         settings = json.dumps(identity, sort_keys=True)
-        for entry in discovery["sample_artifacts"]:
+        entries = discovery["sample_artifacts"]
+        traced_entries = (
+            self.progress.track(entries, description="trace reanchor samples")
+            if self.progress
+            else entries
+        )
+        for entry in traced_entries:
             sample = sample_by_key.get(entry["key"])
             if sample is None:
                 if int(entry.get("anchors", 0)):
@@ -159,6 +167,7 @@ class CausalTracer:
                         pending_rows,
                         self.config,
                         sample_contrasts,
+                        self.progress,
                     ) as (
                         readout,
                         recorders,

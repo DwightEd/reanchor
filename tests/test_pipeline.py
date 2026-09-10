@@ -72,3 +72,51 @@ def test_pipeline_runs_mechanism_audit_as_an_explicit_post_trace_stage(monkeypat
 
     assert [name for name, _ in calls] == ["dataset", "audit"]
     assert result == {"mechanism": {"stage": "audit"}}
+
+
+def test_pipeline_passes_one_progress_display_to_long_running_stages(monkeypatch, tmp_path):
+    seen = []
+    progress = object()
+
+    class Dataset:
+        def __init__(self, path):
+            pass
+
+    class Workflow:
+        def __init__(self, stage, received):
+            seen.append((stage, received))
+            self.stage = stage
+
+        def run(self, dataset, output):
+            return {"stage": self.stage}
+
+    import reanchor.pipeline as module
+
+    monkeypatch.setattr(module, "AuditDataset", Dataset)
+    monkeypatch.setattr(
+        module,
+        "EventDiscovery",
+        lambda *args, progress=None: Workflow("discover", progress),
+    )
+    monkeypatch.setattr(
+        module,
+        "CausalTracer",
+        lambda *args, progress=None: Workflow("trace", progress),
+    )
+    monkeypatch.setattr(
+        module,
+        "MechanismAuditor",
+        lambda *args, progress=None: Workflow("audit", progress),
+    )
+    monkeypatch.setattr(module, "ReportBuilder", lambda *args: Workflow("report", None))
+
+    ReanchorPipeline(
+        PipelineConfig(capture=tmp_path / "capture", output=tmp_path / "run"),
+        progress=progress,
+    ).run()
+
+    assert seen[:3] == [
+        ("discover", progress),
+        ("trace", progress),
+        ("audit", progress),
+    ]

@@ -63,9 +63,16 @@ class EventDiscovery:
 
     SCHEMA = "reanchor/max-null-episode@1"
 
-    def __init__(self, config: DiscoveryConfig = DiscoveryConfig(), *, extractor=None):
+    def __init__(
+        self,
+        config: DiscoveryConfig = DiscoveryConfig(),
+        *,
+        extractor=None,
+        progress=None,
+    ):
         self.config = config
         self.extractor = extractor
+        self.progress = progress
 
     def run(self, dataset: AuditDataset, output: str | Path) -> dict:
         output = Path(output)
@@ -87,7 +94,12 @@ class EventDiscovery:
         records = []
         transition_paths = {}
         resumed_transitions = 0
-        for sample in samples:
+        transition_samples = (
+            self.progress.track(samples, description="discover transitions")
+            if self.progress
+            else samples
+        )
+        for sample in transition_samples:
             path = store.sample_path(sample, "transitions.npz")
             if path.is_file():
                 values = store.read_npz(path)
@@ -129,7 +141,17 @@ class EventDiscovery:
         manifest_samples = []
         eligible_count = floor_candidate_count = 0
         significant_count = anchor_count = samples_with_anchors = 0
-        for sample, record in zip(samples, records):
+        event_samples = (
+            self.progress.track(
+                range(len(samples)),
+                description="freeze reanchor events",
+                total=len(samples),
+            )
+            if self.progress
+            else range(len(samples))
+        )
+        for sample_index in event_samples:
+            sample, record = samples[sample_index], records[sample_index]
             values = store.read_npz(transition_paths[sample.key])
             if str(values["settings"]) != settings or str(values["sample_key"]) != sample.key:
                 raise ValueError(f"{sample.key}: transition artifact identity changed")

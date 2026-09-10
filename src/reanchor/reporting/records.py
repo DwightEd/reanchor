@@ -16,6 +16,31 @@ def load_labels(dataset, sample) -> np.ndarray | None:
     return labels
 
 
+def target_phase(labels: np.ndarray, response_index: int) -> str:
+    """Name a known target's position relative to a hallucinated span."""
+
+    if int(labels[response_index]) == 0:
+        return "normal"
+    if response_index == 0 or int(labels[response_index - 1]) not in (0, 1):
+        return "hallucinated_boundary_unknown"
+    return "onset" if int(labels[response_index - 1]) == 0 else "continuing"
+
+
+def join_outcomes(rows: list[dict], labels: np.ndarray | None) -> list[dict]:
+    """Attach N/H outcomes after label-free signal construction."""
+
+    labels = None if labels is None else np.asarray(labels, dtype=np.int8)
+    joined = []
+    for source in rows:
+        row = dict(source)
+        index = int(row["target_response_index"])
+        label = int(labels[index]) if labels is not None and 0 <= index < len(labels) else -1
+        row["label"] = label if label in (0, 1) else ""
+        row["phase"] = target_phase(labels, index) if label in (0, 1) else ""
+        joined.append(row)
+    return joined
+
+
 def event_records(sample, transitions, events, labels) -> list[dict]:
     positions = np.asarray(events["row_position"])
     eligible = np.asarray(events["eligible"], dtype=bool)

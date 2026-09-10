@@ -64,6 +64,7 @@ def test_dataset_exposes_only_complete_v3_samples_and_reports_coverage(tmp_path)
     assert [sample.key for sample in samples] == ["train/QA/complete"]
     assert coverage == {"planned": 2, "completed": 1, "skipped": 1}
     assert dataset.paths(samples[0]).qk.name == "complete.qk.npz"
+    assert dataset.load_available_metadata(samples[0], "source_kind") == {}
 
 
 def test_dataset_rejects_capture_paths_outside_the_root(tmp_path):

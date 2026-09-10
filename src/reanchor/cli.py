@@ -9,7 +9,7 @@ from pathlib import Path
 
 from reanchor.discovery.events import DiscoveryConfig
 from reanchor.pipeline import PipelineConfig, ReanchorPipeline
-from reanchor.reporting.evaluation import ReportConfig
+from reanchor.reporting.report import ReportConfig
 from reanchor.tracing.mechanism import MechanismConfig
 from reanchor.tracing.tracer import TraceConfig
 

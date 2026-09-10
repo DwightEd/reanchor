@@ -24,7 +24,8 @@ src/reanchor/
 |-- capture/               # fixed-trajectory feature protocol and capture
 |-- discovery/             # transition features, calibration, selection, morphology
 |-- tracing/               # analytic JVP propagation and signed transport cuts
-|-- reporting/             # label join, source-balanced estimates and rendering
+|-- evaluation/            # reusable source-balanced AUROC/AUPR
+|-- reporting/             # label join, readable records and report assembly
 `-- artifacts/             # versioned, atomic artifact persistence
 tests/                     # public-seam and end-to-end tests
 docs/
@@ -80,9 +81,10 @@ bash scripts/run_v3.sh \
   cuda:0
 ```
 
-`discover`, `trace` and `report` can be run separately in that order. Completed
-transition and trace artifacts are identity-checked and resumed. The output is
-always separate from the immutable capture.
+`run` executes `discover -> trace -> audit -> report`. The same stages can be run
+separately in that order. Completed transition and trace artifacts are
+identity-checked and resumed. The output is always separate from the immutable
+capture.
 
 An optional candidate file makes correctness-oriented tracing explicit:
 
@@ -98,8 +100,10 @@ Pass it with `--contrasts contrasts.json`. `target` is an absolute predicted
 token position. The file content hash becomes part of trace identity, so a
 changed contrast cannot silently reuse an old trace.
 
-To ask how the selected attention transition affected that candidate decision,
-run the mechanism audit with the exact same contrast file:
+Without `--contrasts`, tracing and audit use the generated token versus its
+runner-up. This supports detection and preference-route analysis, but it is not a
+truth margin. To ask how the selected transition affected a known candidate
+decision, run tracing and audit with the exact same contrast file:
 
 ```bash
 python -m reanchor audit \
@@ -119,6 +123,14 @@ keeps exact `0`/`1`/`2+` position-hop effects. Four coarse source groups are onl
 complete provenance partition, not four hallucination mechanisms; annotated
 `source_unit_id` effects are retained separately. The prior current-remote-write
 trace remains a reference estimand. Pointwise additive closure is required.
+
+Reporting writes the analyzed answers to `reports/responses.csv`, every eligible
+token's local/remote and source-route measurements to
+`reports/transition_signals.csv`, and mechanism effects to
+`reports/mechanisms.csv`. `reports/summary.json` contains source-balanced AUROC,
+AUPR and source-cluster bootstrap intervals for all-H, onset and continuing-H
+detection separately. The transition table records the actual peak source token
+and its available provenance category; special tokens are excluded.
 
 The audit is still a fixed-trajectory linearized candidate-route test. A causal or
 general mechanism claim requires matched pseudo-onsets, bidirectional exact route

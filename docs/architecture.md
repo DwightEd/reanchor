@@ -12,7 +12,7 @@ parse arguments
   -> extract transition features
   -> calibrate and freeze episodes
   -> trace episode anchors
-  -> optionally audit the frozen transition innovation by phase and provenance
+  -> audit the frozen transition innovation by phase and provenance
   -> join labels and report
 ```
 
@@ -35,11 +35,16 @@ ordering and resume rules; it contains no attention mathematics.
 | `tracing.propagation` | Propagate messages with exact position-hop accounting | `trace_events(...)` |
 | `tracing.mechanism` | Propagate the discovery-aligned transition seed; retain coarse groups and source units; certify pointwise closure | `MechanismAuditor.run(...)` |
 | `tracing.cuts` | Persist and certify signed last-crossing transport edges | `CutRecorder` |
-| `reporting.evaluation` | Join labels, future outcomes and source-balanced estimates | `ReportBuilder.run(...)` |
+| `evaluation.binary` | Source-balanced AUROC/AUPR and source-cluster bootstrap | `BinaryEvaluator.evaluate(...)` |
+| `evaluation.detection` | Keep all-H, onset and continuing-H detection cohorts separate | `DetectionEvaluator.evaluate(...)` |
+| `reporting.signals` | Build readable label-free token and response records | `transition_signal_rows(...)` |
+| `reporting.records` | Attach token outcomes and phases after extraction | `join_outcomes(...)` |
+| `reporting.report` | Join artifacts and labels, then write tables and summaries | `ReportBuilder.run(...)` |
 | `artifacts.store` | Atomic, versioned output persistence and resume identity | `ArtifactStore` |
 
-These are package-internal modules. The supported user interface is the CLI and
-the three workflow classes `EventDiscovery`, `CausalTracer`, and `ReportBuilder`.
+These are package-internal modules. The supported user interface is the CLI. The
+pipeline directly composes `EventDiscovery`, `CausalTracer`, `MechanismAuditor`
+and `ReportBuilder`; metric consumers may reuse `BinaryEvaluator` independently.
 
 ## Dependency direction
 
@@ -48,7 +53,8 @@ cli -> pipeline
 pipeline -> capture, discovery, tracing, reporting, artifacts
 discovery -> capture, artifacts
 tracing -> capture, artifacts
-reporting -> capture, artifacts
+reporting -> capture, evaluation, artifacts
+evaluation -> (no project package dependency)
 capture -> (no project package dependency)
 artifacts -> (no project package dependency)
 ```
@@ -74,7 +80,9 @@ run/
 |-- mechanism.json
 `-- reports/
     |-- summary.json
+    |-- responses.csv
     |-- events.csv
+    |-- transition_signals.csv
     |-- mechanisms.csv
     `-- mechanism_source_units.csv
 ```
@@ -95,3 +103,4 @@ Temporary files are committed by atomic rename only after validation.
 - Capture compatibility is tested against a minimal v3 directory.
 - Tracing is tested against finite differences and independent autograd oracles.
 - One small end-to-end fixture crosses the public pipeline interface.
+- Binary detection metrics are tested independently from artifact loading and label joins.

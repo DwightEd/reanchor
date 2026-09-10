@@ -7,12 +7,8 @@ import numpy as np
 
 from reanchor.artifacts import ArtifactStore
 from reanchor.capture.protocol import AuditSample
-from reanchor.reporting.evaluation import (
-    ReportBuilder,
-    ReportConfig,
-    received_then_overridden,
-    source_ratio_summary,
-)
+from reanchor.reporting.report import ReportBuilder, ReportConfig
+from reanchor.reporting.statistics import received_then_overridden, source_ratio_summary
 
 
 def test_source_ratio_does_not_overweight_a_source_with_more_tokens():
@@ -49,6 +45,10 @@ class FakeDataset:
         assert sample == self.sample
         return {"special_mask": np.zeros(6, dtype=bool)}
 
+    def load_available_metadata(self, sample, *fields):
+        assert sample == self.sample
+        return {}
+
 
 def test_report_is_the_first_stage_that_joins_labels(tmp_path):
     sample = AuditSample("test", "QA", "7", "source-7", Path("7.npz"), 4, 2)
@@ -61,6 +61,21 @@ def test_report_is_the_first_stage_that_joins_labels(tmp_path):
         folder / "transitions.npz",
         response_start=np.array(2),
         row_position=np.arange(2, 6),
+        token_text=np.array(list("abcdef")),
+        special_mask=np.zeros(6, dtype=bool),
+        evidence_mask=np.array([False, True, False, False, False, False]),
+        eligible=np.array([False, True, True, False]),
+        current_local_mass=np.full((1, 1, 4), 0.6),
+        previous_local_mass=np.full((1, 1, 4), 0.8),
+        positive_remote_gain=np.full((1, 1, 4), 0.2),
+        time_tv=np.full((1, 1, 4), 0.1),
+        gain_focality=np.full((1, 1, 4), 0.8),
+        effective_sources=np.full((1, 1, 4), 1.5),
+        mean_distance=np.full((1, 1, 4), 3.0),
+        prompt_positive_gain=np.full((1, 1, 4), 0.15),
+        evidence_positive_gain=np.full((1, 1, 4), 0.1),
+        history_positive_gain=np.full((1, 1, 4), 0.05),
+        peak_source=np.ones((1, 1, 4), dtype=int),
     )
     store.write_npz(
         folder / "events.npz",
@@ -126,6 +141,7 @@ def test_report_is_the_first_stage_that_joins_labels(tmp_path):
         source_unit_root_coefficient=source_roots[1:2],
         source_unit_seed_norm=np.array([0.2]),
         transition_margin_response=source_margin.sum(0),
+        transition_seed_norm=np.array(0.6),
         current_remote_margin_response=source_margin.sum(0),
         baseline_margin=np.array([0.0, -1.0, 0.0]),
         positive_id=np.array([1, 2, 3]),
@@ -156,6 +172,11 @@ def test_report_is_the_first_stage_that_joins_labels(tmp_path):
     assert summary["groups"]["test/QA"]["event_incidence"]["estimate"] == 1.0
     assert summary["groups"]["test/QA"]["event_incidence_hallucinated"]["estimate"] == 1.0
     assert summary["groups"]["test/QA"]["anchor_target_hallucination"]["estimate"] == 1.0
+    detection = summary["transition_detection"]["overall"]
+    assert detection["hallucination"]["local_attention_mass"]["observations"] == 2
+    assert detection["onset"]["local_attention_mass"]["observations"] == 1
+    routes = summary["transition_routes_by_phase"]
+    assert routes["onset"]["peak_token_category"]["evidence"]["estimate"] == 1.0
     outcomes = summary["groups"]["test/QA"]["morphology_outcomes"]["broad_convergent"]
     assert outcomes["future_hallucination"]["1-4"]["estimate"] == 1.0
     causal = summary["causal_response"]
@@ -165,9 +186,10 @@ def test_report_is_the_first_stage_that_joins_labels(tmp_path):
     mechanism = summary["mechanism_audit"]
     assert mechanism["hallucinated_targets"] == 2
     assert mechanism["closure_failures"] == 0
-    assert mechanism["phase_effects"]["onset"]["transition_remote_effect"]["estimate"] == -0.5
-    chain = mechanism["same_event_onset_to_rollout"]
-    assert chain["candidate_chain_rate"]["estimate"] == 1.0
+    candidate = mechanism["readouts"]["explicit_candidate"]
+    assert candidate["phase_effects"]["onset"]["transition_remote_effect"]["estimate"] == -0.5
+    chain = candidate["same_event_onset_to_rollout"]
+    assert chain["negative_margin_chain_rate"]["estimate"] == 1.0
     assert chain["claim_supported"] is False
     assert mechanism["binding_identified"] is False
     with (run / "reports/mechanisms.csv").open(newline="", encoding="utf-8") as handle:
@@ -181,3 +203,11 @@ def test_report_is_the_first_stage_that_joins_labels(tmp_path):
     with (run / "reports/events.csv").open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))
     assert [row["label"] for row in rows] == ["1", "1"]
+    with (run / "reports/transition_signals.csv").open(
+        newline="", encoding="utf-8"
+    ) as handle:
+        signal_rows = list(csv.DictReader(handle))
+    assert [row["phase"] for row in signal_rows] == ["onset", "continuing"]
+    with (run / "reports/responses.csv").open(newline="", encoding="utf-8") as handle:
+        response_rows = list(csv.DictReader(handle))
+    assert response_rows[0]["response_text"] == "cdef"

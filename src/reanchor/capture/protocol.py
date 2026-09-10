@@ -93,6 +93,14 @@ class AuditDataset:
                 raise ValueError(f"{sample.key}: missing capture fields {missing}")
             return {field: archive[field] for field in fields}
 
+    def load_available_metadata(
+        self, sample: AuditSample, *fields: str
+    ) -> dict[str, np.ndarray]:
+        """Return optional capture annotations without inventing fallback values."""
+
+        with np.load(self.paths(sample).compact, allow_pickle=False) as archive:
+            return {field: archive[field] for field in fields if field in archive}
+
     def _sample(self, entry: dict) -> AuditSample:
         relative = Path(str(entry["path"]))
         self._inside_root((self.root / relative).resolve())

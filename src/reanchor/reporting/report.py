@@ -12,9 +12,11 @@ import numpy as np
 
 from reanchor.artifacts import ArtifactStore
 from reanchor.capture.protocol import AuditDataset
+from reanchor.evaluation import DetectionEvaluator
 
-from .mechanisms import mechanism_target_row, source_unit_target_rows
-from .records import event_records, future_records, load_labels
+from .mechanisms import MECHANISM_SCORES, mechanism_target_row, source_unit_target_rows
+from .records import event_records, future_records, join_outcomes, load_labels, target_phase
+from .signals import TRANSITION_SCORES, response_record, transition_signal_rows
 from .statistics import received_then_overridden, source_mean_summary, source_ratio_summary
 
 
@@ -34,7 +36,7 @@ class ReportConfig:
 class ReportBuilder:
     """Create auditable CSV rows and source-balanced summaries after discovery."""
 
-    SCHEMA = "reanchor/source-balanced-report@1"
+    SCHEMA = "reanchor/source-balanced-report@2"
     _EVENT_FIELDS = (
         "split",
         "task",
@@ -65,14 +67,18 @@ class ReportBuilder:
         "onset_aligned",
         "rollout_target",
         "label",
+        "readout",
         "positive_id",
         "negative_id",
         "baseline_margin",
+        "transition_seed_norm",
         "transition_remote_effect",
+        "transition_margin_per_seed_norm",
+        "transition_nonadoption_score",
         "transition_zero_hop_effect",
         "transition_one_hop_effect",
         "transition_multi_hop_effect",
-        "rollout_multi_hop_error_promoting",
+        "rollout_multi_hop_negative",
         "current_remote_write_effect",
         "current_remote_zero_hop_effect",
         "current_remote_one_hop_effect",
@@ -98,6 +104,7 @@ class ReportBuilder:
         "event_target_offset",
         "target_phase",
         "label",
+        "readout",
         "closure_pass",
         "source_unit_id",
         "source_role",
@@ -106,6 +113,36 @@ class ReportBuilder:
         "seed_norm",
         "transition_margin_effect",
         "absolute_effect_rank",
+    )
+    _SIGNAL_FIELDS = (
+        "split",
+        "task",
+        "sample_id",
+        "source_id",
+        "query_position",
+        "target_position",
+        "target_response_index",
+        "query_token",
+        "target_token",
+        "remote_peak_position",
+        "remote_peak_token",
+        "remote_peak_category",
+        "dominant_remote_route",
+        "reanchor_type",
+        "selected_transition",
+        "anchor",
+        *TRANSITION_SCORES,
+        "label",
+        "phase",
+    )
+    _RESPONSE_FIELDS = (
+        "split",
+        "task",
+        "sample_id",
+        "source_id",
+        "response_tokens",
+        "response_text",
+        "response_tokens_json",
     )
 
     def __init__(self, config: ReportConfig = ReportConfig()):
@@ -120,6 +157,8 @@ class ReportBuilder:
         store = ArtifactStore(run_root)
         event_rows = []
         future_rows = []
+        signal_rows = []
+        response_rows = []
         labelled_samples = 0
         for entry in discovery["sample_artifacts"]:
             sample = samples.get(entry["key"])
@@ -129,6 +168,23 @@ class ReportBuilder:
             events = store.read_npz(self._inside(run_root, entry["events"]))
             labels = load_labels(dataset, sample)
             labelled_samples += int(labels is not None)
+            optional = dataset.load_available_metadata(
+                sample, "source_kind", "predictor_logprob", "predictor_entropy"
+            )
+            signal_rows.extend(
+                join_outcomes(
+                    transition_signal_rows(
+                        sample,
+                        transitions,
+                        events,
+                        source_kind=optional.get("source_kind"),
+                        predictor_logprob=optional.get("predictor_logprob"),
+                        predictor_entropy=optional.get("predictor_entropy"),
+                    ),
+                    labels,
+                )
+            )
+            response_rows.append(response_record(sample, transitions))
             event_rows.extend(event_records(sample, transitions, events, labels))
             future_rows.extend(
                 future_records(
@@ -211,6 +267,10 @@ class ReportBuilder:
             "labels_joined_only_in_reporting": True,
             "labelled_samples": labelled_samples,
             "groups": groups,
+            "transition_detection": DetectionEvaluator(
+                bootstrap=self.config.bootstrap, seed=self.config.seed
+            ).evaluate(signal_rows, TRANSITION_SCORES),
+            "transition_routes_by_phase": self._route_summary(signal_rows),
             "causal_response": trace_summary,
             "mechanism_audit": mechanism_summary,
             "interpretation": {
@@ -221,6 +281,13 @@ class ReportBuilder:
         }
         reports = run_root / "reports"
         store.write_text(reports / "events.csv", self._csv(event_rows))
+        store.write_text(
+            reports / "transition_signals.csv",
+            self._csv_fields(signal_rows, self._SIGNAL_FIELDS),
+        )
+        store.write_text(
+            reports / "responses.csv", self._csv_fields(response_rows, self._RESPONSE_FIELDS)
+        )
         if mechanism_rows is not None:
             store.write_text(reports / "mechanisms.csv", self._mechanism_csv(mechanism_rows))
             store.write_text(
@@ -232,6 +299,49 @@ class ReportBuilder:
 
     def _horizon_names(self):
         return tuple(f"{lower}-{upper}" for lower, upper in self.config.future_horizons)
+
+    def _route_summary(self, rows):
+        result = {}
+        for phase in ("normal", "onset", "continuing", "hallucinated_boundary_unknown"):
+            phase_rows = [row for row in rows if row["phase"] == phase]
+            result[phase] = {
+                "dominant_gain_route": self._category_ratios(
+                    phase_rows,
+                    "dominant_remote_route",
+                    ("evidence", "other_prompt", "response_history", "none"),
+                ),
+                "peak_token_category": self._category_ratios(
+                    phase_rows,
+                    "remote_peak_category",
+                    (
+                        "constraint",
+                        "content",
+                        "other",
+                        "evidence",
+                        "other_prompt",
+                        "response_history",
+                        "none",
+                    ),
+                ),
+            }
+        return result
+
+    def _category_ratios(self, rows, field, categories):
+        return {
+            category: source_ratio_summary(
+                [
+                    {
+                        "source_id": row["source_id"],
+                        "selected": row[field] == category,
+                    }
+                    for row in rows
+                ],
+                "selected",
+                bootstrap=self.config.bootstrap,
+                seed=self.config.seed,
+            )
+            for category in categories
+        }
 
     def _trace_summary(self, dataset, run_root: Path, store: ArtifactStore) -> dict:
         path = run_root / "tracing.json"
@@ -330,7 +440,9 @@ class ReportBuilder:
             for artifact_index, artifact in enumerate(artifacts):
                 targets = np.asarray(artifact["target_position"])
                 if np.any(targets < 0) or np.any(targets >= len(special)):
-                    raise ValueError(f"{sample.key}: mechanism target lies outside captured tokens")
+                    raise ValueError(
+                        f"{sample.key}: mechanism target lies outside captured tokens"
+                    )
                 event_position = int(artifact["event_position"])
                 next_event = (
                     event_positions[artifact_index + 1]
@@ -340,9 +452,10 @@ class ReportBuilder:
                 after = targets > event_position
                 label_index = targets - sample.response_start
                 explicit = np.asarray(artifact["explicit_contrast"], dtype=bool)
+                if explicit.shape != targets.shape:
+                    raise ValueError(f"{sample.key}: explicit contrast axis differs from targets")
                 eligible = (
                     after
-                    & explicit
                     & ~special[targets]
                     & (label_index >= 0)
                     & (label_index < len(labels))
@@ -358,7 +471,7 @@ class ReportBuilder:
                     response_index = int(label_index[target_index])
                     label = int(labels[response_index])
                     if label in (0, 1):
-                        phase = self._target_phase(labels, response_index)
+                        phase = target_phase(labels, response_index)
                         target_position = int(targets[target_index])
                         before_next_event = next_event is None or target_position <= next_event
                         row = mechanism_target_row(
@@ -380,13 +493,13 @@ class ReportBuilder:
                                     "event_target_offset": row["event_target_offset"],
                                     "target_phase": phase,
                                     "label": label,
+                                    "readout": row["readout"],
                                     "closure_pass": row["closure_pass"],
                                 },
                             )
                         )
 
         valid = [row for row in rows if row["closure_pass"]]
-        phase_names = ("normal", "onset", "continuing", "hallucinated_boundary_unknown")
         result = {
             "status": "complete",
             "targets": len(rows),
@@ -400,13 +513,40 @@ class ReportBuilder:
             "binding_requirement": (
                 "matched constraint counterfactual or bidirectional intervention"
             ),
+            "readouts": {
+                name: self._mechanism_readout_summary(
+                    name, [row for row in valid if row["readout"] == name]
+                )
+                for name in ("observed_runner", "explicit_candidate")
+            },
+        }
+        return result, rows, unit_rows
+
+    def _mechanism_readout_summary(self, readout, rows):
+        phase_names = ("normal", "onset", "continuing", "hallucinated_boundary_unknown")
+        result = {
+            "targets": len(rows),
+            "interpretation": (
+                "generated-token preference, not factual correctness"
+                if readout == "observed_runner"
+                else "externally defined correct-minus-error preference"
+            ),
             "phase_effects": {},
             "source_groups_by_phase": {},
-            "same_event_onset_to_rollout": self._temporal_chains(valid),
+            "same_event_onset_to_rollout": self._temporal_chains(readout, rows),
+            "detection": DetectionEvaluator(
+                bootstrap=self.config.bootstrap, seed=self.config.seed
+            ).evaluate(rows, MECHANISM_SCORES, phase="target_phase"),
         }
         for phase in phase_names:
-            phase_rows = [row for row in valid if row["target_phase"] == phase]
+            phase_rows = [row for row in rows if row["target_phase"] == phase]
             result["phase_effects"][phase] = {
+                "transition_seed_norm": source_mean_summary(
+                    phase_rows,
+                    "transition_seed_norm",
+                    bootstrap=self.config.bootstrap,
+                    seed=self.config.seed,
+                ),
                 "transition_remote_effect": source_mean_summary(
                     phase_rows,
                     "transition_remote_effect",
@@ -435,16 +575,16 @@ class ReportBuilder:
                         bootstrap=self.config.bootstrap,
                         seed=self.config.seed,
                     ),
-                    "correct_minus_error_transition_effect": source_mean_summary(
+                    "transition_margin_effect": source_mean_summary(
                         phase_rows,
                         f"{name}_transition_margin_effect",
                         bootstrap=self.config.bootstrap,
                         seed=self.config.seed,
                     ),
                 }
-        return result, rows, unit_rows
+        return result
 
-    def _temporal_chains(self, rows) -> dict:
+    def _temporal_chains(self, readout, rows) -> dict:
         grouped = {}
         for row in rows:
             key = (
@@ -474,13 +614,15 @@ class ReportBuilder:
                     "source_id": onset[0]["source_id"],
                     "onset_transition_effect": onset_effect,
                     "rollout_multi_hop_effect": rollout_effect,
-                    "candidate_chain": bool(rollout and onset_effect < 0 and rollout_effect < 0),
+                    "negative_margin_chain": bool(
+                        rollout and onset_effect < 0 and rollout_effect < 0
+                    ),
                 }
             )
         return {
             "status": "exploratory_linearized_candidate_only",
             "events": len(grouped),
-            "events_with_explicit_onset_target": events_with_onset,
+            "events_with_onset_target": events_with_onset,
             "events_with_pre_next_event_rollout_target": events_with_rollout,
             "onset_transition_effect": source_mean_summary(
                 chain_rows,
@@ -494,11 +636,16 @@ class ReportBuilder:
                 bootstrap=self.config.bootstrap,
                 seed=self.config.seed,
             ),
-            "candidate_chain_rate": source_ratio_summary(
+            "negative_margin_chain_rate": source_ratio_summary(
                 chain_rows,
-                "candidate_chain",
+                "negative_margin_chain",
                 bootstrap=self.config.bootstrap,
                 seed=self.config.seed,
+            ),
+            "negative_margin_interpretation": (
+                "error-favouring only for externally defined correct-minus-error contrasts"
+                if readout == "explicit_candidate"
+                else "disfavouring the generated token relative to its runner-up"
             ),
             "claim_supported": False,
             "missing_for_causal_claim": (
@@ -506,15 +653,6 @@ class ReportBuilder:
                 "and held-out cross-model replication"
             ),
         }
-
-    @staticmethod
-    def _target_phase(labels, response_index: int) -> str:
-        label = int(labels[response_index])
-        if label == 0:
-            return "normal"
-        if response_index == 0 or int(labels[response_index - 1]) not in (0, 1):
-            return "hallucinated_boundary_unknown"
-        return "onset" if int(labels[response_index - 1]) == 0 else "continuing"
 
     def _csv(self, rows) -> str:
         stream = io.StringIO(newline="")

@@ -7,7 +7,12 @@ The main hypothesis is temporal, not a four-way source taxonomy:
 > At an `N -> H` onset, a label-free reanchor transition writes an
 > error-favouring remote-source innovation into the response state; before a new
 > reanchor occurs, that innovation reaches later hallucinated tokens mainly
-> through `2+` position-hop paths carried by generated local history.
+> through `2+` generated-token position hops.
+
+The current `2+` bucket means two or more position-to-position transfers; it does
+not require every transfer to stay inside the configured local window. A local
+carrier claim therefore remains untested until edge distances are partitioned or
+the proposed local carriers are cut directly.
 
 The audit must test both parts on the **same frozen event trajectory**. An average
 over all hallucinated tokens and a separate average over onset tokens cannot be
@@ -64,11 +69,13 @@ I_q^h(s) = [Abar_q^h(s) - Abar_(q-1)^h(s)] 1[q-s>w]
 delta_x_transition = W_O^h sum_s I_q^h(s) V_q^h(s)
 ```
 
-The primary audit propagates `delta_x_transition` through the native analytic JVP
-to an independently supplied target margin
-`M_t = logit(correct_t) - logit(error_t)`. This aligns the mechanism estimand with
-the event that discovery selected. It is an attribution of the attention
-innovation, not an exact finite intervention.
+The primary audit propagates `delta_x_transition` through the native analytic JVP.
+Without a candidate file the target is
+`M_t = logit(generated_t) - logit(runner-up_t)`. With an independently supplied
+contrast it is `M_t = logit(correct_t) - logit(error_t)` at the declared target.
+The two readouts are reported separately. This aligns the mechanism estimand with
+the event that discovery selected, but remains an attribution of the attention
+innovation rather than an exact finite intervention.
 
 The previous trace's current native remote write is retained separately:
 
@@ -98,7 +105,7 @@ at the same unresolved path is not supported.
 
 ## Same-event temporal ledger
 
-Labels are joined only by `report`. Every explicit target is marked as:
+Labels are joined only by `report`. Every target is marked as:
 
 - `normal`: label `N`;
 - `onset`: label `H` with an ordinary preceding `N` token;
@@ -110,15 +117,18 @@ Query `q` predicts target `q+1`, so the primary onset alignment is exactly
 it precedes the next frozen reanchor. This avoids attributing a later error to an
 earlier event after a new remote update has occurred.
 
-`reports/mechanisms.csv` contains the target phase, transition/current effects,
-hop effects, group cancellation, and all closure diagnostics.
+`reports/mechanisms.csv` contains the readout kind, target phase, transition seed
+norm, transition/current margin effects, effect per seed norm, hop effects, group
+cancellation, and all closure diagnostics.
 `reports/mechanism_source_units.csv` contains signed effects and absolute-effect
 ranks for every annotated source unit. `summary.json` reports normal, onset, and
-continuing phases symmetrically and includes a same-event onset-to-rollout candidate
-rate. That rate is explicitly marked `exploratory_linearized_candidate_only` and
-`claim_supported=false`. The audit does not open N/H outcome-token labels, but it
-does use explicit correct/error candidate supervision. It is outcome-token-label
-blind, not supervision-free.
+continuing phases symmetrically for each readout and includes a same-event
+onset-to-rollout negative-margin rate. Under observed-versus-runner this means the
+route disfavors the emitted token; only an explicit correct-minus-error readout can
+call a negative effect error-favouring. The rate is marked
+`exploratory_linearized_candidate_only` and `claim_supported=false`. The audit does
+not open N/H outcome-token labels; explicit contrast files remain optional external
+candidate supervision.
 
 ## Confirmation experiment required for a general mechanism claim
 
@@ -165,8 +175,9 @@ hallucinations.
 
 ## Running after a completed trace
 
-The completed trace must use the same explicit contrast file. To test rollout, that
-file must cover the onset target and the later labelled targets in the span.
+The completed trace and audit must use the same contrast setting. With no contrast
+file, both stages use generated-versus-runner readouts. For correctness-oriented
+rollout, the file must cover the onset target and later labelled span targets.
 
 ```bash
 python -m reanchor trace \

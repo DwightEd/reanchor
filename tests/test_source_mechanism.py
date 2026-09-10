@@ -161,11 +161,13 @@ def _artifact(*, baseline=-1.0, effects=(0.0, 0.1, 0.0, -0.8)):
         "source_unit_root_coefficient": unit_roots,
         "source_unit_seed_norm": np.array([0.2, 0.1]),
         "transition_margin_response": transition,
+        "transition_seed_norm": np.array(0.5),
         "current_remote_margin_response": current,
         "baseline_margin": np.array([baseline]),
         "target_position": np.array([9]),
         "positive_id": np.array([4]),
         "negative_id": np.array([5]),
+        "explicit_contrast": np.array([False]),
         "semantic_source_roles_available": np.array(True),
         "closure_pass": np.array(True),
         "closure_margin_max_abs": np.array(0.0),
@@ -186,6 +188,9 @@ def test_mechanism_row_uses_temporal_phase_before_coarse_provenance():
 
     assert row["onset_aligned"] is True
     assert row["transition_remote_effect"] == pytest.approx(-0.7)
+    assert row["readout"] == "observed_runner"
+    assert row["transition_margin_per_seed_norm"] == pytest.approx(-1.4)
+    assert row["transition_nonadoption_score"] == pytest.approx(-1.4)
     assert row["transition_multi_hop_effect"] == pytest.approx(-0.7)
     assert row["response_history_transition_margin_effect"] == pytest.approx(-0.8)
     assert row["binding_identified"] is False
@@ -312,8 +317,9 @@ def test_mechanism_rejects_a_current_trace_from_stale_layer_head_sites():
         )
 
 
+@pytest.mark.parametrize("explicit_contrast", [False, True])
 def test_mechanism_auditor_reuses_frozen_anchors_and_writes_label_free_components(
-    tmp_path, monkeypatch
+    tmp_path, monkeypatch, explicit_contrast
 ):
     sample = AuditSample("test", "QA", "7", "source-7", Path("7.npz"), 3, 3)
     capture_path = tmp_path / "capture.npz"
@@ -357,7 +363,7 @@ def test_mechanism_auditor_reuses_frozen_anchors_and_writes_label_free_component
         event_row=np.array(1),
         event_position=np.array(4),
         target_position=np.array([4, 5]),
-        explicit_contrast=np.array([False, True]),
+        explicit_contrast=np.array([False, explicit_contrast]),
         margin_response=full_margin,
         layer_margin_response=full_layers,
         root_attention_sum=full_roots,
@@ -388,11 +394,14 @@ def test_mechanism_auditor_reuses_frozen_anchors_and_writes_label_free_component
             ],
         },
     )
-    contrast_path = tmp_path / "contrasts.json"
-    contrast_path.write_text(
-        json.dumps({sample.key: [{"target": 5, "positive_id": 4, "negative_id": 6}]})
-    )
-    _, digest = read_contrasts(str(contrast_path))
+    contrast_path = None
+    digest = None
+    if explicit_contrast:
+        contrast_path = tmp_path / "contrasts.json"
+        contrast_path.write_text(
+            json.dumps({sample.key: [{"target": 5, "positive_id": 4, "negative_id": 6}]})
+        )
+        _, digest = read_contrasts(str(contrast_path))
     store.write_json(
         run / "tracing.json",
         {
@@ -445,7 +454,7 @@ def test_mechanism_auditor_reuses_frozen_anchors_and_writes_label_free_component
                         "event_row": np.array(1),
                         "event_position": np.array(4),
                         "target_position": np.array([4, 5]),
-                        "explicit_contrast": np.array([False, True]),
+                        "explicit_contrast": np.array([False, explicit_contrast]),
                         "positive_id": np.array([3, 4]),
                         "negative_id": np.array([5, 6]),
                         "baseline_margin": np.array([0.0, -1.0]),
@@ -466,13 +475,15 @@ def test_mechanism_auditor_reuses_frozen_anchors_and_writes_label_free_component
     monkeypatch.setattr(module, "CheckpointWeights", lambda *args, **kwargs: object())
     monkeypatch.setattr(module, "NativeCache", FakeCache)
     monkeypatch.setattr(module, "trace_events", fake_trace)
-    config = MechanismConfig(device="cpu", contrast_file=str(contrast_path))
+    config = MechanismConfig(
+        device="cpu", contrast_file=str(contrast_path) if contrast_path else None
+    )
 
     summary = MechanismAuditor(config).run(FakeDataset(), run)
 
     assert summary["anchors_audited"] == 1
     assert summary["outcome_token_labels_used_for_mechanism_audit"] is False
-    assert summary["explicit_correctness_contrasts_used"] is True
+    assert summary["explicit_correctness_contrasts_used"] is explicit_contrast
     assert len(seen_masks) == 1
     assert len(seen_masks[0]) == 1 + len(SOURCE_GROUPS)
     mechanism_path = folder / "mechanisms/event_4.npz"

@@ -145,12 +145,17 @@ an edge artifact is committed.
 
 ## Stage 6: reanchor-conditioned mechanism audit
 
-For independently supplied correct/error candidate contrasts, the audit first
-constructs the remote attention innovation that matches Stage 1 exactly: adjacent
-rows are ordinary-normalized with the current legal source set, subtracted, and
-restricted to the current remote set. That signed V/O write is propagated through
-the same native JVP. The existing trace of the whole current native remote write is
-retained as a distinct reference estimand.
+The audit first constructs the remote attention innovation that matches Stage 1
+exactly: adjacent rows are ordinary-normalized with the current legal source set,
+subtracted, and restricted to the current remote set. That signed V/O write is
+propagated through the same native JVP. The existing trace of the whole current
+native remote write is retained as a distinct reference estimand.
+
+The default readout is `logit(generated token) - logit(runner-up)`. It is usable
+without truth candidates and measures whether the route affected the observed
+choice, not whether that choice was correct. Independently supplied correct/error
+candidate contrasts replace this readout at their declared targets and are always
+reported separately.
 
 The transition seed is decomposed into disjoint `constraint`, `content`,
 `other_prompt`, and `response_history` provenance groups. These four groups are
@@ -159,7 +164,7 @@ predeclared bookkeeping axes, not mechanism classes. Every annotated material
 attention reconstruction. Group margin, layer-trajectory, and root-coefficient
 responses must close independently and pointwise to the full transition trace.
 
-Only reporting joins labels and aligns each explicit target as normal, `N -> H`
+Only reporting joins labels and aligns each target as normal, `N -> H`
 onset, continuing `H`, or unknown boundary. The primary sequence is an onset target
 at `q+1` followed by continuing-H targets reached through `2+` position hops before
 the next reanchor. This is an exploratory linearized candidate route, not a named
@@ -179,6 +184,23 @@ separate:
 
 Token observations are summarized within an independent source first. Confidence
 intervals resample sources, not correlated tokens, heads or events.
+
+Every eligible query also produces a compact detection row containing the available
+predictor surprisal/entropy baselines, local mass, attention stability, local-mass drop,
+sparse/broad transition scores, remote gain, distance, focality, effective source
+count, source gain shares, and the actual peak source token/category. Labels are
+joined only afterward. AUROC and AUPR use
+signals averaged within each `(source_id, N/H)` unit before source-balanced ranking
+and source-cluster bootstrap intervals. All hallucinated tokens, `N -> H` onsets
+and continuing-H tokens are evaluated as three separate tasks, with raw token
+counts and split/task results retained.
+
+At a frozen reanchor, mechanism rows keep `transition_seed_norm` (route was read),
+the signed margin effect (route affected the candidate choice), and effect per seed
+norm. `transition_nonadoption_score = -abs(margin effect / seed norm)` is an
+explicit exploratory ranking score: larger values mean weaker margin use per unit
+route perturbation. It is not evidence that semantic content was understood, and
+it cannot identify entity-attribute-constraint binding by itself.
 
 Morphology-conditioned reports separate the anchor target from later horizons.
 Signed candidate-margin responses are also retained after every layer. A

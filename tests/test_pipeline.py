@@ -2,7 +2,7 @@ from pathlib import Path
 
 from reanchor.discovery.events import DiscoveryConfig
 from reanchor.pipeline import PipelineConfig, ReanchorPipeline
-from reanchor.reporting.evaluation import ReportConfig
+from reanchor.reporting.report import ReportConfig
 from reanchor.tracing.tracer import TraceConfig
 
 
@@ -26,6 +26,7 @@ def test_pipeline_keeps_the_default_execution_path_linear(monkeypatch, tmp_path)
     monkeypatch.setattr(module, "AuditDataset", Dataset)
     monkeypatch.setattr(module, "EventDiscovery", lambda *args, **kwargs: Workflow("discover"))
     monkeypatch.setattr(module, "CausalTracer", lambda *args, **kwargs: Workflow("trace"))
+    monkeypatch.setattr(module, "MechanismAuditor", lambda *args, **kwargs: Workflow("audit"))
     monkeypatch.setattr(module, "ReportBuilder", lambda *args, **kwargs: Workflow("report"))
     config = PipelineConfig(
         capture=tmp_path / "capture",
@@ -38,8 +39,8 @@ def test_pipeline_keeps_the_default_execution_path_linear(monkeypatch, tmp_path)
 
     result = ReanchorPipeline(config).run()
 
-    assert [name for name, _ in calls] == ["dataset", "discover", "trace", "report"]
-    assert set(result) == {"discovery", "tracing", "report"}
+    assert [name for name, _ in calls] == ["dataset", "discover", "trace", "audit", "report"]
+    assert set(result) == {"discovery", "tracing", "mechanism", "report"}
 
 
 def test_pipeline_runs_mechanism_audit_as_an_explicit_post_trace_stage(monkeypatch, tmp_path):

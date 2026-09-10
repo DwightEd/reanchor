@@ -1,4 +1,4 @@
-"""Visible orchestration of the three reanchor stages."""
+"""Visible orchestration of the reanchor workflow stages."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from pathlib import Path
 
 from reanchor.capture.protocol import AuditDataset
 from reanchor.discovery.events import DiscoveryConfig, EventDiscovery
-from reanchor.reporting.evaluation import ReportBuilder, ReportConfig
+from reanchor.reporting.report import ReportBuilder, ReportConfig
 from reanchor.tracing.mechanism import MechanismAuditor, MechanismConfig
 from reanchor.tracing.tracer import CausalTracer, TraceConfig
 
@@ -45,7 +45,7 @@ class ReanchorPipeline:
             result["tracing"] = CausalTracer(self.config.tracing, progress=self.progress).run(
                 dataset, self.config.output
             )
-        if self.config.command == "audit":
+        if self.config.command in {"audit", "run"}:
             result["mechanism"] = MechanismAuditor(
                 self.config.mechanism, progress=self.progress
             ).run(dataset, self.config.output)

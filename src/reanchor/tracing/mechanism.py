@@ -64,8 +64,6 @@ class MechanismAuditor:
         if tracing.get("trace_schema") != "reanchor/analytic-trace@2":
             raise ValueError("mechanism audit requires current-remote trace schema v2")
         contrasts, contrast_digest = read_contrasts(self.config.contrast_file)
-        if not contrasts:
-            raise ValueError("mechanism audit requires explicit correct/error --contrasts")
         if tracing.get("settings", {}).get("contrast_sha256") != contrast_digest:
             raise ValueError("mechanism audit contrasts differ from the completed trace")
 
@@ -109,7 +107,7 @@ class MechanismAuditor:
                 if int(entry.get("anchors", 0)):
                     raise ValueError(f"{key}: frozen anchors have no complete trace capture")
                 continue
-            if key not in contrasts:
+            if contrasts and key not in contrasts:
                 sample_summaries.append(
                     {"key": key, "anchors_audited": 0, "reason": "no_explicit_contrast"}
                 )
@@ -190,7 +188,7 @@ class MechanismAuditor:
                     ordinary = ~np.asarray(cache.trace["special_mask"], dtype=bool)
                     masks = np.concatenate((ordinary[None], coarse.masks, units.masks), axis=0)
                     partition_results = self._trace_partitions(
-                        cache, pending, window, contrasts[key], masks
+                        cache, pending, window, contrasts.get(key), masks
                     )
                     transition = partition_results[0]
                     grouped = partition_results[1 : 1 + len(coarse.names)]
@@ -235,10 +233,15 @@ class MechanismAuditor:
             "anchors_computed": computed,
             "anchors_resumed": resumed,
             "outcome_token_labels_used_for_mechanism_audit": False,
-            "explicit_correctness_contrasts_used": True,
+            "explicit_correctness_contrasts_used": bool(contrasts),
+            "readout": (
+                "observed_token_minus_runner_up_with_explicit_overrides"
+                if contrasts
+                else "observed_token_minus_runner_up"
+            ),
             "primary_estimand": (
                 "discovery-aligned adjacent-row remote attention delta propagated "
-                "to the correct-minus-error margin"
+                "to the configured candidate margin"
             ),
             "reference_estimand": "current native remote write at the same frozen sites",
             "coarse_source_groups_are_mechanism_classes": False,

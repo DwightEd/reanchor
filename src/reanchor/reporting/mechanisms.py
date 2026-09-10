@@ -6,6 +6,21 @@ import numpy as np
 
 from .statistics import received_then_overridden
 
+MECHANISM_SCORES = (
+    "baseline_margin",
+    "transition_seed_norm",
+    "transition_remote_effect",
+    "transition_margin_per_seed_norm",
+    "transition_nonadoption_score",
+    "transition_multi_hop_effect",
+    "current_remote_write_effect",
+    "linearized_margin_without_current_remote_write",
+    "source_group_effect_cancellation",
+    "constraint_transition_coefficient_l1_share",
+    "content_transition_coefficient_l1_share",
+    "response_history_transition_coefficient_l1_share",
+)
+
 
 def mechanism_target_row(
     artifact: dict[str, np.ndarray],
@@ -17,7 +32,7 @@ def mechanism_target_row(
     before_next_event: bool,
     effect_epsilon: float = 1e-6,
 ) -> dict:
-    """Return continuous effects for one explicit correct/error target.
+    """Return continuous route and margin effects for one generated target.
 
     Coarse source groups are deliberately not converted into named hallucination
     mechanisms. The event/target phase and exact hop decomposition are the main
@@ -43,6 +58,12 @@ def mechanism_target_row(
     transition = np.asarray(artifact["transition_margin_response"], dtype=float)
     transition_hops = transition[0, :, target_index]
     transition_effect = float(transition_hops.sum())
+    transition_seed_norm = float(np.asarray(artifact["transition_seed_norm"]).item())
+    effect_per_seed = (
+        transition_effect / transition_seed_norm
+        if transition_seed_norm > effect_epsilon
+        else np.nan
+    )
     current = np.asarray(artifact["current_remote_margin_response"], dtype=float)
     current_hops = current[0, :, target_index]
     current_effect = float(current_hops.sum())
@@ -55,8 +76,8 @@ def mechanism_target_row(
     event_target_offset = target_position - event_position
     onset_aligned = target_phase == "onset" and event_target_offset == 1
     rollout_target = target_phase == "continuing" and event_target_offset > 1 and before_next_event
-    rollout_error_promoting = bool(
-        label == 1 and closure_pass and rollout_target and transition_hops[2] < -effect_epsilon
+    rollout_multi_hop_negative = bool(
+        closure_pass and rollout_target and transition_hops[2] < -effect_epsilon
     )
     row = {
         **identity,
@@ -67,14 +88,22 @@ def mechanism_target_row(
         "onset_aligned": onset_aligned,
         "rollout_target": rollout_target,
         "label": int(label),
+        "readout": (
+            "explicit_candidate"
+            if bool(artifact["explicit_contrast"][target_index])
+            else "observed_runner"
+        ),
         "positive_id": int(artifact["positive_id"][target_index]),
         "negative_id": int(artifact["negative_id"][target_index]),
         "baseline_margin": baseline,
+        "transition_seed_norm": transition_seed_norm,
         "transition_remote_effect": transition_effect,
+        "transition_margin_per_seed_norm": effect_per_seed,
+        "transition_nonadoption_score": -abs(effect_per_seed),
         "transition_zero_hop_effect": float(transition_hops[0]),
         "transition_one_hop_effect": float(transition_hops[1]),
         "transition_multi_hop_effect": float(transition_hops[2]),
-        "rollout_multi_hop_error_promoting": rollout_error_promoting,
+        "rollout_multi_hop_negative": rollout_multi_hop_negative,
         "current_remote_write_effect": current_effect,
         "current_remote_zero_hop_effect": float(current_hops[0]),
         "current_remote_one_hop_effect": float(current_hops[1]),

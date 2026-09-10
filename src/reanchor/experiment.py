@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import shutil
 from dataclasses import dataclass
-from hashlib import sha256
 from pathlib import Path
 
 from reanchor import __version__
@@ -43,7 +42,6 @@ class ConstraintControlExperiment:
             system_prompt=self.config.system_prompt,
         )
         self.config.output_path.mkdir(parents=True, exist_ok=True)
-        input_digest = sha256(self.config.input_path.read_bytes()).hexdigest()
         shutil.copyfile(self.config.input_path, self.config.output_path / "input.jsonl")
 
         records = []
@@ -60,7 +58,6 @@ class ConstraintControlExperiment:
             "events": len(records),
             "input": {
                 "path": str(self.config.input_path.resolve()),
-                "sha256": input_digest,
                 "snapshot": "input.jsonl",
             },
             "model": dict(scorer.metadata),

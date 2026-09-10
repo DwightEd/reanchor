@@ -49,7 +49,7 @@ main.py
 ```
 
 The experiment uses one batched forward pass per event to score six contexts
-and twelve candidate continuations. It saves the exact input snapshot and hash,
+and twelve candidate continuations. It saves the exact input snapshot,
 model/config provenance, raw candidate log probabilities, six margins, four
 effects, and aggregate means.
 

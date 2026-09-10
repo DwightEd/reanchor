@@ -59,7 +59,7 @@ class ConstraintControlExperimentTest(unittest.TestCase):
 
         self.assertEqual(summary["events"], 1)
         self.assertEqual(summary["model"], FakeScorer.metadata)
-        self.assertEqual(len(summary["input"]["sha256"]), 64)
+        self.assertEqual(set(summary["input"]), {"path", "snapshot"})
         self.assertTrue(snapshot_exists)
         self.assertEqual(result["schema"], "reanchor/constraint-control@2")
         self.assertEqual(result["event_id"], "temporal-1")

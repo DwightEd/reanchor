@@ -1,3 +1,3 @@
-"""Calibrated reanchor discovery and causal tracing."""
+"""Factorial measurement of source constraint control during generation."""
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

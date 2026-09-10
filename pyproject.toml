@@ -4,13 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "reanchor"
-version = "0.1.0"
-description = "Label-free discovery and causal tracing of reanchor transitions in language models"
+version = "0.2.0"
+description = "Factorial causal measurement of constraint control in language generation"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-  "numpy",
-  "safetensors",
   "torch",
   "tqdm",
   "transformers>=4.46,<4.58",
@@ -19,16 +17,13 @@ dependencies = [
 [project.optional-dependencies]
 test = ["pytest", "ruff"]
 
-[project.scripts]
-reanchor = "reanchor.cli:main"
-
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"
 pythonpath = ["src"]
-testpaths = ["tests", "experiments/constraint_control/tests"]
+testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 100

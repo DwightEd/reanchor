@@ -1,153 +1,111 @@
-# Reanchor
+# Reanchor: factorial constraint control
 
-Reanchor studies token-level transitions in which a causal language model moves
-from recent context toward non-local prompt or response information, and tests
-whether the retrieved message changes later token preferences.
+This repository tests one mechanism: after a model emits a factual commitment,
+does the generated prefix suppress the source condition's causal control over a
+related continuation?
 
-The project deliberately separates three claims:
+It is an independent experiment. The retired attention-event discovery,
+message-DAG, JVP tracing, feature registry, and duplicate evaluation paths have
+been removed.
 
-1. **Capture:** what the model computed on a fixed generation trajectory.
-2. **Discovery:** which token transitions survive label-free null calibration and
-   multiple-testing correction.
-3. **Tracing:** how a frozen event message locally propagates through the native
-   Transformer computation graph.
+## Method
 
-Hallucination labels are outcome annotations. They never select events or graph
-edges.
+Each event defines two minimally different source worlds. World A supports
+option A and world B supports option B. The model scores the same A-minus-B
+answer margin before a commitment and after forcing commitment A or B:
 
-## Project layout
+| source world | forced A | forced B |
+| --- | ---: | ---: |
+| A | `M_AA` | `M_AB` |
+| B | `M_BA` | `M_BB` |
+
+Only four factorial coordinates are reported:
 
 ```text
-src/reanchor/
-|-- cli.py                 # parse arguments and invoke the pipeline
-|-- pipeline.py            # visible stage orchestration
-|-- capture/               # fixed-trajectory feature protocol and capture
-|-- discovery/             # transition features, calibration, selection, morphology
-|-- tracing/               # analytic JVP propagation and signed transport cuts
-|-- evaluation/            # reusable source-balanced AUROC/AUPR
-|-- reporting/             # label join, readable records and report assembly
-`-- artifacts/             # versioned, atomic artifact persistence
-tests/                     # public-seam and end-to-end tests
-docs/
-|-- method.md              # estimands, selection rules and interpretation limits
-`-- architecture.md        # module interfaces, data flow and file responsibilities
+source_onset = (onset_A - onset_B) / 2
+source_followup = (M_AA + M_AB - M_BA - M_BB) / 4
+prefix_followup = (M_AA - M_AB + M_BA - M_BB) / 4
+source_prefix_coupling = |M_AA - M_AB - M_BA + M_BB| / 4
 ```
 
-The initial input adapter reads existing `attention_audit_v3` captures, so the
-completed capture does not need to be regenerated during migration.
+This separates source influence, visible-prefix influence, and their
+interaction. The retired `control_erosion` statistic mixed these terms: its
+formula was twice the prefix main effect, not isolated source erosion.
 
-The mechanism-discovery work lives in
-[`experiments/constraint_control`](experiments/constraint_control). Its first
-vertical slice samples new answers autoregressively, replays the exact sampled
-tokens, verifies logit fidelity, and stores label-free intermediate states. It
-does not treat the old audit answers as free-run trajectories.
+The candidate failure is **prefix-induced constraint shielding**:
+`source_onset` is strong, but `source_followup` becomes weak while
+`prefix_followup` dominates. This is an output-level intervention result; it is
+not inferred from attention distance.
 
-See [the method specification](docs/method.md) and
-[the architecture](docs/architecture.md). The exact input arrays are documented
-in [the data contract](docs/data.md).
+## Execution path
 
-The current free-generation P001 experiment reads the original RAGTruth
-`source_info.jsonl` directly; no hand-written `data/questions.jsonl` is needed.
-On the configured GPU server it can be launched with:
-
-```bash
-conda run --no-capture-output -n research \
-  bash scripts/run_constraint_control_p001.sh
+```text
+main.py
+  -> ConstraintControlExperiment.run()
+       -> load_events()          src/reanchor/data.py
+       -> CausalLMScorer.score() src/reanchor/model.py
+       -> compute_effects()      src/reanchor/effects.py
+       -> events.jsonl + summary.json
 ```
 
-RAGTruth's existing responses and hallucination spans are not reused as labels
-for the newly sampled answers.
+The experiment uses one batched forward pass per event to score six contexts
+and twelve candidate continuations. It saves the exact input snapshot and hash,
+model/config provenance, raw candidate log probabilities, six margins, four
+effects, and aggregate means.
 
-## Install and run
+## Input
 
-```bash
-git clone https://github.com/DwightEd/reanchor.git
-cd reanchor
-python -m pip install -e .
-
-python -m reanchor run \
-  --capture /path/to/attention_audit_v3 \
-  --output outputs/reanchor_v1 \
-  --device cuda:0
-```
-
-The portable one-command script accepts the capture root, output root and an
-optional device:
-
-```bash
-bash scripts/run_v3.sh \
-  /path/to/graph/experiments/reanchor_flow/outputs/attention_audit_v3 \
-  outputs/reanchor_v1 \
-  cuda:0
-```
-
-`run` executes `discover -> trace -> audit -> report`. The same stages can be run
-separately in that order. Completed transition and trace artifacts are
-identity-checked and resumed. The output is always separate from the immutable
-capture.
-
-An optional candidate file makes correctness-oriented tracing explicit:
+Every JSONL line must contain exactly:
 
 ```json
 {
-  "test/QA/11859": [
-    {"target": 123, "positive_id": 42, "negative_id": 91}
-  ]
+  "schema": "reanchor/counterfactual-event@1",
+  "event_id": "question-17/fact-0",
+  "source_id": "question-17",
+  "split": "train",
+  "relation": "temporal",
+  "prompt_a": "The source says Tuesday ...",
+  "prompt_b": "The source says Thursday ...",
+  "answer_prefix": "The train departs on ",
+  "option_a": "Tuesday",
+  "option_b": "Thursday",
+  "followup": ". Re-checking the source, it departs on "
 }
 ```
 
-Pass it with `--contrasts contrasts.json`. `target` is an absolute predicted
-token position. The file content hash becomes part of trace identity, so a
-changed contrast cannot silently reuse an old trace.
+Labels are forbidden from measurement input. `source_id` is the base-item
+group used to prevent split leakage. `data/pilot_events.jsonl` contains five
+small mechanism smoke tests, not a confirmatory benchmark.
 
-Without `--contrasts`, tracing and audit use the generated token versus its
-runner-up. This supports detection and preference-route analysis, but it is not a
-truth margin. To ask how the selected transition affected a known candidate
-decision, run tracing and audit with the exact same contrast file:
+RAGTruth labels do not by themselves define minimal A/B source worlds. A later
+RAGTruth experiment must freeze factual events, candidate answers, world edits,
+and source-disjoint splits before inspecting hallucination labels.
+
+## Run
+
+From the repository root on the GPU server:
 
 ```bash
-python -m reanchor audit \
-  --capture /path/to/attention_audit_v3 \
-  --output outputs/reanchor_v1 \
-  --contrasts contrasts.json \
-  --device cuda:0
-
-python -m reanchor report \
-  --capture /path/to/attention_audit_v3 \
-  --output outputs/reanchor_v1
+bash scripts/run_pilot.sh
 ```
 
-This audit propagates the adjacent-row remote attention innovation that discovery
-actually selected. It reports normal/onset/continuing targets symmetrically and
-keeps exact `0`/`1`/`2+` position-hop effects. Four coarse source groups are only a
-complete provenance partition, not four hallucination mechanisms; annotated
-`source_unit_id` effects are retained separately. The prior current-remote-write
-trace remains a reference estimand. Pointwise additive closure is required.
+Optional positional arguments are input, output, local model, and device. The
+defaults are:
 
-Reporting writes the analyzed answers to `reports/responses.csv`, every eligible
-token's local/remote and source-route measurements to
-`reports/transition_signals.csv`, and mechanism effects to
-`reports/mechanisms.csv`. `reports/summary.json` contains source-balanced AUROC,
-AUPR and source-cluster bootstrap intervals for all-H, onset and continuing-H
-detection separately. The transition table records the actual peak source token
-and its available provenance category; special tokens are excluded.
+```text
+input   data/pilot_events.jsonl
+output  outputs/constraint_control_pilot
+model   /share/home/tm902089733300000/a903202310/lys/models/Meta-Llama-3.1-8B-Instruct
+device  cuda:0
+```
 
-The audit is still a fixed-trajectory linearized candidate-route test. A causal or
-general mechanism claim requires matched pseudo-onsets, bidirectional exact route
-interventions with shams, free-run endpoints, and held-out cross-model/task
-replication. Binding claims additionally require matched constraint
-counterfactuals.
-See [the mechanism-audit specification](docs/mechanism_audit.md).
+The model is loaded with `local_files_only=True`, so the run never attempts to
+access the gated Hugging Face repository. The output directory must be empty.
 
-## What gets selected
+## Claim boundary
 
-A raw read-site threshold is never called a reanchor event. The workflow first
-forms two token statistics: a sparse exceptional-head score and a broad
-coordinated-head score. Each independent training `source_id` then contributes
-its maximum score across its correlated samples and tokens. Empirical
-source-max p-values are corrected across the predeclared score channels and
-relative-position bins. Consecutive significant tokens form an episode, and
-only its strongest anchor is causally traced.
-
-This directly addresses the former `any(layer, head)` trap, where the chance of
-selecting a token grows toward one as the number of read sites grows.
+The 2x2 intervention is an identification instrument, not by itself a new model
+architecture. A mechanism claim requires consistent directional effects across
+relation types, source-disjoint data, A/B swaps, lexical placebos, and multiple
+model families. A training method should be added only after this pilot finds a
+replicable source-recovery deficit.

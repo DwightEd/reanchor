@@ -1,0 +1,7 @@
+case,source_id,seed,start,stop,text,history_steps,prompt_positions
+simmer_time,14375,0,55,63, simmer for 15 to 20 minutes,33 34 35 55,273 276 299 302
+grill_time,14375,0,93,101, grill for 10 to 14 minutes,85 86 87 93,338 341
+onion_time,14375,0,119,133, cook the onions in the beer mixture for 10 to 12 minutes,119 121 124 125,70 73 76 77 95 101 366
+headdress,14315,2,25,47, They were held together by large metal pins and wore a headdress with a special fringe of gold and feathers.,25 33 34,249 251 252 253 254
+clothes_lengths,14315,3,18,45," They wore tunics and cloaks, with tunic lengths reaching up to the knee, and skirts that covered up to the ankle.",18 19 27 28 37,347 365
+star_transition,14304,0,69,73,3. Star:,,

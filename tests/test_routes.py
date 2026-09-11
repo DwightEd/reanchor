@@ -251,7 +251,8 @@ def test_routes_use_captured_prefix_even_if_the_current_chat_template_changed(ro
     assert [float(row["disagreement"]) for row in rows] == pytest.approx([1, 0, 0, 1])
 
 
-def test_sample_to_routes_runs_with_real_model_states_and_full_vocabulary_entropy(route_input):
+@pytest.fixture
+def generated_route_capture(route_input):
     torch.set_num_threads(1)
     torch.manual_seed(7)
     tokenizer = PreTrainedTokenizerFast.from_pretrained(route_input / "tokenizer")
@@ -288,12 +289,17 @@ def test_sample_to_routes_runs_with_real_model_states_and_full_vocabulary_entrop
             "4",
             "--device",
             "cpu",
-            "--dtype",
-            "float32",
             "--output",
             str(capture),
         ]
     )
+    return route_input, capture
+
+
+def test_sample_to_routes_runs_with_real_model_states_and_full_vocabulary_entropy(
+    generated_route_capture,
+):
+    route_input, capture = generated_route_capture
     sample = json.loads((capture / "samples.jsonl").read_text())
     assert sample["response"]
     with (route_input / "cases.csv").open("w", encoding="utf-8", newline="") as stream:
@@ -316,21 +322,66 @@ def test_sample_to_routes_runs_with_real_model_states_and_full_vocabulary_entrop
     assert len(tokens) == 4
     assert all(float(row["logit_entropy"]) > 0 for row in tokens)
     assert len(read_csv(output / "00000/trajectory.csv")) == 8
-    revisit_output = route_input / "real_revisits"
+
+
+def test_fixed_prefix_states_resume_and_feed_the_full_graph_readout(generated_route_capture):
+    route_input, capture = generated_route_capture
+    states = route_input / "fixed_states"
+    main(["states", "--samples", str(capture), "--output", str(states), "--device", "cpu"])
+    with np.load(states / "00000.npz", allow_pickle=False) as state:
+        assert float(state["max_logit_error"]) < 1e-4
+        assert float(state["max_attention_error"]) < 1e-4
+        assert state["hidden"].shape[0] == 3
+        assert state["source_mask"].any()
+        assert (state["logit_entropy"] > 0).all()
+        with np.load(capture / "00000.npz") as original:
+            np.testing.assert_array_equal(state["token_ids"], original["token_ids"])
+            assert state["hidden"].shape[1] == len(original["token_ids"]) - 1
+    stamp = (states / "00000.npz").stat().st_mtime_ns
+    main(["states", "--samples", str(capture), "--output", str(states), "--device", "cpu"])
+    assert (states / "00000.npz").stat().st_mtime_ns == stamp
+    output = route_input / "full_readout"
     main(
         [
             "revisits",
             "--samples",
             str(capture),
+            "--states",
+            str(states),
             "--output",
-            str(revisit_output),
+            str(output),
             "--window",
             "2",
         ]
     )
-    rows = read_csv(revisit_output / "00000/layers.csv")
-    assert len(rows) == 8
-    assert all(1 - 1e-8 <= float(row["effective_rank"]) <= 2 + 1e-8 for row in rows)
-    assert all(
-        float(row["logit_entropy"]) > 0 for row in read_csv(revisit_output / "00000/tokens.csv")
-    )
+    paths = read_csv(output / "00000/paths.csv")
+    assert any(r["relation_residual"] for r in paths)
+    assert any(r["route_divergence"] for r in paths)
+    assert (output / "00000/graph.npz").exists()
+    layers = read_csv(output / "00000/layers.csv")
+    assert len(layers) == 8
+    assert all(1 - 1e-8 <= float(row["effective_rank"]) <= 2 + 1e-8 for row in layers)
+    assert all(float(r["logit_entropy"]) > 0 for r in read_csv(output / "00000/tokens.csv"))
+
+
+@pytest.mark.parametrize(
+    "field, message",
+    [
+        ("top_logits", "fixed-prefix logits differ"),
+        ("attention", "fixed-prefix attention differs"),
+    ],
+)
+def test_fixed_prefix_capture_rejects_changed_references(generated_route_capture, field, message):
+    route_input, capture = generated_route_capture
+    states = route_input / "fixed_states"
+    main(["states", "--samples", str(capture), "--output", str(states), "--device", "cpu"])
+    with np.load(capture / "00000.npz", allow_pickle=False) as trace:
+        changed = {k: trace[k] for k in trace.files}
+    changed[field].flat[0] += 0.05
+    np.savez(capture / "00000.npz", **changed)
+    with pytest.raises(ValueError, match="identity changed"):
+        main(["states", "--samples", str(capture), "--output", str(states), "--device", "cpu"])
+    mismatch = route_input / "mismatch"
+    with pytest.raises(ValueError, match=message):
+        main(["states", "--samples", str(capture), "--output", str(mismatch), "--device", "cpu"])
+    assert not (mismatch / "00000.npz").exists()

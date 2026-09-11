@@ -18,6 +18,7 @@ def capture(path, attention):
         token_ids=np.arange(length),
         token_text=text,
         special_mask=np.zeros(length, dtype=bool),
+        source_mask=np.ones(prompt, dtype=bool),
         top_logits=np.tile([3.0, 2.0], (steps, 1)),
         log_normalizer=np.full(steps, 4.0),
     )
@@ -81,15 +82,15 @@ def test_revisits_ignore_adjacent_copy_and_follow_short_history_reads(tmp_path):
     assert tokens[0]["shift"] == ""
     assert [float(r["shift"]) for r in tokens[1:]] == pytest.approx([1, 1, 1, 15, 0])
     assert float(tokens[4]["revisit"]) == pytest.approx(14)
-    reads = rows(output / "reads.csv")
+    reads = rows(output / "edges.csv")
     assert {int(r["step"]) for r in reads} == {3, 4, 5}
     relay = next(r for r in reads if r["step"] == "4" and r["layer"] == "1")
-    assert relay["key_region"] == "history"
     assert relay["key_token"] == "a"
     assert relay["distance"] == "3"
     # Generated token 0's own query is row 1; row 0 would incorrectly return key 1.
-    assert relay["relay_position"] == "2"
-    assert float(relay["path_weight"]) == 1
+    with np.load(output / "graph.npz") as graph:
+        assert graph["paths"][1, 1, 4, 2] == 1
+        assert graph["history"][1, 4, 0] == 1
     attention[:, :, 5, :] = 0
     attention[:, :, 5, 3] = 1
     capture(tmp_path, attention)
@@ -113,3 +114,34 @@ def test_revisits_reject_invalid_attention_instead_of_scoring_it(tmp_path, probl
     capture(tmp_path, attention)
     with pytest.raises(ValueError, match="invalid attention"):
         analyze(tmp_path)
+
+
+def test_window_comparison_joins_query_prediction_and_following_decisions(tmp_path):
+    attention = np.zeros((2, 2, 6, 26), dtype=np.float32)
+    attention[:, :, :, 2] = 1
+    capture(tmp_path, attention)
+    output = analyze(tmp_path)
+    cases = tmp_path / "cases.csv"
+    cases.write_text(
+        "case,source_id,seed,start,stop,text,judgment\nlocal,q,0,2,5,cde,supported\n",
+        encoding="utf8",
+    )
+    result = tmp_path / "comparison.csv"
+    main(
+        [
+            "compare",
+            "--analysis",
+            str(output.parent),
+            "--cases",
+            str(cases),
+            "--output",
+            str(result),
+        ]
+    )
+    compared = rows(result)
+    assert {r["step"] for r in compared} == {"2", "3", "4"}
+    assert {r["hops"] for r in compared} == {"1", "2"}
+    assert compared[0]["query"] == "b"
+    assert compared[0]["token"] == "c"
+    assert all(r["judgment"] == "supported" for r in compared)
+    assert all(r["relation_residual"] == "" for r in compared)

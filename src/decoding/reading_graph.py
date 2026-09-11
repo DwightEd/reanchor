@@ -24,13 +24,13 @@ class ReadingGraph:
         history = np.tril(edges[:, :, len(self.source) :], k=-1)
         paths = np.zeros((min(self.hops, layers), layers, steps, len(positions)), np.float32)
         paths[0] = edges[:, :, positions]
-        for hop in range(1, len(paths)):
+        for hop in tqdm(range(1, len(paths)), desc="attention paths", unit="hop", leave=False):
             # Row u+1 is the state of generated token u as an INPUT.
             earlier = np.zeros_like(paths[hop - 1])
             earlier[:, :-1] = paths[hop - 1, :, 1:]
             for layer in range(hop, layers):
                 paths[hop, layer] = history[layer] @ earlier[layer - 1]
-        return dict(source_positions=positions, direct=paths[0], history=history, paths=paths)
+        return dict(source_positions=positions, history=history, paths=paths)
 
 
 class RevisitSignal:

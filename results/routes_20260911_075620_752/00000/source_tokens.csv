@@ -1,0 +1,187 @@
+position,passage,token_id,token_piece,token,context
+66,1,16,1,1,1 Linear Bus: If all network nodes are connected to
+67,1,29363,ĠLinear, Linear,1 Linear Bus: If all network nodes are connected to a comb
+68,1,19111,ĠBus, Bus,1 Linear Bus: If all network nodes are connected to a combine 
+69,1,25,:,:,1 Linear Bus: If all network nodes are connected to a combine t
+70,1,1442,ĠIf, If,1 Linear Bus: If all network nodes are connected to a combine tran
+71,1,682,Ġall, all,1 Linear Bus: If all network nodes are connected to a combine transmis
+72,1,4009,Ġnetwork, network,1 Linear Bus: If all network nodes are connected to a combine transmission med
+73,1,7954,Ġnodes, nodes,1 Linear Bus: If all network nodes are connected to a combine transmission medium th
+74,1,527,Ġare, are,1 Linear Bus: If all network nodes are connected to a combine transmission medium that h
+75,1,8599,Ġconnected, connected,1 Linear Bus: If all network nodes are connected to a combine transmission medium that has two end
+76,1,311,Ġto, to,1 Linear Bus: If all network nodes are connected to a combine transmission medium that has two endpoi
+77,1,264,Ġa, a, Linear Bus: If all network nodes are connected to a combine transmission medium that has two endpoint
+78,1,16343,Ġcombine, combine,inear Bus: If all network nodes are connected to a combine transmission medium that has two endpoints the Bu
+79,1,18874,Ġtransmission, transmission,s: If all network nodes are connected to a combine transmission medium that has two endpoints the Bus is Linear. 
+80,1,11298,Ġmedium, medium,work nodes are connected to a combine transmission medium that has two endpoints the Bus is Linear. 2  Dist
+81,1,430,Ġthat, that,des are connected to a combine transmission medium that has two endpoints the Bus is Linear. 2  Distribut
+82,1,706,Ġhas, has,re connected to a combine transmission medium that has two endpoints the Bus is Linear. 2  Distributed B
+83,1,1403,Ġtwo, two,onnected to a combine transmission medium that has two endpoints the Bus is Linear. 2  Distributed Bus: 
+84,1,37442,Ġendpoints, endpoints,cted to a combine transmission medium that has two endpoints the Bus is Linear. 2  Distributed Bus: If all net
+85,1,279,Ġthe, the,combine transmission medium that has two endpoints the Bus is Linear. 2  Distributed Bus: If all network
+86,1,19111,ĠBus, Bus,ine transmission medium that has two endpoints the Bus is Linear. 2  Distributed Bus: If all network nod
+87,1,374,Ġis, is,transmission medium that has two endpoints the Bus is Linear. 2  Distributed Bus: If all network nodes 
+88,1,29363,ĠLinear, Linear,nsmission medium that has two endpoints the Bus is Linear. 2  Distributed Bus: If all network nodes are con
+89,1,13,.,.,on medium that has two endpoints the Bus is Linear. 2  Distributed Bus: If all network nodes are conn
+90,1,220,Ġ, ,n medium that has two endpoints the Bus is Linear. 2  Distributed Bus: If all network nodes are conne
+91,1,17,2,2, medium that has two endpoints the Bus is Linear. 2  Distributed Bus: If all network nodes are connec
+92,1,220,Ġ, ,medium that has two endpoints the Bus is Linear. 2  Distributed Bus: If all network nodes are connect
+93,1,45055,ĠDistributed, Distributed,edium that has two endpoints the Bus is Linear. 2  Distributed Bus: If all network nodes are connected to a comb
+94,1,19111,ĠBus, Bus,as two endpoints the Bus is Linear. 2  Distributed Bus: If all network nodes are connected to a combine 
+95,1,25,:,:,wo endpoints the Bus is Linear. 2  Distributed Bus: If all network nodes are connected to a combine t
+96,1,1442,ĠIf, If,o endpoints the Bus is Linear. 2  Distributed Bus: If all network nodes are connected to a combine tran
+97,1,682,Ġall, all,ndpoints the Bus is Linear. 2  Distributed Bus: If all network nodes are connected to a combine transmis
+98,1,4009,Ġnetwork, network,ints the Bus is Linear. 2  Distributed Bus: If all network nodes are connected to a combine transmission med
+99,1,7954,Ġnodes, nodes, Bus is Linear. 2  Distributed Bus: If all network nodes are connected to a combine transmission medium th
+100,1,527,Ġare, are,s Linear. 2  Distributed Bus: If all network nodes are connected to a combine transmission medium that h
+101,1,8599,Ġconnected, connected,near. 2  Distributed Bus: If all network nodes are connected to a combine transmission medium that has more th
+102,1,311,Ġto, to,istributed Bus: If all network nodes are connected to a combine transmission medium that has more than 
+103,1,264,Ġa, a,ributed Bus: If all network nodes are connected to a combine transmission medium that has more than tw
+104,1,16343,Ġcombine, combine,buted Bus: If all network nodes are connected to a combine transmission medium that has more than two endpoi
+105,1,18874,Ġtransmission, transmission,s: If all network nodes are connected to a combine transmission medium that has more than two endpoints created b
+106,1,11298,Ġmedium, medium,work nodes are connected to a combine transmission medium that has more than two endpoints created by branc
+107,1,430,Ġthat, that,des are connected to a combine transmission medium that has more than two endpoints created by branching 
+108,1,706,Ġhas, has,re connected to a combine transmission medium that has more than two endpoints created by branching the 
+109,1,810,Ġmore, more,onnected to a combine transmission medium that has more than two endpoints created by branching the main 
+110,1,1109,Ġthan, than,ted to a combine transmission medium that has more than two endpoints created by branching the main secti
+111,1,1403,Ġtwo, two,o a combine transmission medium that has more than two endpoints created by branching the main section o
+112,1,37442,Ġendpoints, endpoints,combine transmission medium that has more than two endpoints created by branching the main section of the tran
+113,1,3549,Ġcreated, created,ansmission medium that has more than two endpoints created by branching the main section of the transmitting
+114,1,555,Ġby, by,on medium that has more than two endpoints created by branching the main section of the transmitting me
+115,1,86567,Ġbranching, branching,medium that has more than two endpoints created by branching the main section of the transmitting medium.
+116,1,279,Ġthe, the,t has more than two endpoints created by branching the main section of the transmitting medium.
+117,1,1925,Ġmain, main,s more than two endpoints created by branching the main section of the transmitting medium.
+118,1,3857,Ġsection, section,e than two endpoints created by branching the main section of the transmitting medium.
+119,1,315,Ġof, of,wo endpoints created by branching the main section of the transmitting medium.
+120,1,279,Ġthe, the,endpoints created by branching the main section of the transmitting medium.
+121,1,78768,Ġtransmitting, transmitting,oints created by branching the main section of the transmitting medium.
+122,1,11298,Ġmedium, medium, by branching the main section of the transmitting medium.
+123,1,382,.ĊĊ,".
+
+",nching the main section of the transmitting medium.
+129,2,2028,This,This,This type of network is also difficult to troubleshoot
+130,2,955,Ġtype, type,This type of network is also difficult to troubleshoot. For
+131,2,315,Ġof, of,This type of network is also difficult to troubleshoot. For th
+132,2,4009,Ġnetwork, network,This type of network is also difficult to troubleshoot. For these reas
+133,2,374,Ġis, is,This type of network is also difficult to troubleshoot. For these reasons
+134,2,1101,Ġalso, also,"This type of network is also difficult to troubleshoot. For these reasons, thi"
+135,2,5107,Ġdifficult, difficult,"This type of network is also difficult to troubleshoot. For these reasons, this type of "
+136,2,311,Ġto, to,"This type of network is also difficult to troubleshoot. For these reasons, this type of top"
+137,2,20498,Ġtroub, troub,"This type of network is also difficult to troubleshoot. For these reasons, this type of topology "
+138,2,97508,leshoot,leshoot,"This type of network is also difficult to troubleshoot. For these reasons, this type of topology is not "
+139,2,13,.,.," type of network is also difficult to troubleshoot. For these reasons, this type of topology is not u"
+140,2,1789,ĠFor, For,"type of network is also difficult to troubleshoot. For these reasons, this type of topology is not used "
+141,2,1521,Ġthese, these," of network is also difficult to troubleshoot. For these reasons, this type of topology is not used for la"
+142,2,8125,Ġreasons, reasons,"twork is also difficult to troubleshoot. For these reasons, this type of topology is not used for large netw"
+143,2,11,",",","," also difficult to troubleshoot. For these reasons, this type of topology is not used for large netwo"
+144,2,420,Ġthis, this,"also difficult to troubleshoot. For these reasons, this type of topology is not used for large networks, "
+145,2,955,Ġtype, type,"difficult to troubleshoot. For these reasons, this type of topology is not used for large networks, such "
+146,2,315,Ġof, of,"cult to troubleshoot. For these reasons, this type of topology is not used for large networks, such as "
+147,2,45982,Ġtopology, topology,"t to troubleshoot. For these reasons, this type of topology is not used for large networks, such as those cov"
+148,2,374,Ġis, is,"bleshoot. For these reasons, this type of topology is not used for large networks, such as those coveri"
+149,2,539,Ġnot, not,"shoot. For these reasons, this type of topology is not used for large networks, such as those covering a"
+150,2,1511,Ġused, used,"t. For these reasons, this type of topology is not used for large networks, such as those covering an ent"
+151,2,369,Ġfor, for,"r these reasons, this type of topology is not used for large networks, such as those covering an entire "
+152,2,3544,Ġlarge, large,"ese reasons, this type of topology is not used for large networks, such as those covering an entire buildi"
+153,2,14488,Ġnetworks, networks,"asons, this type of topology is not used for large networks, such as those covering an entire building. Star."
+154,2,11,",",",","is type of topology is not used for large networks, such as those covering an entire building. Star. "
+155,2,1778,Ġsuch, such,"s type of topology is not used for large networks, such as those covering an entire building. Star. In st"
+156,2,439,Ġas, as,"e of topology is not used for large networks, such as those covering an entire building. Star. In star "
+157,2,1884,Ġthose, those,"f topology is not used for large networks, such as those covering an entire building. Star. In star topolo"
+158,2,18702,Ġcovering, covering,"logy is not used for large networks, such as those covering an entire building. Star. In star topology, each "
+159,2,459,Ġan, an,"ot used for large networks, such as those covering an entire building. Star. In star topology, each com"
+160,2,4553,Ġentire, entire,"used for large networks, such as those covering an entire building. Star. In star topology, each computer i"
+161,2,4857,Ġbuilding, building,"r large networks, such as those covering an entire building. Star. In star topology, each computer is connect"
+162,2,13,.,.,"etworks, such as those covering an entire building. Star. In star topology, each computer is connecte"
+163,2,7834,ĠStar, Star,"tworks, such as those covering an entire building. Star. In star topology, each computer is connected to "
+164,2,13,.,.,"s, such as those covering an entire building. Star. In star topology, each computer is connected to a"
+165,2,763,ĠIn, In,", such as those covering an entire building. Star. In star topology, each computer is connected to a ce"
+166,2,6917,Ġstar, star,"uch as those covering an entire building. Star. In star topology, each computer is connected to a central"
+167,2,45982,Ġtopology, topology,"s those covering an entire building. Star. In star topology, each computer is connected to a central hub usin"
+168,2,11,",",",","overing an entire building. Star. In star topology, each computer is connected to a central hub using"
+169,2,1855,Ġeach, each,"vering an entire building. Star. In star topology, each computer is connected to a central hub using a po"
+170,2,6500,Ġcomputer, computer,"g an entire building. Star. In star topology, each computer is connected to a central hub using a point-to-po"
+171,2,374,Ġis, is,"re building. Star. In star topology, each computer is connected to a central hub using a point-to-point"
+172,2,8599,Ġconnected, connected,"building. Star. In star topology, each computer is connected to a central hub using a point-to-point connectio"
+173,2,311,Ġto, to,"Star. In star topology, each computer is connected to a central hub using a point-to-point connection"
+174,2,264,Ġa, a,"r. In star topology, each computer is connected to a central hub using a point-to-point connection"
+175,2,8792,Ġcentral, central," In star topology, each computer is connected to a central hub using a point-to-point connection"
+176,2,19240,Ġhub, hub," topology, each computer is connected to a central hub using a point-to-point connection"
+177,2,1701,Ġusing, using,"ology, each computer is connected to a central hub using a point-to-point connection"
+178,2,264,Ġa, a, each computer is connected to a central hub using a point-to-point connection
+179,2,1486,Ġpoint, point,ach computer is connected to a central hub using a point-to-point connection
+180,2,4791,-to,-to,mputer is connected to a central hub using a point-to-point connection
+181,2,16983,-point,-point,ter is connected to a central hub using a point-to-point connection
+182,2,3717,Ġconnection, connection, connected to a central hub using a point-to-point connection
+189,3,14528,Mesh,Mesh,Mesh topology introduces the concept of routes. Unlike
+190,3,45982,Ġtopology, topology,Mesh topology introduces the concept of routes. Unlike each of 
+191,3,40019,Ġintroduces, introduces,Mesh topology introduces the concept of routes. Unlike each of the previou
+192,3,279,Ġthe, the,Mesh topology introduces the concept of routes. Unlike each of the previous to
+193,3,7434,Ġconcept, concept,Mesh topology introduces the concept of routes. Unlike each of the previous topologies
+194,3,315,Ġof, of,"Mesh topology introduces the concept of routes. Unlike each of the previous topologies, m"
+195,3,11543,Ġroutes, routes,"Mesh topology introduces the concept of routes. Unlike each of the previous topologies, messages"
+196,3,13,.,.,"Mesh topology introduces the concept of routes. Unlike each of the previous topologies, messages "
+197,3,27140,ĠUnlike, Unlike,"Mesh topology introduces the concept of routes. Unlike each of the previous topologies, messages sent on"
+198,3,1855,Ġeach, each," topology introduces the concept of routes. Unlike each of the previous topologies, messages sent on a me"
+199,3,315,Ġof, of,"logy introduces the concept of routes. Unlike each of the previous topologies, messages sent on a mesh "
+200,3,279,Ġthe, the,"y introduces the concept of routes. Unlike each of the previous topologies, messages sent on a mesh netw"
+201,3,3766,Ġprevious, previous,"troduces the concept of routes. Unlike each of the previous topologies, messages sent on a mesh network can t"
+202,3,1948,Ġtop, top,"the concept of routes. Unlike each of the previous topologies, messages sent on a mesh network can take "
+203,3,9268,ologies,ologies,"concept of routes. Unlike each of the previous topologies, messages sent on a mesh network can take any of "
+204,3,11,",",","," of routes. Unlike each of the previous topologies, messages sent on a mesh network can take any of s"
+205,3,6743,Ġmessages, messages,"of routes. Unlike each of the previous topologies, messages sent on a mesh network can take any of several po"
+206,3,3288,Ġsent, sent,". Unlike each of the previous topologies, messages sent on a mesh network can take any of several possibl"
+207,3,389,Ġon, on,"ike each of the previous topologies, messages sent on a mesh network can take any of several possible p"
+208,3,264,Ġa, a," each of the previous topologies, messages sent on a mesh network can take any of several possible pat"
+209,3,11546,Ġmesh, mesh,"ach of the previous topologies, messages sent on a mesh network can take any of several possible paths fr"
+210,3,4009,Ġnetwork, network,"f the previous topologies, messages sent on a mesh network can take any of several possible paths from sourc"
+211,3,649,Ġcan, can,"evious topologies, messages sent on a mesh network can take any of several possible paths from source to"
+212,3,1935,Ġtake, take,"us topologies, messages sent on a mesh network can take any of several possible paths from source to dest"
+213,3,904,Ġany, any,"pologies, messages sent on a mesh network can take any of several possible paths from source to destinat"
+214,3,315,Ġof, of,"gies, messages sent on a mesh network can take any of several possible paths from source to destination"
+215,3,3892,Ġseveral, several,"s, messages sent on a mesh network can take any of several possible paths from source to destination. (Recal"
+216,3,3284,Ġpossible, possible,ges sent on a mesh network can take any of several possible paths from source to destination. (Recall that ev
+217,3,13006,Ġpaths, paths,on a mesh network can take any of several possible paths from source to destination. (Recall that even in 
+218,3,505,Ġfrom, from,esh network can take any of several possible paths from source to destination. (Recall that even in a rin
+219,3,2592,Ġsource, source,"etwork can take any of several possible paths from source to destination. (Recall that even in a ring, alth"
+220,3,311,Ġto, to,"can take any of several possible paths from source to destination. (Recall that even in a ring, althoug"
+221,3,9284,Ġdestination, destination," take any of several possible paths from source to destination. (Recall that even in a ring, although two cable "
+222,3,13,.,.," several possible paths from source to destination. (Recall that even in a ring, although two cable p"
+223,3,320,Ġ(, (,"several possible paths from source to destination. (Recall that even in a ring, although two cable pat"
+224,3,3905,Rec,Rec,"veral possible paths from source to destination. (Recall that even in a ring, although two cable paths "
+225,3,543,all,all,"al possible paths from source to destination. (Recall that even in a ring, although two cable paths exi"
+226,3,430,Ġthat, that,"possible paths from source to destination. (Recall that even in a ring, although two cable paths exist, m"
+227,3,1524,Ġeven, even,"ble paths from source to destination. (Recall that even in a ring, although two cable paths exist, messag"
+228,3,304,Ġin, in,"aths from source to destination. (Recall that even in a ring, although two cable paths exist, messages "
+229,3,264,Ġa, a,"s from source to destination. (Recall that even in a ring, although two cable paths exist, messages ca"
+230,3,10264,Ġring, ring,"from source to destination. (Recall that even in a ring, although two cable paths exist, messages can onl"
+231,3,11,",",",","source to destination. (Recall that even in a ring, although two cable paths exist, messages can only"
+232,3,8051,Ġalthough, although,"ource to destination. (Recall that even in a ring, although two cable paths exist, messages can only travel i"
+233,3,1403,Ġtwo, two,"destination. (Recall that even in a ring, although two cable paths exist, messages can only travel in on"
+234,3,14994,Ġcable, cable,"ination. (Recall that even in a ring, although two cable paths exist, messages can only travel in one dire"
+235,3,13006,Ġpaths, paths,"n. (Recall that even in a ring, although two cable paths exist, messages can only travel in one direction."
+236,3,3073,Ġexist, exist,"call that even in a ring, although two cable paths exist, messages can only travel in one direction.) Some"
+237,3,11,",",",","hat even in a ring, although two cable paths exist, messages can only travel in one direction.) Some "
+238,3,6743,Ġmessages, messages,"at even in a ring, although two cable paths exist, messages can only travel in one direction.) Some WANs, mos"
+239,3,649,Ġcan, can,"n a ring, although two cable paths exist, messages can only travel in one direction.) Some WANs, most no"
+240,3,1193,Ġonly, only,"ring, although two cable paths exist, messages can only travel in one direction.) Some WANs, most notably"
+241,3,5944,Ġtravel, travel," although two cable paths exist, messages can only travel in one direction.) Some WANs, most notably the In"
+242,3,304,Ġin, in,"gh two cable paths exist, messages can only travel in one direction.) Some WANs, most notably the Inter"
+243,3,832,Ġone, one,"two cable paths exist, messages can only travel in one direction.) Some WANs, most notably the Internet,"
+244,3,5216,Ġdirection, direction,"cable paths exist, messages can only travel in one direction.) Some WANs, most notably the Internet, employ me"
+245,3,6266,.),.),"s exist, messages can only travel in one direction.) Some WANs, most notably the Internet, employ mesh"
+246,3,4427,ĠSome, Some,"exist, messages can only travel in one direction.) Some WANs, most notably the Internet, employ mesh rout"
+247,3,99902,ĠWAN, WAN,", messages can only travel in one direction.) Some WANs, most notably the Internet, employ mesh routing."
+248,3,82,s,s,"ssages can only travel in one direction.) Some WANs, most notably the Internet, employ mesh routing."
+249,3,11,",",",","sages can only travel in one direction.) Some WANs, most notably the Internet, employ mesh routing."
+250,3,1455,Ġmost, most,"ages can only travel in one direction.) Some WANs, most notably the Internet, employ mesh routing."
+251,3,35146,Ġnotably, notably,"can only travel in one direction.) Some WANs, most notably the Internet, employ mesh routing."
+252,3,279,Ġthe, the," travel in one direction.) Some WANs, most notably the Internet, employ mesh routing."
+253,3,8191,ĠInternet, Internet,"vel in one direction.) Some WANs, most notably the Internet, employ mesh routing."
+254,3,11,",",",","e direction.) Some WANs, most notably the Internet, employ mesh routing."
+255,3,3539,Ġemploy, employ," direction.) Some WANs, most notably the Internet, employ mesh routing."
+256,3,11546,Ġmesh, mesh,"ion.) Some WANs, most notably the Internet, employ mesh routing."
+257,3,30158,Ġrouting, routing," Some WANs, most notably the Internet, employ mesh routing."
+258,3,382,.ĊĊ,".
+
+","Ns, most notably the Internet, employ mesh routing."

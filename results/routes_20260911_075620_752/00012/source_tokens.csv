@@ -1,0 +1,434 @@
+position,passage,token_id,token_piece,token,context
+64,1,16,1,1,1 Reduce heat to medium and cook another 10 to 12 m
+65,1,53253,ĠReduce, Reduce,1 Reduce heat to medium and cook another 10 to 12 minutes.
+66,1,8798,Ġheat, heat,1 Reduce heat to medium and cook another 10 to 12 minutes. 2  R
+67,1,311,Ġto, to,1 Reduce heat to medium and cook another 10 to 12 minutes. 2  Remo
+68,1,11298,Ġmedium, medium,1 Reduce heat to medium and cook another 10 to 12 minutes. 2  Remove the 
+69,1,323,Ġand, and,1 Reduce heat to medium and cook another 10 to 12 minutes. 2  Remove the brat
+70,1,4394,Ġcook, cook,1 Reduce heat to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst
+71,1,2500,Ġanother, another,1 Reduce heat to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst from th
+72,1,220,Ġ, ,1 Reduce heat to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst from the
+73,1,605,10,10,1 Reduce heat to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst from the b
+74,1,311,Ġto, to,1 Reduce heat to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer
+75,1,220,Ġ, ,1 Reduce heat to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer 
+76,1,717,12,12,1 Reduce heat to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer mi
+77,1,4520,Ġminutes, minutes,1 Reduce heat to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; r
+78,1,13,.,.,e heat to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; re
+79,1,220,Ġ, , heat to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; red
+80,1,17,2,2,heat to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; redu
+81,1,220,Ġ, ,eat to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; reduc
+82,1,11016,ĠRemove, Remove,at to medium and cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; reduce heat 
+83,1,279,Ġthe, the,edium and cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; reduce heat to l
+84,1,117845,Ġbrat, brat,"m and cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; reduce heat to low, a"
+85,1,86,w,w," cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; reduce heat to low, an"
+86,1,33712,urst,urst,"cook another 10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; reduce heat to low, and co"
+87,1,505,Ġfrom, from," another 10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; reduce heat to low, and continu"
+88,1,279,Ġthe, the,"her 10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; reduce heat to low, and continue co"
+89,1,13179,Ġbeer, beer,"10 to 12 minutes. 2  Remove the bratwurst from the beer mixture; reduce heat to low, and continue cooking"
+90,1,21655,Ġmixture, mixture," 12 minutes. 2  Remove the bratwurst from the beer mixture; reduce heat to low, and continue cooking the oni"
+91,1,26,;,;,"tes. 2  Remove the bratwurst from the beer mixture; reduce heat to low, and continue cooking the onio"
+92,1,8108,Ġreduce, reduce,"es. 2  Remove the bratwurst from the beer mixture; reduce heat to low, and continue cooking the onions. 3  "
+93,1,8798,Ġheat, heat,"Remove the bratwurst from the beer mixture; reduce heat to low, and continue cooking the onions. 3  Cook "
+94,1,311,Ġto, to,"e the bratwurst from the beer mixture; reduce heat to low, and continue cooking the onions. 3  Cook the"
+95,1,3428,Ġlow, low,"he bratwurst from the beer mixture; reduce heat to low, and continue cooking the onions. 3  Cook the bra"
+96,1,11,",",",","ratwurst from the beer mixture; reduce heat to low, and continue cooking the onions. 3  Cook the brat"
+97,1,323,Ġand, and,"atwurst from the beer mixture; reduce heat to low, and continue cooking the onions. 3  Cook the bratwurs"
+98,1,3136,Ġcontinue, continue,"rst from the beer mixture; reduce heat to low, and continue cooking the onions. 3  Cook the bratwurst on the "
+99,1,17677,Ġcooking, cooking,"the beer mixture; reduce heat to low, and continue cooking the onions. 3  Cook the bratwurst on the preheate"
+100,1,279,Ġthe, the," mixture; reduce heat to low, and continue cooking the onions. 3  Cook the bratwurst on the preheated gr"
+101,1,45697,Ġonions, onions,"ture; reduce heat to low, and continue cooking the onions. 3  Cook the bratwurst on the preheated grill, tu"
+102,1,13,.,.,"educe heat to low, and continue cooking the onions. 3  Cook the bratwurst on the preheated grill, tur"
+103,1,220,Ġ, ,"duce heat to low, and continue cooking the onions. 3  Cook the bratwurst on the preheated grill, turn"
+104,1,18,3,3,"uce heat to low, and continue cooking the onions. 3  Cook the bratwurst on the preheated grill, turni"
+105,1,220,Ġ, ,"ce heat to low, and continue cooking the onions. 3  Cook the bratwurst on the preheated grill, turnin"
+106,1,12797,ĠCook, Cook,"e heat to low, and continue cooking the onions. 3  Cook the bratwurst on the preheated grill, turning onc"
+107,1,279,Ġthe, the,"t to low, and continue cooking the onions. 3  Cook the bratwurst on the preheated grill, turning once, 5"
+108,1,117845,Ġbrat, brat," low, and continue cooking the onions. 3  Cook the bratwurst on the preheated grill, turning once, 5 to 1"
+109,1,86,w,w," and continue cooking the onions. 3  Cook the bratwurst on the preheated grill, turning once, 5 to 10"
+110,1,33712,urst,urst,"and continue cooking the onions. 3  Cook the bratwurst on the preheated grill, turning once, 5 to 10 min"
+111,1,389,Ġon, on,"continue cooking the onions. 3  Cook the bratwurst on the preheated grill, turning once, 5 to 10 minute"
+112,1,279,Ġthe, the,"tinue cooking the onions. 3  Cook the bratwurst on the preheated grill, turning once, 5 to 10 minutes. 4"
+113,1,864,Ġpre, pre,"e cooking the onions. 3  Cook the bratwurst on the preheated grill, turning once, 5 to 10 minutes. 4  Se"
+114,1,383,he,he,"oking the onions. 3  Cook the bratwurst on the preheated grill, turning once, 5 to 10 minutes. 4  Serv"
+115,1,660,ated,ated,"ing the onions. 3  Cook the bratwurst on the preheated grill, turning once, 5 to 10 minutes. 4  Serve wi"
+116,1,40158,Ġgrill, grill,"the onions. 3  Cook the bratwurst on the preheated grill, turning once, 5 to 10 minutes. 4  Serve with the"
+117,1,11,",",",","ions. 3  Cook the bratwurst on the preheated grill, turning once, 5 to 10 minutes. 4  Serve with the "
+118,1,13353,Ġturning, turning,"ons. 3  Cook the bratwurst on the preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mix"
+119,1,3131,Ġonce, once,"Cook the bratwurst on the preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture "
+120,1,11,",",",","the bratwurst on the preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture a"
+121,1,220,Ġ, ,"he bratwurst on the preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as"
+122,1,20,5,5,"e bratwurst on the preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as "
+123,1,311,Ġto, to," bratwurst on the preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as a t"
+124,1,220,Ġ, ,"atwurst on the preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as a to"
+125,1,605,10,10,"twurst on the preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as a topp"
+126,1,4520,Ġminutes, minutes,"urst on the preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as a topping or s"
+127,1,13,.,.,"the preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as a topping or si"
+128,1,220,Ġ, ,"he preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as a topping or sid"
+129,1,19,4,4,"e preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as a topping or side"
+130,1,220,Ġ, ," preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as a topping or side."
+131,1,54032,ĠServe, Serve,"preheated grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as a topping or side.irecti"
+132,1,449,Ġwith, with,"ted grill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as a topping or side.irections. "
+133,1,279,Ġthe, the,"rill, turning once, 5 to 10 minutes. 4  Serve with the beer mixture as a topping or side.irections. Prep"
+134,1,13179,Ġbeer, beer,", turning once, 5 to 10 minutes. 4  Serve with the beer mixture as a topping or side.irections. Prep. Coo"
+135,1,21655,Ġmixture, mixture,"ning once, 5 to 10 minutes. 4  Serve with the beer mixture as a topping or side.irections. Prep. Cook. Ready"
+136,1,439,Ġas, as,"e, 5 to 10 minutes. 4  Serve with the beer mixture as a topping or side.irections. Prep. Cook. Ready In"
+137,1,264,Ġa, a,5 to 10 minutes. 4  Serve with the beer mixture as a topping or side.irections. Prep. Cook. Ready In. 
+138,1,61376,Ġtopping, topping,to 10 minutes. 4  Serve with the beer mixture as a topping or side.irections. Prep. Cook. Ready In. 1  Prehe
+139,1,477,Ġor, or,nutes. 4  Serve with the beer mixture as a topping or side.irections. Prep. Cook. Ready In. 1  Preheat 
+140,1,3185,Ġside, side,es. 4  Serve with the beer mixture as a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an ou
+141,1,13,.,.,  Serve with the beer mixture as a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an out
+142,1,2936,irection,irection, Serve with the beer mixture as a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor gri
+143,1,82,s,s,ith the beer mixture as a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor gril
+144,1,13,.,.,th the beer mixture as a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill
+145,1,49169,ĠPrep, Prep,h the beer mixture as a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for 
+146,1,13,.,., beer mixture as a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for m
+147,1,12797,ĠCook, Cook,beer mixture as a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium
+148,1,13,.,.,mixture as a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-
+149,1,32082,ĠReady, Ready,ixture as a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-high h
+150,1,763,ĠIn, In, as a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-high heat
+151,1,13,.,., a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-high heat.
+152,1,220,Ġ, ,a topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-high heat. 
+153,1,16,1,1, topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-high heat. 2
+154,1,220,Ġ, ,topping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-high heat. 2 
+155,1,5075,ĠPre, Pre,opping or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-high heat. 2  Whe
+156,1,20559,heat,heat,ng or side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-high heat. 2  When ho
+157,1,459,Ġan, an,"r side.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-high heat. 2  When hot, "
+158,1,16166,Ġoutdoor, outdoor,"ide.irections. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-high heat. 2  When hot, lightly "
+159,1,40158,Ġgrill, grill,"tions. Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-high heat. 2  When hot, lightly oil gr"
+160,1,369,Ġfor, for," Prep. Cook. Ready In. 1  Preheat an outdoor grill for medium-high heat. 2  When hot, lightly oil grate."
+161,1,11298,Ġmedium, medium,"p. Cook. Ready In. 1  Preheat an outdoor grill for medium-high heat. 2  When hot, lightly oil grate. 3  Com"
+162,1,28661,-high,-high,". Ready In. 1  Preheat an outdoor grill for medium-high heat. 2  When hot, lightly oil grate. 3  Combine "
+163,1,8798,Ġheat, heat,"dy In. 1  Preheat an outdoor grill for medium-high heat. 2  When hot, lightly oil grate. 3  Combine the b"
+164,1,13,.,.,". 1  Preheat an outdoor grill for medium-high heat. 2  When hot, lightly oil grate. 3  Combine the be"
+165,1,220,Ġ, ," 1  Preheat an outdoor grill for medium-high heat. 2  When hot, lightly oil grate. 3  Combine the bee"
+166,1,17,2,2,"1  Preheat an outdoor grill for medium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer"
+167,1,220,Ġ, ,"  Preheat an outdoor grill for medium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer "
+168,1,3277,ĠWhen, When," Preheat an outdoor grill for medium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer and o"
+169,1,4106,Ġhot, hot,"eat an outdoor grill for medium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer and onion"
+170,1,11,",",",","an outdoor grill for medium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer and onions"
+171,1,34504,Ġlightly, lightly,"n outdoor grill for medium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer and onions in a la"
+172,1,5707,Ġoil, oil,"r grill for medium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer and onions in a large "
+173,1,86454,Ġgrate, grate,"ill for medium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer and onions in a large pot; b"
+174,1,13,.,.,"r medium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer and onions in a large pot; br"
+175,1,220,Ġ, ," medium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer and onions in a large pot; bri"
+176,1,18,3,3,"medium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer and onions in a large pot; brin"
+177,1,220,Ġ, ,"edium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer and onions in a large pot; bring"
+178,1,47912,ĠCombine, Combine,"dium-high heat. 2  When hot, lightly oil grate. 3  Combine the beer and onions in a large pot; bring to a bo"
+179,1,279,Ġthe, the,"h heat. 2  When hot, lightly oil grate. 3  Combine the beer and onions in a large pot; bring to a boil. "
+180,1,13179,Ġbeer, beer,"at. 2  When hot, lightly oil grate. 3  Combine the beer and onions in a large pot; bring to a boil. 4  Su"
+181,1,323,Ġand, and,"  When hot, lightly oil grate. 3  Combine the beer and onions in a large pot; bring to a boil. 4  Submer"
+182,1,45697,Ġonions, onions,"en hot, lightly oil grate. 3  Combine the beer and onions in a large pot; bring to a boil. 4  Submerge the "
+183,1,304,Ġin, in, lightly oil grate. 3  Combine the beer and onions in a large pot; bring to a boil. 4  Submerge the bra
+184,1,264,Ġa, a,ghtly oil grate. 3  Combine the beer and onions in a large pot; bring to a boil. 4  Submerge the bratw
+185,1,3544,Ġlarge, large,tly oil grate. 3  Combine the beer and onions in a large pot; bring to a boil. 4  Submerge the bratwurst i
+186,1,3419,Ġpot, pot,l grate. 3  Combine the beer and onions in a large pot; bring to a boil. 4  Submerge the bratwurst in th
+187,1,26,;,;,ate. 3  Combine the beer and onions in a large pot; bring to a boil. 4  Submerge the bratwurst in the
+188,1,4546,Ġbring, bring,te. 3  Combine the beer and onions in a large pot; bring to a boil. 4  Submerge the bratwurst in the beer;
+189,1,311,Ġto, to, Combine the beer and onions in a large pot; bring to a boil. 4  Submerge the bratwurst in the beer; ad
+190,1,264,Ġa, a,mbine the beer and onions in a large pot; bring to a boil. 4  Submerge the bratwurst in the beer; add 
+191,1,44790,Ġboil, boil,ine the beer and onions in a large pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the r
+192,1,13,.,.,he beer and onions in a large pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the re
+193,1,220,Ġ, ,e beer and onions in a large pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the red
+194,1,19,4,4, beer and onions in a large pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the red 
+195,1,220,Ġ, ,beer and onions in a large pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the red p
+196,1,3804,ĠSub, Sub,eer and onions in a large pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the red peppe
+197,1,19590,merge,merge,and onions in a large pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the red pepper fla
+198,1,279,Ġthe, the,"nions in a large pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the red pepper flakes,"
+199,1,117845,Ġbrat, brat,"s in a large pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the red pepper flakes, garl"
+200,1,86,w,w,"a large pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the red pepper flakes, garli"
+201,1,33712,urst,urst," large pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the red pepper flakes, garlic po"
+202,1,304,Ġin, in,"ge pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the red pepper flakes, garlic powde"
+203,1,279,Ġthe, the,"pot; bring to a boil. 4  Submerge the bratwurst in the beer; add the red pepper flakes, garlic powder, s"
+204,1,13179,Ġbeer, beer," bring to a boil. 4  Submerge the bratwurst in the beer; add the red pepper flakes, garlic powder, salt, "
+205,1,26,;,;,"g to a boil. 4  Submerge the bratwurst in the beer; add the red pepper flakes, garlic powder, salt, a"
+206,1,923,Ġadd, add," to a boil. 4  Submerge the bratwurst in the beer; add the red pepper flakes, garlic powder, salt, and p"
+207,1,279,Ġthe, the,"a boil. 4  Submerge the bratwurst in the beer; add the red pepper flakes, garlic powder, salt, and peppe"
+208,1,2579,Ġred, red,"il. 4  Submerge the bratwurst in the beer; add the red pepper flakes, garlic powder, salt, and pepper."
+209,1,25349,Ġpepper, pepper,"4  Submerge the bratwurst in the beer; add the red pepper flakes, garlic powder, salt, and pepper."
+210,1,82723,Ġflakes, flakes,"erge the bratwurst in the beer; add the red pepper flakes, garlic powder, salt, and pepper."
+211,1,11,",",",","e bratwurst in the beer; add the red pepper flakes, garlic powder, salt, and pepper."
+212,1,31735,Ġgarlic, garlic," bratwurst in the beer; add the red pepper flakes, garlic powder, salt, and pepper."
+213,1,17138,Ġpowder, powder,"rst in the beer; add the red pepper flakes, garlic powder, salt, and pepper."
+214,1,11,",",",","the beer; add the red pepper flakes, garlic powder, salt, and pepper."
+215,1,12290,Ġsalt, salt,"he beer; add the red pepper flakes, garlic powder, salt, and pepper."
+216,1,11,",",",","er; add the red pepper flakes, garlic powder, salt, and pepper."
+217,1,323,Ġand, and,"r; add the red pepper flakes, garlic powder, salt, and pepper."
+218,1,25349,Ġpepper, pepper,"dd the red pepper flakes, garlic powder, salt, and pepper."
+219,1,382,.ĊĊ,".
+
+","red pepper flakes, garlic powder, salt, and pepper."
+225,2,16,1,1,1 Prick bratwurst with fork to prevent them from ex
+226,2,2394,ĠPr, Pr,1 Prick bratwurst with fork to prevent them from explo
+227,2,875,ick,ick,1 Prick bratwurst with fork to prevent them from explodin
+228,2,117845,Ġbrat, brat,1 Prick bratwurst with fork to prevent them from exploding as 
+229,2,86,w,w,1 Prick bratwurst with fork to prevent them from exploding as t
+230,2,33712,urst,urst,1 Prick bratwurst with fork to prevent them from exploding as they 
+231,2,449,Ġwith, with,1 Prick bratwurst with fork to prevent them from exploding as they cook.
+232,2,23243,Ġfork, fork,1 Prick bratwurst with fork to prevent them from exploding as they cook. 2  P
+233,2,311,Ġto, to,1 Prick bratwurst with fork to prevent them from exploding as they cook. 2  Plac
+234,2,5471,Ġprevent, prevent,1 Prick bratwurst with fork to prevent them from exploding as they cook. 2  Place in a l
+235,2,1124,Ġthem, them,1 Prick bratwurst with fork to prevent them from exploding as they cook. 2  Place in a large 
+236,2,505,Ġfrom, from,1 Prick bratwurst with fork to prevent them from exploding as they cook. 2  Place in a large stock
+237,2,73745,Ġexploding, exploding,1 Prick bratwurst with fork to prevent them from exploding as they cook. 2  Place in a large stock pot with 
+238,2,439,Ġas, as,bratwurst with fork to prevent them from exploding as they cook. 2  Place in a large stock pot with the
+239,2,814,Ġthey, they,twurst with fork to prevent them from exploding as they cook. 2  Place in a large stock pot with the onio
+240,2,4394,Ġcook, cook,"t with fork to prevent them from exploding as they cook. 2  Place in a large stock pot with the onions, b"
+241,2,13,.,.,"h fork to prevent them from exploding as they cook. 2  Place in a large stock pot with the onions, bu"
+242,2,220,Ġ, ," fork to prevent them from exploding as they cook. 2  Place in a large stock pot with the onions, but"
+243,2,17,2,2,"fork to prevent them from exploding as they cook. 2  Place in a large stock pot with the onions, butt"
+244,2,220,Ġ, ,"ork to prevent them from exploding as they cook. 2  Place in a large stock pot with the onions, butte"
+245,2,11004,ĠPlace, Place,"rk to prevent them from exploding as they cook. 2  Place in a large stock pot with the onions, butter, and"
+246,2,304,Ġin, in,"prevent them from exploding as they cook. 2  Place in a large stock pot with the onions, butter, and be"
+247,2,264,Ġa, a,"vent them from exploding as they cook. 2  Place in a large stock pot with the onions, butter, and beer"
+248,2,3544,Ġlarge, large,"nt them from exploding as they cook. 2  Place in a large stock pot with the onions, butter, and beer. 3  P"
+249,2,5708,Ġstock, stock,"m from exploding as they cook. 2  Place in a large stock pot with the onions, butter, and beer. 3  Place p"
+250,2,3419,Ġpot, pot," exploding as they cook. 2  Place in a large stock pot with the onions, butter, and beer. 3  Place pot o"
+251,2,449,Ġwith, with,"loding as they cook. 2  Place in a large stock pot with the onions, butter, and beer. 3  Place pot over m"
+252,2,279,Ġthe, the,"g as they cook. 2  Place in a large stock pot with the onions, butter, and beer. 3  Place pot over mediu"
+253,2,45697,Ġonions, onions," they cook. 2  Place in a large stock pot with the onions, butter, and beer. 3  Place pot over medium heat,"
+254,2,11,",",",","ook. 2  Place in a large stock pot with the onions, butter, and beer. 3  Place pot over medium heat, "
+255,2,14432,Ġbutter, butter,"ok. 2  Place in a large stock pot with the onions, butter, and beer. 3  Place pot over medium heat, and sim"
+256,2,11,",",",","Place in a large stock pot with the onions, butter, and beer. 3  Place pot over medium heat, and simm"
+257,2,323,Ġand, and,"lace in a large stock pot with the onions, butter, and beer. 3  Place pot over medium heat, and simmer f"
+258,2,13179,Ġbeer, beer," in a large stock pot with the onions, butter, and beer. 3  Place pot over medium heat, and simmer for 15"
+259,2,13,.,.," large stock pot with the onions, butter, and beer. 3  Place pot over medium heat, and simmer for 15 "
+260,2,220,Ġ, ,"large stock pot with the onions, butter, and beer. 3  Place pot over medium heat, and simmer for 15 t"
+261,2,18,3,3,"arge stock pot with the onions, butter, and beer. 3  Place pot over medium heat, and simmer for 15 to"
+262,2,220,Ġ, ,"rge stock pot with the onions, butter, and beer. 3  Place pot over medium heat, and simmer for 15 to "
+263,2,11004,ĠPlace, Place,"ge stock pot with the onions, butter, and beer. 3  Place pot over medium heat, and simmer for 15 to 20 min"
+264,2,3419,Ġpot, pot,"ck pot with the onions, butter, and beer. 3  Place pot over medium heat, and simmer for 15 to 20 minutes"
+265,2,927,Ġover, over,"ot with the onions, butter, and beer. 3  Place pot over medium heat, and simmer for 15 to 20 minutes.4  P"
+266,2,11298,Ġmedium, medium,"th the onions, butter, and beer. 3  Place pot over medium heat, and simmer for 15 to 20 minutes.4  Preheat "
+267,2,8798,Ġheat, heat,"onions, butter, and beer. 3  Place pot over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill"
+268,2,11,",",",","s, butter, and beer. 3  Place pot over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill "
+269,2,323,Ġand, and,", butter, and beer. 3  Place pot over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for "
+270,2,62915,Ġsimmer, simmer,"tter, and beer. 3  Place pot over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-"
+271,2,369,Ġfor, for,"nd beer. 3  Place pot over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high"
+272,2,220,Ġ, ,"eer. 3  Place pot over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high "
+273,2,868,15,15,"er. 3  Place pot over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high he"
+274,2,311,Ġto, to,". 3  Place pot over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high heat."
+275,2,220,Ġ, ,"  Place pot over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high heat. "
+276,2,508,20,20," Place pot over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high heat. Pl"
+277,2,4520,Ġminutes, minutes,"lace pot over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high heat. Place pot "
+278,2,13,.,.," over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high heat. Place pot o"
+279,2,19,4,4,"over medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high heat. Place pot ov"
+280,2,220,Ġ, ,"ver medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high heat. Place pot ove"
+281,2,5075,ĠPre, Pre,"er medium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high heat. Place pot over me"
+282,2,20559,heat,heat,"edium heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high heat. Place pot over medium"
+283,2,40158,Ġgrill, grill,"m heat, and simmer for 15 to 20 minutes.4  Preheat grill for medium-high heat. Place pot over medium heat,"
+284,2,369,Ġfor, for,", and simmer for 15 to 20 minutes.4  Preheat grill for medium-high heat. Place pot over medium heat, and"
+285,2,11298,Ġmedium, medium,"d simmer for 15 to 20 minutes.4  Preheat grill for medium-high heat. Place pot over medium heat, and simmer"
+286,2,28661,-high,-high,"r for 15 to 20 minutes.4  Preheat grill for medium-high heat. Place pot over medium heat, and simmer for "
+287,2,8798,Ġheat, heat," 15 to 20 minutes.4  Preheat grill for medium-high heat. Place pot over medium heat, and simmer for 15 to"
+288,2,13,.,.,"o 20 minutes.4  Preheat grill for medium-high heat. Place pot over medium heat, and simmer for 15 to "
+289,2,11004,ĠPlace, Place," 20 minutes.4  Preheat grill for medium-high heat. Place pot over medium heat, and simmer for 15 to 20 min"
+290,2,3419,Ġpot, pot,"nutes.4  Preheat grill for medium-high heat. Place pot over medium heat, and simmer for 15 to 20 minutes"
+291,2,927,Ġover, over,"s.4  Preheat grill for medium-high heat. Place pot over medium heat, and simmer for 15 to 20 minutes. 2  "
+292,2,11298,Ġmedium, medium,"Preheat grill for medium-high heat. Place pot over medium heat, and simmer for 15 to 20 minutes. 2  Preheat"
+293,2,8798,Ġheat, heat," grill for medium-high heat. Place pot over medium heat, and simmer for 15 to 20 minutes. 2  Preheat gril"
+294,2,11,",",",","l for medium-high heat. Place pot over medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill"
+295,2,323,Ġand, and," for medium-high heat. Place pot over medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for"
+296,2,62915,Ġsimmer, simmer," medium-high heat. Place pot over medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium"
+297,2,369,Ġfor, for,"-high heat. Place pot over medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-hig"
+298,2,220,Ġ, ,"h heat. Place pot over medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high"
+299,2,868,15,15," heat. Place pot over medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high h"
+300,2,311,Ġto, to,"eat. Place pot over medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat"
+301,2,220,Ġ, ,". Place pot over medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat."
+302,2,508,20,20," Place pot over medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat. 3"
+303,2,4520,Ġminutes, minutes,"lace pot over medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightl"
+304,2,13,.,.," over medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly"
+305,2,220,Ġ, ,"over medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly "
+306,2,17,2,2,"ver medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly o"
+307,2,220,Ġ, ,"er medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly oi"
+308,2,5075,ĠPre, Pre,"r medium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly oil gr"
+309,2,20559,heat,heat,"dium heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly oil grate."
+310,2,40158,Ġgrill, grill," heat, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Co"
+311,2,369,Ġfor, for, and simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Cook b
+312,2,11298,Ġmedium, medium, simmer for 15 to 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurs
+313,2,28661,-high,-high, for 15 to 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on 
+314,2,8798,Ġheat, heat,15 to 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on prehe
+315,2,13,.,., 20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on prehea
+316,2,220,Ġ, ,20 minutes. 2  Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheat
+317,2,18,3,3,0 minutes. 2  Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheate
+318,2,220,Ġ, , minutes. 2  Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated
+319,2,8828,ĠLight, Light,minutes. 2  Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill
+320,2,398,ly,ly,s. 2  Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill f
+321,2,5707,Ġoil, oil, 2  Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 1
+322,2,86454,Ġgrate, grate,Preheat grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 1
+323,2,13,.,.,t grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14
+324,2,220,Ġ, , grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 
+325,2,19,4,4,grill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 m
+326,2,220,Ġ, ,rill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 mi
+327,2,12797,ĠCook, Cook,ill for medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes
+328,2,117845,Ġbrat, brat,"or medium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, tur"
+329,2,86,w,w,"dium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turn"
+330,2,33712,urst,urst,"ium-high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning "
+331,2,389,Ġon, on,"high heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning occ"
+332,2,864,Ġpre, pre,"h heat. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning occasio"
+333,2,383,he,he,"at. 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning occasiona"
+334,2,660,ated,ated,". 3  Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning occasionally "
+335,2,40158,Ġgrill, grill," Lightly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning occasionally to bro"
+336,2,369,Ġfor, for,"ly oil grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning occasionally to brown e"
+337,2,220,Ġ, ,"il grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning occasionally to brown ev"
+338,2,605,10,10,"l grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning occasionally to brown even"
+339,2,311,Ġto, to,"grate. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning occasionally to brown evenly."
+340,2,220,Ġ, ,"te. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning occasionally to brown evenly."
+341,2,975,14,14,"e. 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning occasionally to brown evenly."
+342,2,4520,Ġminutes, minutes," 4  Cook bratwurst on preheated grill for 10 to 14 minutes, turning occasionally to brown evenly."
+343,2,11,",",","," bratwurst on preheated grill for 10 to 14 minutes, turning occasionally to brown evenly."
+344,2,13353,Ġturning, turning,"bratwurst on preheated grill for 10 to 14 minutes, turning occasionally to brown evenly."
+345,2,23781,Ġoccasionally, occasionally,"t on preheated grill for 10 to 14 minutes, turning occasionally to brown evenly."
+346,2,311,Ġto, to,"d grill for 10 to 14 minutes, turning occasionally to brown evenly."
+347,2,14198,Ġbrown, brown,"rill for 10 to 14 minutes, turning occasionally to brown evenly."
+348,2,42147,Ġevenly, evenly,"or 10 to 14 minutes, turning occasionally to brown evenly."
+349,2,382,.ĊĊ,".
+
+","o 14 minutes, turning occasionally to brown evenly."
+354,3,55776,:Add,:Add,Add the onions. Brown the onions in the butter for 1-
+355,3,279,Ġthe, the,Add the onions. Brown the onions in the butter for 1-2 mi
+356,3,45697,Ġonions, onions,Add the onions. Brown the onions in the butter for 1-2 minutes. 
+357,3,13,.,.,Add the onions. Brown the onions in the butter for 1-2 minutes. S
+358,3,10690,ĠBrown, Brown,Add the onions. Brown the onions in the butter for 1-2 minutes. Stir th
+359,3,279,Ġthe, the,Add the onions. Brown the onions in the butter for 1-2 minutes. Stir them f
+360,3,45697,Ġonions, onions,Add the onions. Brown the onions in the butter for 1-2 minutes. Stir them frequent
+361,3,304,Ġin, in,Add the onions. Brown the onions in the butter for 1-2 minutes. Stir them frequently 
+362,3,279,Ġthe, the,Add the onions. Brown the onions in the butter for 1-2 minutes. Stir them frequently to m
+363,3,14432,Ġbutter, butter,Add the onions. Brown the onions in the butter for 1-2 minutes. Stir them frequently to make sur
+364,3,369,Ġfor, for,Add the onions. Brown the onions in the butter for 1-2 minutes. Stir them frequently to make sure th
+365,3,220,Ġ, ,Add the onions. Brown the onions in the butter for 1-2 minutes. Stir them frequently to make sure the
+366,3,16,1,1,dd the onions. Brown the onions in the butter for 1-2 minutes. Stir them frequently to make sure they
+367,3,12,-,-,d the onions. Brown the onions in the butter for 1-2 minutes. Stir them frequently to make sure they 
+368,3,17,2,2, the onions. Brown the onions in the butter for 1-2 minutes. Stir them frequently to make sure they a
+369,3,4520,Ġminutes, minutes,the onions. Brown the onions in the butter for 1-2 minutes. Stir them frequently to make sure they are brown
+370,3,13,.,.,ns. Brown the onions in the butter for 1-2 minutes. Stir them frequently to make sure they are browne
+371,3,65292,ĠStir, Stir,s. Brown the onions in the butter for 1-2 minutes. Stir them frequently to make sure they are browned on 
+372,3,1124,Ġthem, them,own the onions in the butter for 1-2 minutes. Stir them frequently to make sure they are browned on all s
+373,3,14134,Ġfrequently, frequently,he onions in the butter for 1-2 minutes. Stir them frequently to make sure they are browned on all sides. 1  So
+374,3,311,Ġto, to,n the butter for 1-2 minutes. Stir them frequently to make sure they are browned on all sides. 1  Some 
+375,3,1304,Ġmake, make,he butter for 1-2 minutes. Stir them frequently to make sure they are browned on all sides. 1  Some recip
+376,3,2771,Ġsure, sure,tter for 1-2 minutes. Stir them frequently to make sure they are browned on all sides. 1  Some recipes su
+377,3,814,Ġthey, they,for 1-2 minutes. Stir them frequently to make sure they are browned on all sides. 1  Some recipes suggest
+378,3,527,Ġare, are,-2 minutes. Stir them frequently to make sure they are browned on all sides. 1  Some recipes suggest coo
+379,3,14198,Ġbrown, brown,inutes. Stir them frequently to make sure they are browned on all sides. 1  Some recipes suggest cooking t
+380,3,291,ed,ed,. Stir them frequently to make sure they are browned on all sides. 1  Some recipes suggest cooking the
+381,3,389,Ġon, on,Stir them frequently to make sure they are browned on all sides. 1  Some recipes suggest cooking the on
+382,3,682,Ġall, all,r them frequently to make sure they are browned on all sides. 1  Some recipes suggest cooking the onions
+383,3,11314,Ġsides, sides,em frequently to make sure they are browned on all sides. 1  Some recipes suggest cooking the onions after
+384,3,13,.,.,quently to make sure they are browned on all sides. 1  Some recipes suggest cooking the onions after 
+385,3,220,Ġ, ,uently to make sure they are browned on all sides. 1  Some recipes suggest cooking the onions after y
+386,3,16,1,1,ently to make sure they are browned on all sides. 1  Some recipes suggest cooking the onions after yo
+387,3,220,Ġ, ,ntly to make sure they are browned on all sides. 1  Some recipes suggest cooking the onions after you
+388,3,4427,ĠSome, Some,tly to make sure they are browned on all sides. 1  Some recipes suggest cooking the onions after you cook
+389,3,19141,Ġrecipes, recipes,o make sure they are browned on all sides. 1  Some recipes suggest cooking the onions after you cook the bra
+390,3,4284,Ġsuggest, suggest,"ure they are browned on all sides. 1  Some recipes suggest cooking the onions after you cook the bratwurst, "
+391,3,17677,Ġcooking, cooking," are browned on all sides. 1  Some recipes suggest cooking the onions after you cook the bratwurst, so that "
+392,3,279,Ġthe, the,"wned on all sides. 1  Some recipes suggest cooking the onions after you cook the bratwurst, so that you "
+393,3,45697,Ġonions, onions," on all sides. 1  Some recipes suggest cooking the onions after you cook the bratwurst, so that you can mon"
+394,3,1306,Ġafter, after," sides. 1  Some recipes suggest cooking the onions after you cook the bratwurst, so that you can monitor t"
+395,3,499,Ġyou, you,". 1  Some recipes suggest cooking the onions after you cook the bratwurst, so that you can monitor the b"
+396,3,4394,Ġcook, cook," Some recipes suggest cooking the onions after you cook the bratwurst, so that you can monitor the bratwu"
+397,3,279,Ġthe, the," recipes suggest cooking the onions after you cook the bratwurst, so that you can monitor the bratwurst "
+398,3,117845,Ġbrat, brat,"ipes suggest cooking the onions after you cook the bratwurst, so that you can monitor the bratwurst more "
+399,3,86,w,w,"suggest cooking the onions after you cook the bratwurst, so that you can monitor the bratwurst more e"
+400,3,33712,urst,urst,"uggest cooking the onions after you cook the bratwurst, so that you can monitor the bratwurst more effec"
+401,3,11,",",",","st cooking the onions after you cook the bratwurst, so that you can monitor the bratwurst more effect"
+402,3,779,Ġso, so,"t cooking the onions after you cook the bratwurst, so that you can monitor the bratwurst more effective"
+403,3,430,Ġthat, that,"ooking the onions after you cook the bratwurst, so that you can monitor the bratwurst more effectively an"
+404,3,499,Ġyou, you,"g the onions after you cook the bratwurst, so that you can monitor the bratwurst more effectively and so"
+405,3,649,Ġcan, can,"e onions after you cook the bratwurst, so that you can monitor the bratwurst more effectively and so tha"
+406,3,8891,Ġmonitor, monitor,"ions after you cook the bratwurst, so that you can monitor the bratwurst more effectively and so that you do"
+407,3,279,Ġthe, the,"er you cook the bratwurst, so that you can monitor the bratwurst more effectively and so that you don’t "
+408,3,117845,Ġbrat, brat,"ou cook the bratwurst, so that you can monitor the bratwurst more effectively and so that you don’t risk "
+409,3,86,w,w,"ok the bratwurst, so that you can monitor the bratwurst more effectively and so that you don’t risk o"
+410,3,33712,urst,urst,"k the bratwurst, so that you can monitor the bratwurst more effectively and so that you don’t risk overc"
+411,3,810,Ġmore, more,"e bratwurst, so that you can monitor the bratwurst more effectively and so that you don’t risk overcookin"
+412,3,13750,Ġeffectively, effectively,"twurst, so that you can monitor the bratwurst more effectively and so that you don’t risk overcooking the onions"
+413,3,323,Ġand, and,hat you can monitor the bratwurst more effectively and so that you don’t risk overcooking the onions.ook
+414,3,779,Ġso, so,you can monitor the bratwurst more effectively and so that you don’t risk overcooking the onions.ooked 
+415,3,430,Ġthat, that, can monitor the bratwurst more effectively and so that you don’t risk overcooking the onions.ooked bratw
+416,3,499,Ġyou, you,monitor the bratwurst more effectively and so that you don’t risk overcooking the onions.ooked bratwurst
+417,3,1541,Ġdon, don,tor the bratwurst more effectively and so that you don’t risk overcooking the onions.ooked bratwurst can
+418,3,1431,âĢĻt,’t,the bratwurst more effectively and so that you don’t risk overcooking the onions.ooked bratwurst can l
+419,3,5326,Ġrisk, risk,e bratwurst more effectively and so that you don’t risk overcooking the onions.ooked bratwurst can last f
+420,3,927,Ġover, over,twurst more effectively and so that you don’t risk overcooking the onions.ooked bratwurst can last for ab
+421,3,1030,co,co,t more effectively and so that you don’t risk overcooking the onions.ooked bratwurst can last for abou
+422,3,10979,oking,oking,more effectively and so that you don’t risk overcooking the onions.ooked bratwurst can last for about 5 d
+423,3,279,Ġthe, the,effectively and so that you don’t risk overcooking the onions.ooked bratwurst can last for about 5 days 
+424,3,45697,Ġonions, onions,ctively and so that you don’t risk overcooking the onions.ooked bratwurst can last for about 5 days in the 
+425,3,13,.,., and so that you don’t risk overcooking the onions.ooked bratwurst can last for about 5 days in the f
+426,3,1982,ook,ook,and so that you don’t risk overcooking the onions.ooked bratwurst can last for about 5 days in the frid
+427,3,291,ed,ed, so that you don’t risk overcooking the onions.ooked bratwurst can last for about 5 days in the fridge
+428,3,117845,Ġbrat, brat,o that you don’t risk overcooking the onions.ooked bratwurst can last for about 5 days in the fridge. You
+429,3,86,w,w,t you don’t risk overcooking the onions.ooked bratwurst can last for about 5 days in the fridge. You 
+430,3,33712,urst,urst, you don’t risk overcooking the onions.ooked bratwurst can last for about 5 days in the fridge. You can 
+431,3,649,Ġcan, can, don’t risk overcooking the onions.ooked bratwurst can last for about 5 days in the fridge. You can also
+432,3,1566,Ġlast, last,’t risk overcooking the onions.ooked bratwurst can last for about 5 days in the fridge. You can also stor
+433,3,369,Ġfor, for,sk overcooking the onions.ooked bratwurst can last for about 5 days in the fridge. You can also store co
+434,3,922,Ġabout, about,vercooking the onions.ooked bratwurst can last for about 5 days in the fridge. You can also store cooked b
+435,3,220,Ġ, ,king the onions.ooked bratwurst can last for about 5 days in the fridge. You can also store cooked br
+436,3,20,5,5,ing the onions.ooked bratwurst can last for about 5 days in the fridge. You can also store cooked bra
+437,3,2919,Ġdays, days,ng the onions.ooked bratwurst can last for about 5 days in the fridge. You can also store cooked bratwurs
+438,3,304,Ġin, in,e onions.ooked bratwurst can last for about 5 days in the fridge. You can also store cooked bratwurst i
+439,3,279,Ġthe, the,nions.ooked bratwurst can last for about 5 days in the fridge. You can also store cooked bratwurst in th
+440,3,38681,Ġfridge, fridge,s.ooked bratwurst can last for about 5 days in the fridge. You can also store cooked bratwurst in the freez
+441,3,13,.,., bratwurst can last for about 5 days in the fridge. You can also store cooked bratwurst in the freeze
+442,3,1472,ĠYou, You,bratwurst can last for about 5 days in the fridge. You can also store cooked bratwurst in the freezer fo
+443,3,649,Ġcan, can,wurst can last for about 5 days in the fridge. You can also store cooked bratwurst in the freezer for up
+444,3,1101,Ġalso, also,t can last for about 5 days in the fridge. You can also store cooked bratwurst in the freezer for up to 3
+445,3,3637,Ġstore, store, last for about 5 days in the fridge. You can also store cooked bratwurst in the freezer for up to 3 month
+446,3,30205,Ġcooked, cooked,for about 5 days in the fridge. You can also store cooked bratwurst in the freezer for up to 3 months in th
+447,3,117845,Ġbrat, brat,ut 5 days in the fridge. You can also store cooked bratwurst in the freezer for up to 3 months in the fre
+448,3,86,w,w,days in the fridge. You can also store cooked bratwurst in the freezer for up to 3 months in the free
+449,3,33712,urst,urst,ays in the fridge. You can also store cooked bratwurst in the freezer for up to 3 months in the freezer.
+450,3,304,Ġin, in,in the fridge. You can also store cooked bratwurst in the freezer for up to 3 months in the freezer. Wr
+451,3,279,Ġthe, the,the fridge. You can also store cooked bratwurst in the freezer for up to 3 months in the freezer. Write 
+452,3,50685,Ġfreezer, freezer,fridge. You can also store cooked bratwurst in the freezer for up to 3 months in the freezer. Write the date
+453,3,369,Ġfor, for,You can also store cooked bratwurst in the freezer for up to 3 months in the freezer. Write the date tha
+454,3,709,Ġup, up,can also store cooked bratwurst in the freezer for up to 3 months in the freezer. Write the date that y
+455,3,311,Ġto, to, also store cooked bratwurst in the freezer for up to 3 months in the freezer. Write the date that you 
+456,3,220,Ġ, ,so store cooked bratwurst in the freezer for up to 3 months in the freezer. Write the date that you s
+457,3,18,3,3,o store cooked bratwurst in the freezer for up to 3 months in the freezer. Write the date that you st
+458,3,4038,Ġmonths, months, store cooked bratwurst in the freezer for up to 3 months in the freezer. Write the date that you stored it
+459,3,304,Ġin, in,cooked bratwurst in the freezer for up to 3 months in the freezer. Write the date that you stored it on
+460,3,279,Ġthe, the,ked bratwurst in the freezer for up to 3 months in the freezer. Write the date that you stored it on the
+461,3,50685,Ġfreezer, freezer,bratwurst in the freezer for up to 3 months in the freezer. Write the date that you stored it on the contain
+462,3,13,.,.,t in the freezer for up to 3 months in the freezer. Write the date that you stored it on the containe
+463,3,9842,ĠWrite, Write, in the freezer for up to 3 months in the freezer. Write the date that you stored it on the container so t
+464,3,279,Ġthe, the,e freezer for up to 3 months in the freezer. Write the date that you stored it on the container so that 
+465,3,2457,Ġdate, date,eezer for up to 3 months in the freezer. Write the date that you stored it on the container so that you c
+466,3,430,Ġthat, that, for up to 3 months in the freezer. Write the date that you stored it on the container so that you can ke
+467,3,499,Ġyou, you,up to 3 months in the freezer. Write the date that you stored it on the container so that you can keep t
+468,3,9967,Ġstored, stored,o 3 months in the freezer. Write the date that you stored it on the container so that you can keep track of
+469,3,433,Ġit, it,ths in the freezer. Write the date that you stored it on the container so that you can keep track of it
+470,3,389,Ġon, on, in the freezer. Write the date that you stored it on the container so that you can keep track of its e
+471,3,279,Ġthe, the, the freezer. Write the date that you stored it on the container so that you can keep track of its expir
+472,3,5593,Ġcontainer, container, freezer. Write the date that you stored it on the container so that you can keep track of its expiration date
+473,3,779,Ġso, so,Write the date that you stored it on the container so that you can keep track of its expiration date. 1
+474,3,430,Ġthat, that,te the date that you stored it on the container so that you can keep track of its expiration date. 1  Coo
+475,3,499,Ġyou, you,e date that you stored it on the container so that you can keep track of its expiration date. 1  Cook up
+476,3,649,Ġcan, can,te that you stored it on the container so that you can keep track of its expiration date. 1  Cook up a l
+477,3,2567,Ġkeep, keep,hat you stored it on the container so that you can keep track of its expiration date. 1  Cook up a large 
+478,3,3839,Ġtrack, track,ou stored it on the container so that you can keep track of its expiration date. 1  Cook up a large batch 
+479,3,315,Ġof, of,red it on the container so that you can keep track of its expiration date. 1  Cook up a large batch of 
+480,3,1202,Ġits, its, it on the container so that you can keep track of its expiration date. 1  Cook up a large batch of brat
+481,3,32792,Ġexpiration, expiration,on the container so that you can keep track of its expiration date. 1  Cook up a large batch of bratwurst and f
+482,3,2457,Ġdate, date,ainer so that you can keep track of its expiration date. 1  Cook up a large batch of bratwurst and freeze
+483,3,13,.,., so that you can keep track of its expiration date. 1  Cook up a large batch of bratwurst and freeze 
+484,3,220,Ġ, ,so that you can keep track of its expiration date. 1  Cook up a large batch of bratwurst and freeze i
+485,3,16,1,1,o that you can keep track of its expiration date. 1  Cook up a large batch of bratwurst and freeze it
+486,3,220,Ġ, , that you can keep track of its expiration date. 1  Cook up a large batch of bratwurst and freeze it.
+487,3,12797,ĠCook, Cook,that you can keep track of its expiration date. 1  Cook up a large batch of bratwurst and freeze it.
+488,3,709,Ġup, up,you can keep track of its expiration date. 1  Cook up a large batch of bratwurst and freeze it.
+489,3,264,Ġa, a, can keep track of its expiration date. 1  Cook up a large batch of bratwurst and freeze it.
+490,3,3544,Ġlarge, large,an keep track of its expiration date. 1  Cook up a large batch of bratwurst and freeze it.
+491,3,7309,Ġbatch, batch,p track of its expiration date. 1  Cook up a large batch of bratwurst and freeze it.
+492,3,315,Ġof, of,k of its expiration date. 1  Cook up a large batch of bratwurst and freeze it.
+493,3,117845,Ġbrat, brat,f its expiration date. 1  Cook up a large batch of bratwurst and freeze it.
+494,3,86,w,w, expiration date. 1  Cook up a large batch of bratwurst and freeze it.
+495,3,33712,urst,urst,expiration date. 1  Cook up a large batch of bratwurst and freeze it.
+496,3,323,Ġand, and,ration date. 1  Cook up a large batch of bratwurst and freeze it.
+497,3,31030,Ġfreeze, freeze,on date. 1  Cook up a large batch of bratwurst and freeze it.
+498,3,433,Ġit, it,. 1  Cook up a large batch of bratwurst and freeze it.
+499,3,382,.ĊĊ,".
+
+",  Cook up a large batch of bratwurst and freeze it.

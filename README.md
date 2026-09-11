@@ -6,13 +6,58 @@
 - `inspect` → `AttentionAnalysis.run()`：读取保存的数据，输出具体 token 选择和历史读取变化。
 - `routes` → `RouteAnalysis.run()`：对具体样本计算 source 上的 head 内散布、head 间分歧与逐步转向。
 - `decisions` → `DecisionInspection.run()`：固定窗口的原始候选、指定历史边、相同前缀数值检查。
+- `revisits` → `RevisitAnalysis.run()`：无实体/错误标签的全流回看、head 读取结构与历史两跳检查。
 
 算法在 [sampling.py](src/decoding/sampling.py)、[attention.py](src/decoding/attention.py)
 和 [routes.py](src/decoding/routes.py)。
 新增的具体检查集中在 [decisions.py](src/decoding/decisions.py)。
-`io.py` 只负责 JSON 读写及拒绝覆盖已有输出。没有训练、校准、分组评估、bootstrap 或 report。
+`io.py` 只负责 JSON 读写及拒绝覆盖已有输出。没有训练、概率校准、分组评估、bootstrap 或 report。
 当前研究要求见 [回看节点与约束归属](docs/graph_method_proposal.md)。
 该文区分已观察结果、本轮检查和待验证算法；其他历史笔记不作为当前实现说明。
+
+## 自动扫描已有生成
+
+```bash
+git pull --ff-only origin agent/direct-sampling && bash scripts/revisits_and_push.sh
+```
+
+脚本打印并分析 `outputs/samples_*` 中最近完成记录的目录，也可把实际采样目录作为参数。
+只读已有 NPZ，CPU 计算，不加载模型/tokenizer、不重新生成、不读取 cases 或幻觉标签。
+结束后提交并推送 `results/revisits_*`；原始 NPZ 保留在服务器。
+只分析而不推送可直接运行：
+
+```bash
+PYTHONPATH=src python main.py revisits --samples outputs/你的采样目录 \
+  --output outputs/revisit_analysis --window 16 --quantile 0.95 --context 4
+```
+
+实现集中在 [revisits.py](src/decoding/revisits.py)。每条回答即时保存三张数值表，有回答/token 进度条：
+
+- `tokens.csv`：每步读取变化、过去基线校正后的 `revisit`、阈值与 `event`，以及原始概率/margin/已保存的 logits 熵。
+- `layers.csv`：逐层的 `shift`、`revisit`、head 内散布、head 间分歧和读取图的有效秩。
+- `reads.csv`：事件前后指定范围内，全部 heads 的两个最强连接；额外保留增量最大的旧历史连接。
+  展示该 head 的熵/位移、实际 token/位置/权重，并对历史读取给出前一层的最强普通 prompt 端点和两跳权重。
+
+`shift` 是逐 head 的一维 Wasserstein 距离，使用完整可见 attention 行和真实 token 位置。
+相邻复制的位移代价为 1，远处换读代价更大；`revisit` 为超过该 head 过去位移中位数的正部分，再平均。
+事件要求超过过去分数的 0.95 分位数，并完成过去窗口预热；连续超阈值只记录起点。
+阈值不使用未来；`context` 只决定事后展示范围，不参与检测。事件表示读取重组，不是错误标签。
+
+散布是各 head 的 Shannon 熵均值；分歧是平均分布的熵减去各 head 熵的均值。
+有效秩来自 `sqrt(P) @ sqrt(P).T / heads` 的特征值谱熵；P 是同一层的 head×可见 key 读取矩阵。
+相同的分散读取可以是“散布高、有效秩 1”；各自集中但读向不同处可以是“散布低、有效秩较高”。
+有效秩是读取方向的结构读数，不是语义候选数量；相邻子词、合理分工也可能产生 head 差异。
+这些全行读数包括 instruction、special 与 self，不能与旧 `routes` 的 source 条件熵直接混比。
+`reads.csv` 的 region 和原始权重用于核查这些来源；prompt 位置不自动等于有效证据。
+
+第 t 行 query=P+t−1，预测生成 token t。历史 token u 的自身输入状态在行 u+1。
+两跳只使用更早层，按该层 heads 平均；不包含 V/O、MLP、残差变换，不能叫完整因果流。
+第一层、self 和没有普通 prompt 读取的情况不填两跳结果；无事件时 reads 只有表头。
+旧缓存没有完整 logits 熵则留空，不能用 top-5 代替。
+输出拒绝覆盖已有目录；运行中途失败时已写的文件保留，但不表示该批分析完成，也不会提交推送。
+
+当前功能是无标签的内部读取分析。它尚未实现关系真值读出或验证首错检测效果；
+低秩关系监督方案作为备选，不参与本命令。
 
 目录中的两个层级现在用不同名称：
 

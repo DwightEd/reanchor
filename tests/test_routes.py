@@ -316,3 +316,21 @@ def test_sample_to_routes_runs_with_real_model_states_and_full_vocabulary_entrop
     assert len(tokens) == 4
     assert all(float(row["logit_entropy"]) > 0 for row in tokens)
     assert len(read_csv(output / "00000/trajectory.csv")) == 8
+    revisit_output = route_input / "real_revisits"
+    main(
+        [
+            "revisits",
+            "--samples",
+            str(capture),
+            "--output",
+            str(revisit_output),
+            "--window",
+            "2",
+        ]
+    )
+    rows = read_csv(revisit_output / "00000/layers.csv")
+    assert len(rows) == 8
+    assert all(1 - 1e-8 <= float(row["effective_rank"]) <= 2 + 1e-8 for row in rows)
+    assert all(
+        float(row["logit_entropy"]) > 0 for row in read_csv(revisit_output / "00000/tokens.csv")
+    )

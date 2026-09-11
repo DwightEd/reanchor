@@ -42,6 +42,12 @@ def main(argv=None):
     decisions.add_argument("--samples", type=Path, required=True)
     decisions.add_argument("--cases", type=Path, required=True)
     decisions.add_argument("--output", type=Path, required=True)
+    revisits = commands.add_parser("revisits", help="scan all saved decisions without case labels")
+    revisits.add_argument("--samples", type=Path, required=True)
+    revisits.add_argument("--output", type=Path, required=True)
+    revisits.add_argument("--window", type=int, default=16, help="past steps for event baseline")
+    revisits.add_argument("--quantile", type=float, default=0.95, help="past-score event quantile")
+    revisits.add_argument("--context", type=int, default=4, help="inspect steps around each event")
     args = parser.parse_args(argv)
     if args.command == "sample":
         from decoding.sampling import SamplingConfig, SamplingExperiment
@@ -84,10 +90,14 @@ def main(argv=None):
             args.after,
             args.baseline,
         ).run()
-    else:
+    elif args.command == "decisions":
         from decoding.decisions import DecisionInspection
 
         DecisionInspection(args.samples, args.cases, args.output).run()
+    else:
+        from decoding.revisits import RevisitAnalysis
+
+        RevisitAnalysis(args.samples, args.output, args.window, args.quantile, args.context).run()
     print(args.output)
 
 

@@ -9,6 +9,13 @@ from tqdm.auto import tqdm
 from decoding.io import empty_directory, read_jsonl
 
 
+def entropy(probabilities: np.ndarray) -> np.ndarray:
+    """Shannon entropy in bits along the final axis; zero mass contributes zero."""
+    logs = np.zeros_like(probabilities)
+    np.log2(probabilities, out=logs, where=probabilities > 0)
+    return -(probabilities * logs).sum(-1)
+
+
 class AttentionAnalysis:
     def __init__(
         self,

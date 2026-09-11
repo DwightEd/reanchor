@@ -5,11 +5,14 @@
 - `sample` → `SamplingExperiment.run()`：加载模型，逐 token 采样，在同一次前向保存 attention 和候选 logits。
 - `inspect` → `AttentionAnalysis.run()`：读取保存的数据，输出具体 token 选择和历史读取变化。
 - `routes` → `RouteAnalysis.run()`：对具体样本计算 source 上的 head 内散布、head 间分歧与逐步转向。
+- `decisions` → `DecisionInspection.run()`：固定窗口的原始候选、指定历史边、相同前缀数值检查。
 
 算法在 [sampling.py](src/decoding/sampling.py)、[attention.py](src/decoding/attention.py)
 和 [routes.py](src/decoding/routes.py)。
+新增的具体检查集中在 [decisions.py](src/decoding/decisions.py)。
 `io.py` 只负责 JSON 读写及拒绝覆盖已有输出。没有训练、校准、分组评估、bootstrap 或 report。
-旧实验可从 Git 历史恢复；`docs/` 中的研究笔记不是当前实现说明。
+当前研究要求见 [回看节点与约束归属](docs/graph_method_proposal.md)。
+该文区分已观察结果、本轮检查和待验证算法；其他历史笔记不作为当前实现说明。
 
 目录中的两个层级现在用不同名称：
 
@@ -208,6 +211,9 @@ PYTHONPATH=src python main.py routes \
 
 ## 结构数值的定义
 
+当前 TV/shift 是读取分布变化的描述，逐词复制也会产生大值。
+不将它的峰直接当作回看或幻觉。图距离的改进与 head 选择要求见当前研究文档。
+
 在每层固定的 passage token 集合 S 上，各 head 单独归一化：
 
 ```text
@@ -241,3 +247,41 @@ reading 中 `peak_*` 是当前最强 source 边，`gain_*` 是前后至少一次
 最后通过 tokens 对齐原句；正确对照也按相同步骤检查。固定 source 集合控制了历史长度增长，
 但目前只研究对原始 passages 的直接注意力，不覆盖通过已生成答案间接回看的路径。
 这些数值是关注结构的描述，不能单独证明某条路由导致了幻觉。
+
+## 固定回看窗口：候选、历史对象与限制词
+
+`analyze_cases.sh` 和 `analyze_and_push.sh` 现在同时执行此检查，结果位于 `decisions/`。
+只需新检查时直接运行，无须重复 routes 或加载模型：
+
+```bash
+PYTHONPATH=src python main.py decisions \
+  --samples outputs/你的采样目录 --cases examples/decision_cases.csv \
+  --output outputs/decision_inspection
+```
+
+[decision_cases.csv](examples/decision_cases.csv) 固定六个观察窗口：三种烹饪时间、
+头饰限制、正常衣长描述和 Star 条目转换。`start` 包含、`stop` 不包含，都是 response step。
+`text` 必须与该窗口保存的单 token 显示文本拼接完全一致，否则停止；不能套到新一批生成上。
+`history_steps` 是指定的 response key，`prompt_positions` 是完整输入里的 prompt key。
+这些编号只用于实例核验，不是自动回看检测或预先指定实体的模型输入。
+
+输出四张直接读数的表：
+
+- `tokens.csv`：实际选择的原始概率、chosen margin、top-2 margin 和已保存的完整 logits 熵。
+  `chosen_rank` 只表示其在保存的 top 候选中的排名；不在其中时留空。
+- `candidates.csv`：每个保存候选的 ID、文本、原始 logit、完整词表概率、是否实际选中。
+  概率不施加 temperature/top-p，也不对 top-5 重新归一化，因此概率和通常小于 1。
+- `reads.csv`：指定 key 在**全部层和全部 heads** 上的原始权重、前值、增量。
+  包括低权重、非最大边和零权重。新 key 的前值/增量留空；不可见 key 不导出。
+  `distance=0` 是 query 自身，不是回看。某个 response token u 的自身 query 在预测行 u+1。
+- `same_prefix.csv`：整个采样目录内，各回答相同 token 前缀的候选数值比较。
+  包括首次抽样分叉那一步，不比较分叉之后不同前缀的状态，也不比较不同选择的 chosen logit。
+  `max_top_logit_error` 比较按排名保存的 logits，需结合 `candidate_ids_equal` 读取；
+  另给出 log-normalizer 的误差。没有重复前缀时只有表头，不表示通过了完整激活一致性检查。
+
+输入的 settings、samples、prompts 和 cases 也会复制保存，原始 NPZ 留在服务器。
+旧缓存缺少 logits 熵时留空，不反推。此命令不依赖模型权重或 tokenizer；
+只读取固定缓存，seed/温度不会参与分析计算。
+
+相同前缀检查只能验证保存数值的一致性。不同前缀下正确/错误段落的差异仍受上下文、
+位置和表达影响；相同 seed 或改用 greedy 不能自动消除这些因素。

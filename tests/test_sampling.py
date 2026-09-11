@@ -157,3 +157,68 @@ def test_sample_honors_model_stop_tokens(sample_input, tmp_path):
     )
     row = json.loads((output / "samples.jsonl").read_text())
     assert row["tokens"] == 1 and row["stop_reason"] == "eos"
+
+
+def test_seed_temperature_and_top_p_do_not_change_raw_state_at_the_same_prefix(
+    sample_input, tmp_path
+):
+    model_path, dataset = sample_input
+    states = []
+    for index, (seed, temperature, top_p) in enumerate(
+        [(2, 0.2, 0.9), (3, 1.8, 0.9), (5, 0.7, 0.4)]
+    ):
+        output = tmp_path / f"sampling_{index}"
+        main(
+            [
+                "sample",
+                "--dataset",
+                str(dataset),
+                "--source-ids",
+                "q1",
+                "--model",
+                str(model_path),
+                "--output",
+                str(output),
+                "--device",
+                "cpu",
+                "--dtype",
+                "float32",
+                "--seeds",
+                str(seed),
+                "--temperature",
+                str(temperature),
+                "--top-p",
+                str(top_p),
+                "--max-new-tokens",
+                "3",
+            ]
+        )
+        with np.load(output / "00000.npz") as trace:
+            states.append(
+                {
+                    name: trace[name]
+                    for name in [
+                        "token_ids",
+                        "prompt_length",
+                        "top_ids",
+                        "top_logits",
+                        "log_normalizer",
+                        "logit_entropy",
+                        "attention",
+                    ]
+                }
+            )
+    reference = states[0]
+    for current in states[1:]:
+        prompt = int(current["prompt_length"])
+        # Compare every shared-prefix decision, including the first different sampled token.
+        for t in range(3):
+            if not np.array_equal(
+                reference["token_ids"][: prompt + t], current["token_ids"][: prompt + t]
+            ):
+                break
+            for field in ["top_ids", "top_logits", "log_normalizer", "logit_entropy"]:
+                np.testing.assert_array_equal(reference[field][t], current[field][t])
+            np.testing.assert_array_equal(
+                reference["attention"][:, :, t], current["attention"][:, :, t]
+            )

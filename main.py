@@ -38,6 +38,10 @@ def main(argv=None):
     routes.add_argument("--before", type=int, default=16)
     routes.add_argument("--after", type=int, default=8)
     routes.add_argument("--baseline", type=int, default=16, help="previous steps for shift median")
+    decisions = commands.add_parser("decisions", help="inspect fixed decision windows from NPZ")
+    decisions.add_argument("--samples", type=Path, required=True)
+    decisions.add_argument("--cases", type=Path, required=True)
+    decisions.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
     if args.command == "sample":
         from decoding.sampling import SamplingConfig, SamplingExperiment
@@ -68,7 +72,7 @@ def main(argv=None):
             args.after,
             args.min_distance,
         ).run()
-    else:
+    elif args.command == "routes":
         from decoding.routes import RouteAnalysis
 
         RouteAnalysis(
@@ -80,6 +84,10 @@ def main(argv=None):
             args.after,
             args.baseline,
         ).run()
+    else:
+        from decoding.decisions import DecisionInspection
+
+        DecisionInspection(args.samples, args.cases, args.output).run()
     print(args.output)
 
 

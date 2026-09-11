@@ -127,7 +127,9 @@ class SamplingExperiment:
         generator = torch.Generator(device=cfg.device).manual_seed(seed)
         ids = prompt
         next_input, cache = prompt, None
-        attention, top_ids, top_logits, chosen_logits, normalizers = ([] for _ in range(5))
+        attention, top_ids, top_logits, chosen_logits, normalizers, entropies = (
+            [] for _ in range(6)
+        )
         for _ in tqdm(range(cfg.max_new_tokens), desc=f"seed {seed}", unit="token", leave=False):
             if ids.shape[1] > model.config.max_position_embeddings:
                 raise ValueError("generation exceeded model context length")
@@ -148,7 +150,10 @@ class SamplingExperiment:
             probabilities /= probabilities.sum()
             chosen = torch.multinomial(probabilities, 1, generator=generator)
             chosen_logits.append(float(logits[chosen]))
-            normalizers.append(float(logits.logsumexp(-1)))
+            normalizer = logits.logsumexp(-1)
+            normalizers.append(float(normalizer))
+            native_log_prob = logits - normalizer
+            entropies.append(float(-(native_log_prob.exp() * native_log_prob).sum() / np.log(2)))
             top = logits.topk(min(5, logits.numel()))
             top_ids.append(top.indices.cpu().numpy())
             top_logits.append(top.values.cpu().numpy())
@@ -176,4 +181,5 @@ class SamplingExperiment:
             "top_logits": np.stack(top_logits),
             "chosen_logit": np.array(chosen_logits, dtype=np.float32),
             "log_normalizer": np.array(normalizers, dtype=np.float32),
+            "logit_entropy": np.array(entropies, dtype=np.float32),
         }

@@ -109,6 +109,13 @@ def test_sample_cli_saves_states_of_each_actual_generation_decision(sample_input
                     float(expected.logits[0, -1].float().logsumexp(-1)),
                     abs=3e-3,
                 )
+                distribution = torch.distributions.Categorical(
+                    logits=expected.logits[0, -1].float()
+                )
+                assert trace["logit_entropy"][t] == pytest.approx(
+                    float(distribution.entropy() / np.log(2)),
+                    abs=3e-3,
+                )
                 assert not trace["attention"][:, :, t, prompt + t :].any()
     inspected = tmp_path / "inspected"
     main(["inspect", "--samples", str(output), "--output", str(inspected), "--min-distance", "1"])

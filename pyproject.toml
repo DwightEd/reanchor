@@ -11,6 +11,7 @@ requires-python = ">=3.10"
 dependencies = [
   "torch>=2.5",
   "numpy",
+  "matplotlib>=3.6",
   "tqdm",
   "transformers>=4.46,<4.58",
 ]

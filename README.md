@@ -4,8 +4,10 @@
 
 - `sample` → `SamplingExperiment.run()`：加载模型，逐 token 采样，在同一次前向保存 attention 和候选 logits。
 - `inspect` → `AttentionAnalysis.run()`：读取保存的数据，输出具体 token 选择和历史读取变化。
+- `routes` → `RouteAnalysis.run()`：对具体样本计算 source 上的 head 内散布、head 间分歧与逐步转向。
 
-算法在 [sampling.py](src/reanchor/sampling.py) 和 [attention.py](src/reanchor/attention.py)。
+算法在 [sampling.py](src/reanchor/sampling.py)、[attention.py](src/reanchor/attention.py)
+和 [routes.py](src/reanchor/routes.py)。
 `io.py` 只负责 JSON 读写及拒绝覆盖已有输出。没有训练、校准、分组评估、bootstrap 或 report。
 旧实验可从 Git 历史恢复；`docs/` 中的研究笔记不是当前实现说明。
 
@@ -36,9 +38,12 @@ outputs/samples_<时间>_<进程号>/
 ```
 
 模型使用自身 chat template 和 generation_config 中的终止符；没有二次前向或扰动。
-NPZ 不保存当前分析没有使用的 hidden states、entropy 和采样分布派生指标。
+NPZ 保存完整 attention、前五候选 logits，以及完整词表的 `logit_entropy`（bits）；不保存 hidden states。
+已有 NPZ 缺少 `logit_entropy` 时，routes 对应列留空，不用 top-5 近似，也不要求重新生成。
 完整 attention 以 float16 保存，logits 以 float32 保存，分析小于量化精度的变化时应谨慎。
-分析只读取 NPZ，不再加载模型或 tokenizer，也不需要 GPU。
+inspect 只读取 NPZ；routes 另读原始 prompt，并加载本地 tokenizer 检查字符与 token 的对应。
+两种分析都不加载模型权重，不需要 GPU。
+routes 从已保存的 prompt token ID 还原前缀并验证原文，不重新套用可能带日期的 chat template。
 本版 inspect 需要新增的 token 显示文本和所选 logit 字段，请用新脚本生成对应数据。
 
 ## 直接检查首错之前
@@ -106,3 +111,87 @@ shift 越大，过去读取的分布变化越大；需要结合具体边的原�
 这能直接检查“在首错前，哪个 head 开始增加对哪段历史的读取，随后选择了什么 token”。
 正确回答也需要同样查看。attention 变化是读取行为的代理；
 仅凭它和 margin 的同时变化，还不能证明筛选了错误的语义路由，或该路由造成幻觉。
+
+## 分析这四个具体例子
+
+已有 16 条采样结果时，在仓库中运行：
+
+```bash
+git fetch origin && git switch agent/direct-sampling && git pull --ff-only origin agent/direct-sampling && bash scripts/analyze_cases.sh
+```
+
+脚本选择 `outputs/samples_*/samples.jsonl` 修改时间最近的采样目录并打印路径。
+也可以明确指定：
+
+```bash
+bash scripts/analyze_cases.sh outputs/你的采样目录
+```
+
+脚本只分析现有数据；没有重新采样步骤。首次缺少 matplotlib 时会安装该绘图库。
+需要 `samples.jsonl`、`prompts.jsonl`、`settings.json` 和四个对应的 NPZ。
+`TOKENIZER_PATH` 可指定移动后的本地 tokenizer 目录；默认使用 settings 中的模型路径。
+`PYTHON_BIN`、`SAMPLES_DIR`、`OUTPUT_DIR` 可覆盖解释器、输入目录、输出目录。
+每次默认建立新的 `routes_<时间>_<进程号>` 子目录，原始文件不会改写。
+
+[examples/route_cases.csv](examples/route_cases.csv) 只指定样本和待看的原句：
+
+| source_id / seed | 观察窗口 | 原文对照的用途 |
+| --- | --- | --- |
+| 14375 / 0 | 第 5 步：洋葱与 10–12 分钟 | 查看时间与动作对象的错误组合 |
+| 14315 / 2 | `and wore a headdress...` | 查看帝王限定条件的丢失 |
+| 14315 / 3 | 及膝、及踝的描述 | 这两个长度有原文依据 |
+| 14304 / 0 | `3. Star:` | 查看正常条目转换 |
+
+按 source_id + seed 查找真实文件名，不假定它们一定叫 00012 等。
+原句必须在对应回答中恰好出现一次，否则停止，不猜测另一批生成结果的位置。
+原句不是首错标注，也不参与结构量计算；字符定位沿实际生成的 token ID 解码，
+不会重新分词后套用另一组 token。跨多个 byte token 的字符全部纳入窗口。
+
+每个样本输出一个以 trace 文件名命名的目录，例如 `00012/`：
+
+- `tokens.csv`：完整回答的 step、实际 token、观察原句标记、top-2 margin、完整词表熵（若已保存）。
+- `source_tokens.csv`：原始 passage 正文的 token 位置及上下文，排除题目、指令、passage 标签和特殊 token。
+- `trajectory.csv`：整个回答的逐步、逐层结构数值。
+- `reading.csv`：观察原句前 16 步、原句内部、后 8 步，每个 layer/head 的具体读取位置与原始权重。
+- `trajectory.png`：全部层的四张热图。红框只标出待看的原句；空白表示该值没有定义。
+
+调用路径为 `main.py routes -> RouteAnalysis.run()`，核心计算集中在 routes.py。
+默认观察窗口和历史基线可从命令行调整：
+
+```bash
+PYTHONPATH=src python main.py routes \
+  --samples outputs/你的采样目录 --cases examples/route_cases.csv \
+  --before 16 --after 8 --baseline 16 --output outputs/route_analysis
+```
+
+## 结构数值的定义
+
+在每层固定的 passage token 集合 S 上，各 head 单独归一化：
+
+```text
+mass[h,t] = sum_j∈S attention[h,t,j]
+p[h,t,j] = attention[h,t,j] / mass[h,t]
+dispersion[t] = mean_h H(p[h,t])
+disagreement[t] = H(mean_h p[h,t]) - dispersion[t]
+shift[t] = mean_h 0.5 * sum_j∈S |p[h,t,j] - p[h,t-1,j]|
+```
+
+H 的单位是 bits。前两项分别表示 head 内分散、head 间分歧；
+不会先平均 head 再只算一个熵。shift 捕捉连接分布的变化，包括熵不变的位置转移。
+`shift_baseline` 是同一层之前最多 16 步的有效 shift 中位数，不含当前步或未来步。
+没有依据这四例拟合阈值、选择层、训练分类器或自动赋予幻觉标签。
+
+`source_mass` 是所有 head 的原始 source 权重均值。
+零 source 权重的 head 不参与 D/J；TV 要求同一个 head 在前后两步均有正 source 权重。
+没有有效 head 时留空；`valid_heads` 记录当前参与 D/J 的数量，第一步 TV 和基线留空。
+很小的 source 权重也可能归一化出明显的变化，必须同时查看原始质量，不能单看熵或 TV。
+
+reading 中 `peak_*` 是当前最强 source 边，`gain_*` 是前后至少一次有权重的边中增量最大的一条。
+若这些边全部下降，则保留负 gain；第一步没有前值和 gain。
+这里只导出便于逐行检查的两条边，完整连接仍在原始 NPZ 中。
+层、head、step 都从 0 开始。第 t 步 attention 的 query 是 P+t−1，用于预测 response token t。
+
+先在 trajectory 看转向相对近期基线何时增大，再到 reading 看相同 step/layer 的具体 source，
+最后通过 tokens 对齐原句；正确对照也按相同步骤检查。固定 source 集合控制了历史长度增长，
+但目前只研究对原始 passages 的直接注意力，不覆盖通过已生成答案间接回看的路径。
+这些数值是关注结构的描述，不能单独证明某条路由导致了幻觉。

@@ -1,4 +1,4 @@
-"""Two commands: generate a trace, then inspect individual decoding decisions."""
+"""Generate traces and inspect the attention used for decoding decisions."""
 
 import argparse
 from pathlib import Path
@@ -30,6 +30,14 @@ def main(argv=None):
     inspect.add_argument(
         "--min-distance", type=int, default=16, help="minimum query-to-key token lag"
     )
+    routes = commands.add_parser("routes", help="analyze source attention in concrete examples")
+    routes.add_argument("--samples", type=Path, required=True)
+    routes.add_argument("--cases", type=Path, required=True, help="CSV: source_id,seed,focus")
+    routes.add_argument("--output", type=Path, required=True)
+    routes.add_argument("--tokenizer", type=Path, help="defaults to the captured model path")
+    routes.add_argument("--before", type=int, default=16)
+    routes.add_argument("--after", type=int, default=8)
+    routes.add_argument("--baseline", type=int, default=16, help="previous steps for shift median")
     args = parser.parse_args(argv)
     if args.command == "sample":
         from reanchor.sampling import SamplingConfig, SamplingExperiment
@@ -48,7 +56,7 @@ def main(argv=None):
                 dtype=args.dtype,
             )
         ).run()
-    else:
+    elif args.command == "inspect":
         from reanchor.attention import AttentionAnalysis
 
         AttentionAnalysis(
@@ -59,6 +67,18 @@ def main(argv=None):
             args.before,
             args.after,
             args.min_distance,
+        ).run()
+    else:
+        from reanchor.routes import RouteAnalysis
+
+        RouteAnalysis(
+            args.samples,
+            args.cases,
+            args.output,
+            args.tokenizer,
+            args.before,
+            args.after,
+            args.baseline,
         ).run()
     print(args.output)
 

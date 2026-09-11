@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import sys
 from functools import partial
@@ -56,6 +57,33 @@ def parser():
         parser_class=partial(argparse.ArgumentParser, allow_abbrev=False),
     )
     commands.add_parser("audit", help="legacy factorial audit; audit --help for options")
+    sample = commands.add_parser("sample", help="generate answers and save states during decoding")
+    sample.add_argument("--dataset", type=Path, required=True)
+    sample.add_argument("--source-ids", nargs="+", required=True)
+    sample.add_argument("--model", type=Path, required=True)
+    sample.add_argument("--output", type=Path, required=True)
+    sample.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2, 3])
+    sample.add_argument("--max-new-tokens", type=int, default=512)
+    sample.add_argument("--temperature", type=float, default=0.7)
+    sample.add_argument("--top-p", type=float, default=0.9)
+    sample.add_argument("--device", default="cuda:0")
+    sample.add_argument("--dtype", choices=["float32", "float16", "bfloat16"], default="bfloat16")
+    attention = commands.add_parser(
+        "analyze-attention", help="write per-token/head WAAD and FAI CSV"
+    )
+    attention.add_argument("--samples", type=Path, required=True)
+    attention.add_argument("--output", type=Path, required=True)
+    attention.add_argument("--window", type=int, default=10)
+    attention.add_argument("--future-range", type=int, nargs=2, default=[10, 100])
+    spans = commands.add_parser(
+        "evaluate-spans", help="evaluate token scores at onsets and continuations"
+    )
+    spans.add_argument(
+        "--input", type=Path, required=True, help="complete labeled token scores CSV"
+    )
+    spans.add_argument("--output", type=Path, required=True)
+    spans.add_argument("--bootstrap", type=int, default=200)
+    spans.add_argument("--seed", type=int, default=42)
     check = commands.add_parser("preflight", help="dependencies/device and seeded witness")
     check.add_argument("--device", default="cuda:0")
     check.add_argument("--model", type=Path)
@@ -128,6 +156,43 @@ def main(argv=None):
 
         return audit_main(argv[1:] if argv[0] == "audit" else argv)
     args = parser().parse_args(argv)
+    if args.command == "sample":
+        from reanchor.sampling import SamplingConfig, SamplingExperiment
+
+        rows = SamplingExperiment(
+            SamplingConfig(
+                dataset=args.dataset,
+                source_ids=tuple(args.source_ids),
+                model=args.model,
+                output=args.output,
+                seeds=tuple(args.seeds),
+                max_new_tokens=args.max_new_tokens,
+                temperature=args.temperature,
+                top_p=args.top_p,
+                device=args.device,
+                dtype=args.dtype,
+            )
+        ).run()
+        writer = csv.DictWriter(
+            sys.stdout, ["source_id", "seed", "tokens", "stop_reason"], extrasaction="ignore"
+        )
+        writer.writeheader()
+        writer.writerows(rows)
+        return
+    if args.command == "analyze-attention":
+        from reanchor.attention import AttentionAnalysis
+
+        count = AttentionAnalysis(
+            args.samples, args.output, args.window, tuple(args.future_range)
+        ).run()
+        print(f"rows\n{count}")
+        return
+    if args.command == "evaluate-spans":
+        from reanchor.span_evaluation import SpanEvaluation
+
+        SpanEvaluation(args.input, args.output, args.bootstrap, args.seed).run()
+        print(args.output.read_text(encoding="utf-8"), end="")
+        return
     if args.command == "preflight":
         from reanchor.runner import preflight
 

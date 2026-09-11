@@ -1,6 +1,75 @@
-# Reanchor：条件绑定支持模型 G0
+# Reanchor：采样与内部状态分析
 
-主入口现已改为 **G0 训练与检测流程**，不再把四个 factorial 坐标当作图学习模型。
+自然样本实验从 `python main.py sample` 开始。执行链只有：
+
+```text
+main.py → SamplingExperiment.run() → 加载模型 → 逐 token 采样并保存当步状态
+main.py → AttentionAnalysis.run()  → 读取 attention → 输出数值 CSV
+main.py → SpanEvaluation.run()     → 读取已有方法的分数和标签 → 分组指标 CSV
+```
+
+- [sampling.py](src/reanchor/sampling.py)：加载本地模型，使用 KV cache 生成，在同一次前向取 attention、hidden states、候选 logits。没有第二遍 replay。
+- [attention.py](src/reanchor/attention.py)：WAAD / FAI 的基线复现，逐 token、layer、head 输出。它们来自 [Li 等的论文](https://arxiv.org/html/2510.13554v2)，不是本项目提出的新方法。
+- [span_evaluation.py](src/reanchor/span_evaluation.py)：区分首错、连续错误段开头与段内延续，检验全 token 指标是否掩盖起点表现。
+
+在已安装依赖的环境运行（从源码运行时先 `export PYTHONPATH="$PWD/src"`）：
+
+```bash
+python main.py sample --dataset /path/to/RAGTruth/dataset --model /path/to/Llama \
+  --source-ids 14304 14315 14325 14375 --seeds 0 1 2 3 \
+  --max-new-tokens 512 --output outputs/samples
+python main.py analyze-attention --samples outputs/samples --output outputs/attention.csv
+```
+
+参数默认 temperature=0.7、top-p=0.9、cuda:0、bfloat16。模型使用自身 chat template，输入一条 user 消息，即 source_info 中的原 prompt；不额外要求思维链。终止符取模型 generation_config。到长度上限的回答记为 max_new_tokens。
+
+输出只有实验输入、原始数据和数值：
+
+```text
+settings.json    本次实际参数，保存一次
+prompts.jsonl    本次选中的原问题与材料，保存一次
+samples.jsonl   source_id、seed、回答、token 数、停止原因、张量文件名
+00000.npz …     token_ids、prompt_length、special_mask、attention、hidden_states、
+                top_ids/top_logits、entropy、原模型 logprob、采样分布 sampling_logprob
+attention.csv  每个 token/layer/head 的 WAAD、FAI、可用未来 query 数和最高 attention 来源位置
+```
+
+不写 schema、identity、replay_mode 等轨迹说明字段，不生成 report、HTML 或叙述性分析。样本行在每次生成完成后落盘。非空输出目录拒绝覆盖。
+
+张量 `attention[L,H,t,j]` 是在预测响应 token t 时，query `P+t-1` 对 j 的注意力。
+`hidden_states[L+1,t,D]` 同样是预测之前的状态，含 embedding 层。存储为 float16；
+top_logits 是未施加 temperature/top-p 的原模型 float32 logits。
+完整 token ID 可配合 settings 中的 tokenizer/model 路径恢复到具体 token；不要将 response 的词或字符序号当成模型 token 序号。
+
+WAAD 默认窗口 10；FAI 默认使用当前生成 token 后距离 10～100 的 query，区间端点包含。
+FAI 是事后量，不能放入该 token 生成前的检测器。没有可用未来 query 时 CSV 留空，并给出 fai_queries=0。
+两项采用原始 attention，包含特殊 token；peak_source 必须结合 special_mask 排除 sink 的解释。
+它们只描述距离与后续读取，不能自动判断幻觉。
+
+## 检验连续 span 假设
+
+每个方法导出同一测试集的完整 token 分数 CSV，列为：
+
+```text
+source_id,response_id,token_index,token_count,label,score
+```
+
+label 为 0/1，score 越高表示越可能幻觉；每个回答 token_index 必须完整覆盖 0～token_count-1。
+新采样回答需要独立标注，不能套用原数据另一个回答的标签。该入口不从回答文字猜测标签。
+
+```bash
+python main.py evaluate-spans --input charm_tokens.csv --output charm_metrics.csv --bootstrap 200
+```
+
+输出 all、onsets、first_error、continuations、first_error_clean_prefix 的计数、阳性比例、AUROC/AP 与 source bootstrap 区间，并直接打印同一数值表。连续段按二值标签游程定义；回答 token 0 若为阳性也算开头。最后一组仅保留首次阳性及之前的正常 token，以及完全正常回答。前四组使用相同正常 token 集，source 在每组内等权；组间重加权后不能直接用原始计数拼回总 AUROC。AP 随阳性比例变化，应同时查看 prevalence。当前未实现语义类型／位置匹配、逐 span 等权和固定误报率的报警评估。
+
+要区分“attention 结构有效”和“连续标签容易平滑”，需在相同 source split、输入表示与调参预算下比较 CHARM、无消息传递、仅相邻 token 链的消息传递，并分别评估起点与延续；同时核查方向、池化和归一化是否允许未来回答影响当前输出。不能根据一次无图消融或 span 比例就断定 CHARM 的效果全部来自连续性。
+
+[First Hallucination Tokens Are Different from Conditional Ones](https://arxiv.org/html/2507.20836v1) 已研究段内位置差异；对其测试的 logit 信号，首 token 更易区分。因此我们应检验不同方法的收益落在哪类位置，而不是预设延续对所有方法都更容易。CHARM 原论文的 token 实验使用 NQ/CNN；RAGTruth 上的发现需要单独复现，不能直接替代其原始实验。
+
+## G0 条件绑定支持模型
+
+另有 **G0 训练与检测流程**。
 G0 使用冻结 Llama 表示、候选条件化 source cross-attention，直接学习 `softmax(f)`。
 旧四格实验保留为独立的 `audit` 子命令。
 

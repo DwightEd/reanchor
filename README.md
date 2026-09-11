@@ -1,5 +1,9 @@
 # Reanchor：出错前在回看什么
 
+本仓库用于机制验证、具体样本分析和候选算子的实验。主线检测方法在
+[graph 项目](https://github.com/DwightEd/graph) 中实现、集成和评价。
+这里的回看定位、多跳来源和关系残差是实验原型；“实验流程已接通”不表示主线方法已经完成。
+
 入口只有 `main.py`：
 
 - `sample` → `SamplingExperiment.run()`：加载模型，逐 token 采样，在同一次前向保存 attention 和候选 logits。
@@ -17,7 +21,7 @@
 当前研究要求见 [回看节点与约束归属](docs/graph_method_proposal.md)。
 该文区分已观察结果、本轮检查和待验证算法；其他历史笔记不作为当前实现说明。
 
-## 回看与证据路径分析
+## 回看与证据路径验证实验
 
 ```bash
 git pull --ff-only origin agent/direct-sampling && bash scripts/revisits_and_push.sh

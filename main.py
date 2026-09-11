@@ -40,7 +40,7 @@ def main(argv=None):
     routes.add_argument("--baseline", type=int, default=16, help="previous steps for shift median")
     args = parser.parse_args(argv)
     if args.command == "sample":
-        from reanchor.sampling import SamplingConfig, SamplingExperiment
+        from decoding.sampling import SamplingConfig, SamplingExperiment
 
         SamplingExperiment(
             SamplingConfig(
@@ -57,7 +57,7 @@ def main(argv=None):
             )
         ).run()
     elif args.command == "inspect":
-        from reanchor.attention import AttentionAnalysis
+        from decoding.attention import AttentionAnalysis
 
         AttentionAnalysis(
             args.samples,
@@ -69,7 +69,7 @@ def main(argv=None):
             args.min_distance,
         ).run()
     else:
-        from reanchor.routes import RouteAnalysis
+        from decoding.routes import RouteAnalysis
 
         RouteAnalysis(
             args.samples,

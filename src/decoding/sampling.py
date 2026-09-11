@@ -9,7 +9,7 @@ import torch
 from tqdm.auto import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from reanchor.io import empty_directory, read_jsonl, write_json, write_jsonl
+from decoding.io import empty_directory, read_jsonl, write_json, write_jsonl
 
 
 @dataclass(frozen=True)

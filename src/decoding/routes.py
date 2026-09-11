@@ -10,7 +10,7 @@ import numpy as np
 from tqdm.auto import tqdm
 from transformers import AutoTokenizer
 
-from reanchor.io import empty_directory, read_jsonl
+from decoding.io import empty_directory, read_jsonl
 
 
 def entropy(probabilities: np.ndarray) -> np.ndarray:

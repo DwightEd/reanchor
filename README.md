@@ -6,10 +6,27 @@
 - `inspect` → `AttentionAnalysis.run()`：读取保存的数据，输出具体 token 选择和历史读取变化。
 - `routes` → `RouteAnalysis.run()`：对具体样本计算 source 上的 head 内散布、head 间分歧与逐步转向。
 
-算法在 [sampling.py](src/reanchor/sampling.py)、[attention.py](src/reanchor/attention.py)
-和 [routes.py](src/reanchor/routes.py)。
+算法在 [sampling.py](src/decoding/sampling.py)、[attention.py](src/decoding/attention.py)
+和 [routes.py](src/decoding/routes.py)。
 `io.py` 只负责 JSON 读写及拒绝覆盖已有输出。没有训练、校准、分组评估、bootstrap 或 report。
 旧实验可从 Git 历史恢复；`docs/` 中的研究笔记不是当前实现说明。
+
+目录中的两个层级现在用不同名称：
+
+```text
+reanchor/                 Git 项目根目录，在这里 pull 和运行 scripts
+  main.py                 命令行入口
+  src/decoding/           Python 代码包
+    sampling.py           加载模型、生成与保存中间状态
+    attention.py          查看具体历史 token 的读取变化
+    routes.py             分析 source 上的关注分布
+    io.py                 文件读写
+  outputs/                服务器上的原始采样，Git 忽略
+  results/                随 Git 同步的分析结果和生成原文
+```
+
+原来的 `reanchor/src/reanchor` 是项目名与 Python 包名相同，不表示又 clone 了一份仓库。
+`git pull` 不会创建新的嵌套项目。当前算法文件是 `reanchor/src/decoding/routes.py`。
 
 ## 运行
 
@@ -133,6 +150,31 @@ bash scripts/analyze_cases.sh outputs/你的采样目录
 `PYTHON_BIN`、`SAMPLES_DIR`、`OUTPUT_DIR` 可覆盖解释器、输入目录、输出目录。
 每次默认建立新的 `routes_<时间>_<进程号>` 子目录，原始文件不会改写。
 
+## 把真实结果一起推送
+
+在项目根目录执行以下命令，会分析已有采样，把结果提交并推送到当前分支：
+
+```bash
+git fetch origin && git switch agent/direct-sampling && git pull --ff-only origin agent/direct-sampling && bash scripts/analyze_and_push.sh
+```
+
+也可指定已有采样目录：
+
+```bash
+bash scripts/analyze_and_push.sh outputs/你的采样目录
+```
+
+结果保存到 `results/routes_<UTC时间>_<进程号>/`。除了每例的 CSV 和图，
+还复制本次输入的 `samples.jsonl`、`prompts.jsonl`、`settings.json` 和观察窗口 `cases.csv`。
+这样拉取仓库后，就可以对照生成原文、材料和真实数值分析。大体积原始 NPZ 留在服务器。
+仅提交此次结果目录；未跟踪的其他文件不会被加入提交。
+有未提交的代码或暂存修改时会停止，以保证结果对应已提交代码；分析失败也不会提交、推送半成品。
+Git 推送失败时结果与本地提交仍保留，脚本不会强制推送或重写远端历史。
+
+你在会话中提供的 16 条真实生成文本已另存于
+[results/pasted_samples_20260911/samples.jsonl](results/pasted_samples_20260911/samples.jsonl)。
+该文件只有生成文本，没有 attention 数值；它不是上述分析脚本的运行结果。
+
 [examples/route_cases.csv](examples/route_cases.csv) 只指定样本和待看的原句：
 
 | source_id / seed | 观察窗口 | 原文对照的用途 |
@@ -185,6 +227,10 @@ H 的单位是 bits。前两项分别表示 head 内分散、head 间分歧；
 零 source 权重的 head 不参与 D/J；TV 要求同一个 head 在前后两步均有正 source 权重。
 没有有效 head 时留空；`valid_heads` 记录当前参与 D/J 的数量，第一步 TV 和基线留空。
 很小的 source 权重也可能归一化出明显的变化，必须同时查看原始质量，不能单看熵或 TV。
+
+`source_mass` 就是分给 passage 正文的总 attention 权重，不是另外训练或拼接的检测特征。
+例如 `[0.001, 0.001]` 与 `[0.4, 0.4]` 归一化后同为 `[0.5, 0.5]`，熵相同，
+但前者仅有 0.002 的注意力分给 source，后者有 0.8。保留它是为了分清这两种情况。
 
 reading 中 `peak_*` 是当前最强 source 边，`gain_*` 是前后至少一次有权重的边中增量最大的一条。
 若这些边全部下降，则保留负 gain；第一步没有前值和 gain。

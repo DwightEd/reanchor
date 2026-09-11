@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 from tqdm.auto import tqdm
 
-from reanchor.io import empty_directory, read_jsonl
+from decoding.io import empty_directory, read_jsonl
 
 
 class AttentionAnalysis:

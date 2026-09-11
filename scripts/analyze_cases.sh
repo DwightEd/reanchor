@@ -33,4 +33,8 @@ if [[ -n "${TOKENIZER_PATH:-}" ]]; then
 fi
 printf 'Existing samples: %s\n' "$samples"
 "$python_bin" -u main.py routes "${args[@]}"
+cp "$samples/samples.jsonl" "$output/samples.jsonl"
+cp "$samples/prompts.jsonl" "$output/prompts.jsonl"
+cp "$samples/settings.json" "$output/settings.json"
+cp "$repo_root/examples/route_cases.csv" "$output/cases.csv"
 printf 'Results: %s\n' "$output"

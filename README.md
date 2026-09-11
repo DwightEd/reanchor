@@ -1,5 +1,16 @@
 # Reanchor：采样与内部状态分析
 
+在远端 reanchor 仓库、已激活的 GPU Python 环境中运行：
+
+```bash
+git fetch origin && git switch agent/direct-sampling && git pull --ff-only origin agent/direct-sampling && bash scripts/run_samples.sh
+```
+
+`run_samples.sh` 使用服务器现有的 Llama-3.1-8B-Instruct 和 RAGTruth 路径，
+对 14304、14315、14325、14375 各采样 4 个 seed，每次最多生成 512 token，随后输出 attention 数值 CSV。
+结果保存在新建的 `outputs/samples_<时间>_<进程号>/`，包括 `attention.csv`。
+路径和设备可通过 `MODEL_PATH`、`RAGTRUTH_DIR`、`OUTPUT_DIR`、`DEVICE`、`DTYPE`、`PYTHON_BIN` 覆盖；相对路径以仓库根目录为基准。
+
 自然样本实验从 `python main.py sample` 开始。执行链只有：
 
 ```text

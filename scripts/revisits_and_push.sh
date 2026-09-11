@@ -30,11 +30,20 @@ PY
 fi
 
 result_path="results/revisits_$(date -u +%Y%m%d_%H%M%S)_$$"
+state_path=${STATES_DIR:-"outputs/states_$(basename "$samples")"}
 printf 'Existing samples: %s\n' "$samples"
+printf '[1/3] Fixed-prefix states (reuse completed samples): %s\n' "$state_path"
+"$python_bin" -u main.py states --samples "$samples" --output "$state_path" \
+  --device "${DEVICE:-cuda:0}" --atol "${LOGIT_ATOL:-0.0001}"
+printf '[2/3] Content revisits and reading paths\n'
 "$python_bin" -u main.py revisits --samples "$samples" --output "$result_path" \
-  --window 16 --quantile 0.95 --context 4
+  --states "$state_path" --window 16 --quantile 0.95 --context 4 --hops "${HOPS:-3}"
+printf '[3/3] Concrete example windows\n'
+"$python_bin" -u main.py compare --analysis "$result_path" \
+  --cases "${CASES_FILE:-examples/decision_cases.csv}" --output "$result_path/comparison.csv"
 cp "$samples/prompts.jsonl" "$result_path/prompts.jsonl"
 cp "$samples/settings.json" "$result_path/sampling.json"
+cp "$state_path/settings.json" "$result_path/state_settings.json"
 git add -- "$result_path"
 git commit -m "Add automatic revisit analysis $(basename "$result_path")" -- "$result_path"
 git push origin "HEAD:refs/heads/$branch"

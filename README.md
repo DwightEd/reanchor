@@ -6,7 +6,9 @@
 - `inspect` → `AttentionAnalysis.run()`：读取保存的数据，输出具体 token 选择和历史读取变化。
 - `routes` → `RouteAnalysis.run()`：对具体样本计算 source 上的 head 内散布、head 间分歧与逐步转向。
 - `decisions` → `DecisionInspection.run()`：固定窗口的原始候选、指定历史边、相同前缀数值检查。
-- `revisits` → `RevisitAnalysis.run()`：无实体/错误标签的全流回看、head 读取结构与历史两跳检查。
+- `states` → `FixedPrefixStates.run()`：固定原生成前缀，补取各层表征和完整 logits 熵。
+- `revisits` → `RevisitAnalysis.run()`：内容回看、多跳路径与关系保持读出。
+- `compare` → `WindowComparison.run()`：独立案例窗口的数字对照。
 
 算法在 [sampling.py](src/decoding/sampling.py)、[attention.py](src/decoding/attention.py)
 和 [routes.py](src/decoding/routes.py)。
@@ -15,49 +17,72 @@
 当前研究要求见 [回看节点与约束归属](docs/graph_method_proposal.md)。
 该文区分已观察结果、本轮检查和待验证算法；其他历史笔记不作为当前实现说明。
 
-## 自动扫描已有生成
+## 回看与证据路径分析
 
 ```bash
 git pull --ff-only origin agent/direct-sampling && bash scripts/revisits_and_push.sh
 ```
 
-脚本打印并分析 `outputs/samples_*` 中最近完成记录的目录，也可把实际采样目录作为参数。
-只读已有 NPZ，CPU 计算，不加载模型/tokenizer、不重新生成、不读取 cases 或幻觉标签。
-结束后提交并推送 `results/revisits_*`；原始 NPZ 保留在服务器。
-只分析而不推送可直接运行：
+脚本选择并打印最新的 outputs/samples_*，也可传入原有样本目录：
+`bash scripts/revisits_and_push.sh outputs/你的采样目录`。
+
+执行顺序是固定前缀状态补取 → 全流图分析 → 案例窗口对照 → 推送数字结果。
+第一步需要原模型和 GPU，严格使用已有 token ID，不重新采样，不应用温度或 top-p。
+补取 embedding、各层表征和完整 logits 熵，逐步核对原缓存 top logits、log-normalizer 和 attention。
+默认最大差异 1e-4，超出立即停止。可用 DEVICE、STATES_DIR、LOGIT_ATOL 指定实际环境。
+完成的状态按样本复用，未完成样本重做；状态放在 outputs/states_*，不进入 Git。
+
+只计算、不推送：
 
 ```bash
-PYTHONPATH=src python main.py revisits --samples outputs/你的采样目录 \
-  --output outputs/revisit_analysis --window 16 --quantile 0.95 --context 4
+export PYTHONPATH="$PWD/src"
+python main.py states --samples outputs/你的采样目录 --output outputs/fixed_states
+python main.py revisits --samples outputs/你的采样目录 --states outputs/fixed_states \
+  --output outputs/revisit_analysis --window 16 --quantile 0.95 --context 4 --hops 3
+python main.py compare --analysis outputs/revisit_analysis \
+  --cases examples/decision_cases.csv --output outputs/revisit_analysis/comparison.csv
 ```
 
-实现集中在 [revisits.py](src/decoding/revisits.py)。每条回答即时保存三张数值表，有回答/token 进度条：
+每条回答完成后保存：
 
-- `tokens.csv`：每步读取变化、过去基线校正后的 `revisit`、阈值与 `event`，以及原始概率/margin/已保存的 logits 熵。
-- `layers.csv`：逐层的 `shift`、`revisit`、head 内散布、head 间分歧和读取图的有效秩。
-- `reads.csv`：事件前后指定范围内，全部 heads 的两个最强连接；额外保留增量最大的旧历史连接。
-  展示该 head 的熵/位移、实际 token/位置/权重，并对历史读取给出前一层的最强普通 prompt 端点和两跳权重。
+- tokens.csv：query_step/query 与被预测 token，读取变化、历史阈值、active/event、原生 margin/熵。
+- layers.csv：每层的内容 W1、回看分数、head 散布/分歧与有效秩。
+- paths.csv：所有 token、每层、每跳的来源分歧和关系读数；展示三个来源端点。
+- edges.csv：事件附近逐 head 的强内容连接与增强的历史连接，保留 token 身份和原始权重。
+- graph.npz：完整 head 平均图边、各跳全部来源分布与读数，留在服务器，不推入 Git。
+- comparison.csv：原有六个具体窗口的逐步数字对照；窗口不参与算法，未标注首错就不报首错准确率。
+- state_checks.csv：每条轨迹的最大 logits/attention 差异，用于核对两次前向的一致性。
 
-`shift` 是逐 head 的一维 Wasserstein 距离，使用完整可见 attention 行和真实 token 位置。
-相邻复制的位移代价为 1，远处换读代价更大；`revisit` 为超过该 head 过去位移中位数的正部分，再平均。
-事件要求超过过去分数的 0.95 分位数，并完成过去窗口预热；连续超阈值只记录起点。
-阈值不使用未来；`context` 只决定事后展示范围，不参与检测。事件表示读取重组，不是错误标签。
+算法分为三个直接调用的模块：
 
-散布是各 head 的 Shannon 熵均值；分歧是平均分布的熵减去各 head 熵的均值。
-有效秩来自 `sqrt(P) @ sqrt(P).T / heads` 的特征值谱熵；P 是同一层的 head×可见 key 读取矩阵。
-相同的分散读取可以是“散布高、有效秩 1”；各自集中但读向不同处可以是“散布低、有效秩较高”。
-有效秩是读取方向的结构读数，不是语义候选数量；相邻子词、合理分工也可能产生 head 差异。
-这些全行读数包括 instruction、special 与 self，不能与旧 `routes` 的 source 条件熵直接混比。
-`reads.csv` 的 region 和原始权重用于核查这些来源；prompt 位置不自动等于有效证据。
+1. [RevisitSignal.run()](src/decoding/reading_graph.py) 在共同可见的正文和历史键上计算
+   相邻步 W1。排除指令、special、self 及刚变成历史的旧 query，避免把正常增加上下文当回看。
+   减去各 head 过去位移的中位数，乘两时刻较小的原始内容质量，再对 head/层平均。
+   这是过去基线校正，不是移动平均。active 标识超过过去分位数的区间，event 标识起点。
+2. 同文件的 ReadingGraph.run() 按原生边计算直接来源，以及经历史节点的 2..hops 路径。
+   层严格递减，历史 token u 的输入行是 u+1；prompt/source 是终点。默认最多三跳，
+   可用 --hops 或脚本 HOPS 调整，有效最大值为模型层数。计算保留全部端点，无 top-k 截断。
+   原始逐 head 图仍在采样 NPZ；分析图将中间 heads 平均，不能声称保留了每条 head 路径。
+3. [RouteReadout.run()](src/decoding/route_readout.py) 先比较直接来源和多跳来源的 JS 分歧。
+   再固定 token 到 source 的对应 T：实际路径权重乘输入 embedding 相似性。
+   用同层、源文均值中心化的表征 x，比较生成端关联与对应后关联：
 
-第 t 行 query=P+t−1，预测生成 token t。历史 token u 的自身输入状态在行 u+1。
-两跳只使用更早层，按该层 heads 平均；不包含 V/O、MLP、残差变换，不能叫完整因果流。
-第一层、self 和没有普通 prompt 读取的情况不填两跳结果；无事件时 reads 只有表头。
-旧缓存没有完整 logits 熵则留空，不能用 top-5 代替。
-输出拒绝覆盖已有目录；运行中途失败时已写的文件保留，但不表示该批分析完成，也不会提交推送。
+```text
+mapped_i = sum_s T(i,s) * x_source[s]
+residual(i,j) = max(0, dot(x_i,x_j) - dot(mapped_i,mapped_j))
+relation_residual(i) = 历史读取边加权的 residual
+```
 
-当前功能是无标签的内部读取分析。它尚未实现关系真值读出或验证首错检测效果；
-低秩关系监督方案作为备选，不参与本命令。
+另存 source 身份循环移位的 relation_shuffled 对照，以及有效关系覆盖率。
+它们都是无需关系标签的读数，不是关系真值或错误概率；同义改写、软对应范数下降、
+合法跨句组合也可能产生残差。无来源或退化表征留空。中间状态只能使用已经输入的 token：
+第 t 行 query=P+t-1，预测 response[t]，不能把当前 query 的关系残差称为未生成 token 的知识。
+
+[实现方案和验收边界](docs/revisit_route_plan.md) 说明当前算子、时间对齐和局限。
+已有测试覆盖数值算子、无未来泄漏、真实微型模型端到端、状态身份检查和发布失败行为；
+真实 8B 模型上的区分效果需要服务器结果。程序关系监督与低秩投影仍是备选，未参与本实现。
+算法没有读取实体清单或幻觉标签。正文边界来自原有 RAGTruth QA passage 标记，
+因此 states 的正文对齐目前限定此 prompt 格式。
 
 目录中的两个层级现在用不同名称：
 

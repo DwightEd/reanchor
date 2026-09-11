@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -94,3 +95,55 @@ def test_result_publishing_stops_before_commit_or_push_on_failure(result_reposit
     assert run.returncode == (7 if failure == "analysis" else 2)
     assert git("rev-parse", "HEAD") == git("rev-parse", "origin/main") == old_head
     assert not any(p.startswith("results/") for p in git("ls-files").splitlines())
+
+
+@pytest.mark.parametrize("failure", ["", "states", "revisits", "compare"])
+def test_revisit_pipeline_runs_all_stages_and_publishes_only_complete_text(
+    result_repository, failure
+):
+    repo, bash, git = result_repository
+    script = Path(__file__).resolve().parents[1] / "scripts/revisits_and_push.sh"
+    (repo / "scripts/revisits_and_push.sh").write_bytes(script.read_bytes())
+    (repo / ".gitignore").write_text("outputs/\nresults/**/graph.npz\n", encoding="utf8")
+    (repo / "main.py").write_text(
+        "import json,os,sys\nfrom pathlib import Path\n"
+        "command=sys.argv[1]\n"
+        'with Path("calls.txt").open("a") as f: f.write(command+"\\n")\n'
+        'if command==os.environ.get("FAIL_COMMAND"): raise SystemExit(7)\n'
+        'out=Path(sys.argv[sys.argv.index("--output")+1])\n'
+        'if command=="compare": out.write_text("case,step\\nexample,1\\n")\n'
+        "else:\n"
+        " out.mkdir(parents=True,exist_ok=True)\n"
+        ' (out/"settings.json").write_text("{}")\n'
+        ' if command=="revisits":\n'
+        '  (out/"00000").mkdir()\n'
+        '  (out/"00000/tokens.csv").write_text("step,revisit\\n1,0.1\\n")\n'
+        '  (out/"00000/graph.npz").write_bytes(b"graph stays local")\n',
+        encoding="utf8",
+    )
+    samples = repo / "outputs/existing samples"
+    samples.mkdir()
+    for name in ("settings.json", "prompts.jsonl"):
+        (samples / name).write_text("{}", encoding="utf8")
+    git("add", "scripts/revisits_and_push.sh", "main.py", ".gitignore")
+    git("commit", "-m", "Set up pipeline boundary test")
+    git("push", "origin", "main")
+    before = git("rev-parse", "HEAD")
+    environment = dict(os.environ, PYTHON_BIN=Path(sys.executable).as_posix(), FAIL_COMMAND=failure)
+    run = subprocess.run(
+        [bash, "scripts/revisits_and_push.sh", "outputs/existing samples"],
+        cwd=repo,
+        env=environment,
+        capture_output=True,
+        text=True,
+    )
+    assert run.returncode == (7 if failure else 0), run.stderr
+    if failure:
+        assert git("rev-parse", "HEAD") == before
+        assert (repo / "calls.txt").read_text().splitlines()[-1] == failure
+    else:
+        assert (repo / "calls.txt").read_text().splitlines() == ["states", "revisits", "compare"]
+        assert git("rev-parse", "HEAD") == git("rev-parse", "origin/main") != before
+        added = git("diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD").splitlines()
+        assert all(p.startswith("results/") and not p.endswith(".npz") for p in added)
+        assert any(p.endswith("comparison.csv") for p in added)

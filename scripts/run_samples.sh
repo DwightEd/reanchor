@@ -20,8 +20,8 @@ output=${OUTPUT_DIR:-"$repo_root/outputs/samples_$(date +%Y%m%d_%H%M%S)_$$"}
   --device "${DEVICE:-cuda:0}" --dtype "${DTYPE:-bfloat16}" \
   --output "$output"
 
-"$python_bin" -u main.py analyze-attention \
+"$python_bin" -u main.py inspect \
   --samples "$output" \
-  --output "$output/attention.csv"
+  --output "$output/reading"
 
 printf 'Results: %s\n' "$output"

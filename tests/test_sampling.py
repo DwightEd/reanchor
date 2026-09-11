@@ -1,3 +1,4 @@
+import csv
 import json
 
 import numpy as np
@@ -8,7 +9,7 @@ from tokenizers.models import WordLevel
 from tokenizers.pre_tokenizers import Whitespace
 from transformers import LlamaConfig, LlamaForCausalLM, PreTrainedTokenizerFast
 
-from reanchor.cli import main
+from main import main
 
 
 @pytest.fixture
@@ -82,7 +83,6 @@ def test_sample_cli_saves_states_of_each_actual_generation_decision(sample_input
         assert row["stop_reason"] == "max_new_tokens"
         with np.load(output / row["trace"]) as trace:
             assert trace["attention"].shape == (2, 2, 3, 5)
-            assert trace["hidden_states"].shape == (3, 3, 16)
             ids = trace["token_ids"]
             prompt = int(trace["prompt_length"])
             for t in range(3):
@@ -90,7 +90,6 @@ def test_sample_cli_saves_states_of_each_actual_generation_decision(sample_input
                     expected = model(
                         torch.tensor([ids[: prompt + t].tolist()]),
                         output_attentions=True,
-                        output_hidden_states=True,
                     )
                 np.testing.assert_allclose(
                     trace["top_logits"][t],
@@ -102,14 +101,26 @@ def test_sample_cli_saves_states_of_each_actual_generation_decision(sample_input
                     torch.stack([a[0, :, -1].float() for a in expected.attentions]),
                     atol=3e-3 if dtype == "bfloat16" else 5e-4,
                 )
-                np.testing.assert_allclose(
-                    trace["hidden_states"][:, t],
-                    torch.stack([h[0, -1].float() for h in expected.hidden_states]),
-                    atol=2e-2 if dtype == "bfloat16" else 2e-3,
+                assert trace["chosen_logit"][t] == pytest.approx(
+                    float(expected.logits[0, -1, int(ids[prompt + t])]),
+                    abs=3e-3 if dtype == "bfloat16" else 1e-5,
+                )
+                assert trace["log_normalizer"][t] == pytest.approx(
+                    float(expected.logits[0, -1].float().logsumexp(-1)),
+                    abs=3e-3,
                 )
                 assert not trace["attention"][:, :, t, prompt + t :].any()
-    assert not list(output.glob("*report*"))
-    assert not list(output.rglob("trajectory.json"))
+    inspected = tmp_path / "inspected"
+    main(["inspect", "--samples", str(output), "--output", str(inspected), "--min-distance", "1"])
+    with (inspected / "tokens.csv").open(encoding="utf-8") as stream:
+        tokens = list(csv.DictReader(stream))
+    assert len(tokens) == 6
+    assert all(row["error_offset"] == "" for row in tokens)
+    assert all(0 < float(row["probability"]) < 1 for row in tokens)
+    with (inspected / "attention.csv").open(encoding="utf-8") as stream:
+        reading = list(csv.DictReader(stream))
+    assert len(reading) == 24
+    assert all(row["shift"] == "" and row["gain"] == "" for row in reading if row["step"] == "0")
 
 
 def test_sample_honors_model_stop_tokens(sample_input, tmp_path):

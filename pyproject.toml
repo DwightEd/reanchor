@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "reanchor"
 version = "0.3.0"
-description = "Label-free conditional binding support and independent mechanism audits"
+description = "Inspect concrete attention shifts before a generated error"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -23,7 +23,7 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"
-pythonpath = ["src"]
+pythonpath = [".", "src"]
 testpaths = ["tests"]
 
 [tool.ruff]

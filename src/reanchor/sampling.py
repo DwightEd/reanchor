@@ -62,7 +62,10 @@ class SamplingExperiment:
         for name in ("dataset", "model", "output"):
             settings[name] = str(settings[name])
         write_json(cfg.output / "settings.json", settings)
-        write_jsonl(cfg.output / "prompts.jsonl", selected)
+        write_jsonl(
+            cfg.output / "prompts.jsonl",
+            [{"source_id": str(row["source_id"]), "prompt": row["prompt"]} for row in selected],
+        )
         eos = model.generation_config.eos_token_id
         eos_ids = set(eos if isinstance(eos, list) else ([] if eos is None else [eos]))
         records = []
@@ -77,6 +80,24 @@ class SamplingExperiment:
                 trace = self._generate(model, prompt, seed, eos_ids)
                 token_ids = trace["token_ids"]
                 trace["special_mask"] = np.isin(token_ids, tokenizer.all_special_ids)
+                trace["token_pieces"] = np.array(
+                    tokenizer.convert_ids_to_tokens(token_ids.tolist())
+                )
+                trace["token_text"] = np.array(
+                    [
+                        tokenizer.decode([int(token)], clean_up_tokenization_spaces=False)
+                        for token in token_ids
+                    ]
+                )
+                trace["top_text"] = np.array(
+                    [
+                        [
+                            tokenizer.decode([int(token)], clean_up_tokenization_spaces=False)
+                            for token in candidates
+                        ]
+                        for candidates in trace["top_ids"]
+                    ]
+                )
                 filename = f"{len(records):05d}.npz"
                 np.savez_compressed(cfg.output / filename, **trace)
                 response_ids = token_ids[prompt.shape[1] :]
@@ -84,7 +105,11 @@ class SamplingExperiment:
                     {
                         "source_id": str(source["source_id"]),
                         "seed": seed,
-                        "response": tokenizer.decode(response_ids, skip_special_tokens=True),
+                        "response": tokenizer.decode(
+                            response_ids,
+                            skip_special_tokens=True,
+                            clean_up_tokenization_spaces=False,
+                        ),
                         "tokens": len(response_ids),
                         "stop_reason": "eos"
                         if int(response_ids[-1]) in eos_ids
@@ -102,9 +127,7 @@ class SamplingExperiment:
         generator = torch.Generator(device=cfg.device).manual_seed(seed)
         ids = prompt
         next_input, cache = prompt, None
-        attention, states, top_ids, top_logits, entropy, logprob, sampling_logprob = (
-            [] for _ in range(7)
-        )
+        attention, top_ids, top_logits, chosen_logits, normalizers = ([] for _ in range(5))
         for _ in tqdm(range(cfg.max_new_tokens), desc=f"seed {seed}", unit="token", leave=False):
             if ids.shape[1] > model.config.max_position_embeddings:
                 raise ValueError("generation exceeded model context length")
@@ -114,11 +137,9 @@ class SamplingExperiment:
                 use_cache=True,
                 attention_mask=torch.ones_like(ids),
                 output_attentions=True,
-                output_hidden_states=True,
                 return_dict=True,
             )
             logits = output.logits[0, -1].float()
-            log_p = logits.log_softmax(-1)
             probabilities = (logits / cfg.temperature).softmax(-1)
             values, indices = probabilities.sort(descending=True)
             # Keep the token that crosses the top-p boundary.
@@ -126,20 +147,14 @@ class SamplingExperiment:
             probabilities[indices[remove]] = 0
             probabilities /= probabilities.sum()
             chosen = torch.multinomial(probabilities, 1, generator=generator)
-            logprob.append(float(log_p[chosen]))
-            sampling_logprob.append(float(probabilities[chosen].log()))
-            entropy.append(float(torch.special.entr(log_p.exp()).sum()))
-            top = logits.topk(min(32, logits.numel()))
+            chosen_logits.append(float(logits[chosen]))
+            normalizers.append(float(logits.logsumexp(-1)))
+            top = logits.topk(min(5, logits.numel()))
             top_ids.append(top.indices.cpu().numpy())
             top_logits.append(top.values.cpu().numpy())
             # Row t is query P+t-1, the state BEFORE sampling response token t.
             attention.append(
                 torch.stack([a[0, :, -1] for a in output.attentions])
-                .to(device="cpu", dtype=torch.float16)
-                .numpy()
-            )
-            states.append(
-                torch.stack([h[0, -1] for h in output.hidden_states])
                 .to(device="cpu", dtype=torch.float16)
                 .numpy()
             )
@@ -157,10 +172,8 @@ class SamplingExperiment:
             "token_ids": ids[0].cpu().numpy(),
             "prompt_length": np.array(prompt.shape[1]),
             "attention": weights,
-            "hidden_states": np.stack(states, axis=1),
             "top_ids": np.stack(top_ids),
             "top_logits": np.stack(top_logits),
-            "entropy": np.array(entropy),
-            "logprob": np.array(logprob),
-            "sampling_logprob": np.array(sampling_logprob),
+            "chosen_logit": np.array(chosen_logits, dtype=np.float32),
+            "log_normalizer": np.array(normalizers, dtype=np.float32),
         }

@@ -1,8 +1,7 @@
-"""Artifact I/O. Inputs and scores stay separate from hallucination labels."""
+"""Read experiment inputs and refuse accidental overwrites."""
 
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -39,25 +38,3 @@ def empty_directory(path: Path) -> None:
     if path.exists() and (not path.is_dir() or any(path.iterdir())):
         raise FileExistsError(f"refusing nonempty output: {path}")
     path.mkdir(parents=True, exist_ok=True)
-
-
-def digest(value) -> str:
-    encoded = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    return hashlib.sha256(encoded.encode("utf-8")).hexdigest()
-
-
-def file_digest(path: Path) -> str:
-    result = hashlib.sha256()
-    with path.open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            result.update(chunk)
-    return result.hexdigest()
-
-
-def assert_disjoint(groups: dict[str, set[str]]) -> None:
-    owners = {}
-    for split, sources in groups.items():
-        for source in sources:
-            if source in owners and owners[source] != split:
-                raise ValueError(f"source {source!r} occurs in {owners[source]} and {split}")
-            owners[source] = split

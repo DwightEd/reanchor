@@ -1,0 +1,5 @@
+{
+  "model": "/share/home/tm902089733300000/a903202310/lys/models/Meta-Llama-3.1-8B-Instruct",
+  "dtype": "bfloat16",
+  "atol": 0.0001
+}

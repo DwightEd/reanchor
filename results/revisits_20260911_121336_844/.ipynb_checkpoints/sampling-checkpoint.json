@@ -1,0 +1,22 @@
+{
+  "dataset": "/share/home/tm902089733300000/a903202310/lys/data/RAGTruth/dataset",
+  "source_ids": [
+    "14304",
+    "14315",
+    "14325",
+    "14375"
+  ],
+  "model": "/share/home/tm902089733300000/a903202310/lys/models/Meta-Llama-3.1-8B-Instruct",
+  "output": "/share/home/tm902089733300000/a903202310/lys/research/reanchor/outputs/samples_20260911_145421_235",
+  "seeds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "max_new_tokens": 512,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "device": "cuda:0",
+  "dtype": "bfloat16"
+}

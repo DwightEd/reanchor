@@ -1,0 +1,9 @@
+{
+  "method": "content_revisit_paths",
+  "samples": "/share/home/tm902089733300000/a903202310/lys/research/reanchor/outputs/samples_20260911_145421_235",
+  "states": "/share/home/tm902089733300000/a903202310/lys/research/reanchor/outputs/states_samples_20260911_145421_235",
+  "window": 16,
+  "quantile": 0.95,
+  "context": 4,
+  "hops": 3
+}

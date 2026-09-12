@@ -1,5 +1,19 @@
 # Reanchor：出错前在回看什么
 
+回看与约束归属的控制实验见 [执行方案](docs/mechanism_experiment.md)：
+
+```bash
+bash scripts/run_mechanism.sh
+```
+
+入口 `main.py mechanism` 调用 `MechanismExperiment.run()`：归属交换、真实
+attention 连接干预、MLP 更新替换，再检查五个已有自然样本窗口。输出逐项
+`tokens.csv`、`layers.csv` 与完成检查；相同设置重跑会跳过已完成案例。
+使用已有 GPU Python 环境，`OUTPUT_DIR`、`SAMPLES_DIR`、`STATES_DIR` 可以显式指定。
+
+同 token 熵对照使用 `main.py match-entropy --features ... --labels ... --output ...`。
+这里的标签只用于比较首错与正常位置，不能作为检测算法的输入。
+
 本仓库用于机制验证、具体样本分析和候选算子的实验。主线检测方法在
 [graph 项目](https://github.com/DwightEd/graph) 中实现、集成和评价。
 这里的回看定位、多跳来源和关系残差是实验原型；“实验流程已接通”不表示主线方法已经完成。

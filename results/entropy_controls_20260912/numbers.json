@@ -1,0 +1,22 @@
+{
+  "first_errors": 61,
+  "incomplete_responses": 1,
+  "entropy_unit": "nats",
+  "controls": {
+    "same_token": {
+      "matched": 58,
+      "mean_difference": 0.49048447146526625,
+      "fraction_higher": 0.6896551724137931
+    },
+    "same_response_token": {
+      "matched": 29,
+      "mean_difference": 0.5699577403945931,
+      "fraction_higher": 0.6206896551724138
+    },
+    "same_token_clause_start": {
+      "matched": 36,
+      "mean_difference": 0.22648096713439417,
+      "fraction_higher": 0.5555555555555556
+    }
+  }
+}

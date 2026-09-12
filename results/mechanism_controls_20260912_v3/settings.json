@@ -1,0 +1,10 @@
+{
+  "model": "/share/home/tm902089733300000/a903202310/lys/models/Meta-Llama-3.1-8B-Instruct",
+  "device": "cuda:0",
+  "dtype": "bfloat16",
+  "samples": "/share/home/tm902089733300000/a903202310/lys/research/reanchor/outputs/samples_20260911_145421_235",
+  "states": "/share/home/tm902089733300000/a903202310/lys/research/reanchor/outputs/states_samples_20260911_145421_235",
+  "cases_sha256": "240944fa182bafa90549ad68a8fcfbae2877d989d54350983bcdd8cffafde633",
+  "code_sha256": "ec55d78aae595123ac634a060f826d564d1f6b47457cc439d124bcb6dae32e69",
+  "entropy_unit": "nats"
+}

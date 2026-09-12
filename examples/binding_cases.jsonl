@@ -1,0 +1,8 @@
+{"id":"cooking_vegetables","subjects":["The onions","The potatoes"],"predicate":"must cook for","values":["10","20"],"unit":"minutes"}
+{"id":"cooking_meat","subjects":["The sausages","The chicken"],"predicate":"must cook for","values":["15","30"],"unit":"minutes"}
+{"id":"resting_dough","subjects":["The bread dough","The pizza dough"],"predicate":"must rest for","values":["20","40"],"unit":"minutes"}
+{"id":"storage_boxes","subjects":["The blue box","The red box"],"predicate":"contains","values":["10","20"],"unit":"marbles"}
+{"id":"waiting_trains","subjects":["The northbound train","The southbound train"],"predicate":"must wait for","values":["15","30"],"unit":"minutes"}
+{"id":"mixing_materials","subjects":["The first mixture","The second mixture"],"predicate":"must be stirred for","values":["10","20"],"unit":"minutes"}
+{"id":"laboratory_samples","subjects":["The blue sample","The red sample"],"predicate":"must be heated for","values":["20","40"],"unit":"minutes"}
+{"id":"watering_plants","subjects":["The tomato plant","The pepper plant"],"predicate":"requires","values":["15","30"],"unit":"milliliters of water"}

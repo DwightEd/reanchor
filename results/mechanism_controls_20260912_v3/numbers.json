@@ -1,0 +1,51 @@
+{
+  "binding_templates": 8,
+  "binding_conditions": 32,
+  "natural_windows": 5,
+  "repeat_checks": 37,
+  "max_repeat_logit_error": 0.0,
+  "binding": {
+    "cut_competitor": {
+      "conditions": 32,
+      "expected_top1": 32,
+      "mean_entropy_nats": 0.14633524406235665,
+      "mean_expected_margin": 10.388671875
+    },
+    "cut_required": {
+      "conditions": 32,
+      "expected_top1": 2,
+      "mean_entropy_nats": 1.9342050612904131,
+      "mean_expected_margin": -2.439453125
+    },
+    "full": {
+      "conditions": 32,
+      "expected_top1": 32,
+      "mean_entropy_nats": 0.10928543860791251,
+      "mean_expected_margin": 8.9453125
+    },
+    "local16": {
+      "conditions": 32,
+      "expected_top1": 0,
+      "mean_entropy_nats": 3.4659452736377716,
+      "mean_expected_margin": 0.001953125
+    },
+    "local64": {
+      "conditions": 32,
+      "expected_top1": 32,
+      "mean_entropy_nats": 0.08931561309145764,
+      "mean_expected_margin": 8.76171875
+    },
+    "sham_mlp": {
+      "conditions": 32,
+      "expected_top1": 32,
+      "mean_entropy_nats": 0.10928543860791251,
+      "mean_expected_margin": 8.9453125
+    },
+    "swap_mlp": {
+      "conditions": 32,
+      "expected_top1": 32,
+      "mean_entropy_nats": 0.14299298787955195,
+      "mean_expected_margin": 6.29296875
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "case": {
+    "id": "cooking_vegetables",
+    "subjects": [
+      "The onions",
+      "The potatoes"
+    ],
+    "predicate": "must cook for",
+    "values": [
+      "10",
+      "20"
+    ],
+    "unit": "minutes"
+  },
+  "checks": [
+    {
+      "condition": "object0_world0",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object0_world1",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object1_world0",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object1_world1",
+      "sham_max_logit_error": 0.0
+    }
+  ]
+}

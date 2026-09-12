@@ -1,0 +1,33 @@
+{
+  "case": {
+    "id": "laboratory_samples",
+    "subjects": [
+      "The blue sample",
+      "The red sample"
+    ],
+    "predicate": "must be heated for",
+    "values": [
+      "20",
+      "40"
+    ],
+    "unit": "minutes"
+  },
+  "checks": [
+    {
+      "condition": "object0_world0",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object0_world1",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object1_world0",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object1_world1",
+      "sham_max_logit_error": 0.0
+    }
+  ]
+}

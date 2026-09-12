@@ -1,0 +1,33 @@
+{
+  "case": {
+    "id": "resting_dough",
+    "subjects": [
+      "The bread dough",
+      "The pizza dough"
+    ],
+    "predicate": "must rest for",
+    "values": [
+      "20",
+      "40"
+    ],
+    "unit": "minutes"
+  },
+  "checks": [
+    {
+      "condition": "object0_world0",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object0_world1",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object1_world0",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object1_world1",
+      "sham_max_logit_error": 0.0
+    }
+  ]
+}

@@ -5,6 +5,13 @@ from pathlib import Path
 
 
 def capture_arguments(commands):
+    mechanism = commands.add_parser("mechanism", help="controlled binding and route interventions")
+    mechanism.add_argument("--model", type=Path, required=True)
+    mechanism.add_argument("--cases", type=Path, required=True)
+    mechanism.add_argument("--output", type=Path, required=True)
+    mechanism.add_argument("--samples", type=Path)
+    mechanism.add_argument("--states", type=Path)
+    mechanism.add_argument("--device", default="cuda:0")
     sample = commands.add_parser("sample", help="sample answers and capture attention/logits")
     sample.add_argument("--dataset", type=Path, required=True)
     sample.add_argument("--source-ids", nargs="+", required=True)
@@ -24,6 +31,10 @@ def capture_arguments(commands):
 
 
 def analysis_arguments(commands):
+    matched = commands.add_parser("match-entropy", help="compare exact-token entropy controls")
+    matched.add_argument("--features", type=Path, required=True)
+    matched.add_argument("--labels", type=Path, required=True)
+    matched.add_argument("--output", type=Path, required=True)
     inspect = commands.add_parser(
         "inspect", help="write token choices and concrete attention shifts"
     )
@@ -63,7 +74,16 @@ def analysis_arguments(commands):
 
 
 def experiment(args):
-    if args.command == "sample":
+    if args.command == "mechanism":
+        from decoding.mechanism import MechanismExperiment
+
+        return MechanismExperiment(args.model, args.cases, args.output,
+                                   args.samples, args.states, args.device)
+    elif args.command == "match-entropy":
+        from decoding.entropy_controls import EntropyControls
+
+        return EntropyControls(args.features, args.labels, args.output)
+    elif args.command == "sample":
         from decoding.sampling import SamplingConfig, SamplingExperiment
 
         return SamplingExperiment(

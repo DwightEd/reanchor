@@ -1,0 +1,33 @@
+{
+  "case": {
+    "id": "watering_plants",
+    "subjects": [
+      "The tomato plant",
+      "The pepper plant"
+    ],
+    "predicate": "requires",
+    "values": [
+      "15",
+      "30"
+    ],
+    "unit": "milliliters of water"
+  },
+  "checks": [
+    {
+      "condition": "object0_world0",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object0_world1",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object1_world0",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object1_world1",
+      "sham_max_logit_error": 0.0
+    }
+  ]
+}

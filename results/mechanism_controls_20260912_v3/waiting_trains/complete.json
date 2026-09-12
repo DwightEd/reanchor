@@ -1,0 +1,33 @@
+{
+  "case": {
+    "id": "waiting_trains",
+    "subjects": [
+      "The northbound train",
+      "The southbound train"
+    ],
+    "predicate": "must wait for",
+    "values": [
+      "15",
+      "30"
+    ],
+    "unit": "minutes"
+  },
+  "checks": [
+    {
+      "condition": "object0_world0",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object0_world1",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object1_world0",
+      "sham_max_logit_error": 0.0
+    },
+    {
+      "condition": "object1_world1",
+      "sham_max_logit_error": 0.0
+    }
+  ]
+}

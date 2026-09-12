@@ -1,5 +1,8 @@
 # Reanchor：出错前在回看什么
 
+新会话先读 [项目进展与后续方向](docs/PROJECT_HANDOFF.md)：已完成工作、真实结果、
+尚未验证的假设、两个仓库的版本和下一轮实验顺序。
+
 回看与约束归属的控制实验见 [执行方案](docs/mechanism_experiment.md)：
 
 ```bash

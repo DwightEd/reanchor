@@ -1,0 +1,11 @@
+{
+  "conditions": 128,
+  "native_logits_exactly_unchanged": true,
+  "context_direct_count_exactly_unchanged": true,
+  "distinct_permutations": {
+    "3": 6,
+    "4": 24
+  },
+  "mean_cross_candidate_endpoint_fraction": 0.5553385416666667,
+  "readouts": 256
+}

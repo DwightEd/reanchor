@@ -1,0 +1,97 @@
+{
+  "capture": "capture.npz",
+  "evidence_units": [
+    {
+      "char_end": 38,
+      "char_start": 0,
+      "kind": "constraint",
+      "message_index": 1,
+      "text": "Briefly answer the following question:",
+      "unit_id": "constraint:instruction_1"
+    },
+    {
+      "char_end": 64,
+      "char_start": 39,
+      "kind": "constraint",
+      "message_index": 1,
+      "text": "butcher shop phone number",
+      "unit_id": "constraint:question"
+    },
+    {
+      "char_end": 154,
+      "char_start": 65,
+      "kind": "constraint",
+      "message_index": 1,
+      "text": "Bear in mind that your response should be strictly based on the following three passages:",
+      "unit_id": "constraint:instruction_2"
+    },
+    {
+      "char_end": 247,
+      "char_start": 155,
+      "kind": "content",
+      "message_index": 1,
+      "text": "passage 1:Butcher Shop - Hayward 826 B Street, Hayward CA 94541 Phone Number: (510) 889-8690",
+      "unit_id": "content:passage_1"
+    },
+    {
+      "char_end": 348,
+      "char_start": 249,
+      "kind": "content",
+      "message_index": 1,
+      "text": "passage 2:Butcher Shop - Lakefield 212 Main Street, Lakefield MN 56150 Phone Number: (507) 662-6281",
+      "unit_id": "content:passage_2"
+    },
+    {
+      "char_end": 612,
+      "char_start": 350,
+      "kind": "content",
+      "message_index": 1,
+      "text": "passage 3:Some More Phone Numbers Related To The Butcher Shop The Local Butcher Shop phone number : (510) 845-6328 Boones Butcher Shop phone number : (502) 348-3668 Ye Ole Butcher Shop phone number : (972) 423-1848 J Ms Butcher Shop phone number : (865) 483-9228",
+      "unit_id": "content:passage_3"
+    },
+    {
+      "char_end": 770,
+      "char_start": 614,
+      "kind": "constraint",
+      "message_index": 1,
+      "text": "In case the passages do not contain the necessary information to answer the question, please reply with: \"Unable to answer based on given passages.\"\noutput:",
+      "unit_id": "constraint:instruction_3"
+    }
+  ],
+  "identity": "639d337e53138c43b2f322e7ea712f00ab224c9dc20585c4ec54124f91056101",
+  "labels_used_for_capture": false,
+  "messages": [
+    {
+      "content": "You are a helpful assistant.",
+      "role": "system"
+    },
+    {
+      "content": "Briefly answer the following question:\nbutcher shop phone number\nBear in mind that your response should be strictly based on the following three passages:\npassage 1:Butcher Shop - Hayward 826 B Street, Hayward CA 94541 Phone Number: (510) 889-8690\n\npassage 2:Butcher Shop - Lakefield 212 Main Street, Lakefield MN 56150 Phone Number: (507) 662-6281\n\npassage 3:Some More Phone Numbers Related To The Butcher Shop The Local Butcher Shop phone number : (510) 845-6328 Boones Butcher Shop phone number : (502) 348-3668 Ye Ole Butcher Shop phone number : (972) 423-1848 J Ms Butcher Shop phone number : (865) 483-9228\n\nIn case the passages do not contain the necessary information to answer the question, please reply with: \"Unable to answer based on given passages.\"\noutput:",
+      "role": "user"
+    }
+  ],
+  "model": {
+    "attention_implementation": "eager",
+    "device": "cuda:0",
+    "dtype": "bfloat16",
+    "model": "/share/home/tm902089733300000/a903202310/lys/models/Meta-Llama-3.1-8B-Instruct",
+    "revision": "unresolved"
+  },
+  "replay_atol": 0.05,
+  "replay_max_abs_logit_error": 0.0,
+  "replay_mode": "same_prefix",
+  "response_text": "(510) 889-8690",
+  "response_tokens": 9,
+  "sample_key": "train/QA/14292",
+  "sampling": {
+    "max_new_tokens": 64,
+    "seed": 0,
+    "temperature": 0.7,
+    "top_k": 20,
+    "top_p": 0.9,
+    "trace_top_k": 20
+  },
+  "schema": "constraint_control_trajectory_v2",
+  "source_id": "14292",
+  "stop_reason": "eos"
+}

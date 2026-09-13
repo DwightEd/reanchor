@@ -1,0 +1,25 @@
+{
+  "verified_unix": 1789234680.6571908,
+  "manifest_file_count": 175,
+  "conditions": 167,
+  "endpoint_shapes": [
+    [
+      128256
+    ]
+  ],
+  "exact_final_E_reproduction": true,
+  "exact_sham_endpoint_reproduction": true,
+  "runner_exact_complete_baseline_assertion_passed": true,
+  "all_query_sham_error": 0,
+  "maximum_earlier_query_error": 0,
+  "maximum_source_mass_error": 2.980232238769531e-07,
+  "old_population_manifests_verified": 5040,
+  "old_settings_and_code_unchanged": true,
+  "summary": {
+    "conditions": 167,
+    "baseline_max_error": 0.0,
+    "reproduced_O4_margin": -0.875,
+    "elapsed_seconds": 55.738169027492404,
+    "peak_cuda_allocated_bytes": 16507489792
+  }
+}

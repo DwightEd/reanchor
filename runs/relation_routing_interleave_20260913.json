@@ -1,0 +1,30 @@
+{
+  "status": "population_resume_started",
+  "previous_progress": {
+    "status": "running",
+    "pid": 19668,
+    "total": 17790,
+    "completed": 5057,
+    "failed": 0,
+    "remaining": 12733,
+    "current_response": "12530",
+    "condition": "history_01",
+    "last_response_seconds": 1.1729528959840536,
+    "elapsed_seconds_this_process": 896.3521619718522,
+    "updated_unix": 1789234357.5885322,
+    "by_task": {
+      "QA": 5934,
+      "Summary": 5658,
+      "Data2txt": 6198
+    }
+  },
+  "started_unix": 1789234357.6469436,
+  "mechanism_output": "outputs/relation_routing_20260913",
+  "population_output": "/share/home/tm902089733300000/a903202310/lys/research/reanchor/outputs/ragtruth_population_20260912",
+  "stopped_unix": 1789234359.6611726,
+  "mechanism_pid": 20315,
+  "mechanism_exit_code": 0,
+  "resumed_pid": 20383,
+  "resume_log": "/share/home/tm902089733300000/a903202310/lys/research/reanchor/runs/ragtruth_population_resume_relation_routing_20260913.log",
+  "resumed_unix": 1789234436.0998843
+}

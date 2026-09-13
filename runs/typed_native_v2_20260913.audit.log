@@ -1,0 +1,4 @@
+{"pid": 167181, "unix_time": 1789271932.5855432, "status": "loading_model", "total": 1}
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:02,  1.09it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:01<00:01,  1.13it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:02<00:00,  1.17it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:02<00:00,  1.69it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:02<00:00,  1.44it/s]
+{"pid": 167181, "unix_time": 1789271972.8760724, "status": "running", "done": 1, "total": 1, "actual_forward_calls": 90, "current": "9273_4", "base_F": -9.011938095092773, "position_delta": -12.862699508666992, "origin_delta": -15.254831314086914}
+{"pid": 167181, "unix_time": 1789271994.8038733, "status": "complete", "done": 1, "actual_forward_calls": 90}

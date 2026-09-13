@@ -1,0 +1,14 @@
+{
+  "pid": 16928,
+  "started_unix": 1789227239.6665316,
+  "command": [
+    "bash",
+    "scripts/run_ragtruth_population.sh",
+    "--output",
+    "outputs/ragtruth_population_20260912"
+  ],
+  "cwd": "/share/home/tm902089733300000/a903202310/lys/research/reanchor",
+  "output": "/share/home/tm902089733300000/a903202310/lys/research/reanchor/outputs/ragtruth_population_20260912",
+  "log": "/share/home/tm902089733300000/a903202310/lys/research/reanchor/runs/ragtruth_population_20260912.log",
+  "expected_responses": 17790
+}

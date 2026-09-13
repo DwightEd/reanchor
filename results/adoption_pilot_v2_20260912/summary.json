@@ -1,0 +1,9 @@
+{
+  "n_cases": 1,
+  "n_queries": 7,
+  "elapsed_seconds": 7.8399553298950195,
+  "peak_gpu_memory_bytes": 17738937344,
+  "sham_max_logit_error": 0.0,
+  "numerical_checks_only": true,
+  "scientific_review": "REVIEW_UNAVAILABLE"
+}

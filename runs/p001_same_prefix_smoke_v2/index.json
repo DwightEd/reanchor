@@ -1,0 +1,77 @@
+{
+  "input": "/share/home/tm902089733300000/a903202310/lys/data/RAGTruth/dataset",
+  "input_format": "ragtruth",
+  "labels_used_for_capture": false,
+  "model": {
+    "attention_implementation": "eager",
+    "device": "cuda:0",
+    "dtype": "bfloat16",
+    "model": "/share/home/tm902089733300000/a903202310/lys/models/Meta-Llama-3.1-8B-Instruct",
+    "revision": "unresolved"
+  },
+  "replay_atol": 0.05,
+  "replay_mode": "same_prefix",
+  "samples": [
+    {
+      "capture": "trajectories/train/QA/14292/seed_0/capture.npz",
+      "response_tokens": 9,
+      "sample_key": "train/QA/14292",
+      "seed": 0,
+      "source_id": "14292",
+      "status": "completed",
+      "trajectory": "trajectories/train/QA/14292/seed_0/trajectory.json"
+    },
+    {
+      "capture": "trajectories/train/QA/14292/seed_1/capture.npz",
+      "response_tokens": 9,
+      "sample_key": "train/QA/14292",
+      "seed": 1,
+      "source_id": "14292",
+      "status": "completed",
+      "trajectory": "trajectories/train/QA/14292/seed_1/trajectory.json"
+    },
+    {
+      "capture": "trajectories/train/QA/14292/seed_2/capture.npz",
+      "response_tokens": 9,
+      "sample_key": "train/QA/14292",
+      "seed": 2,
+      "source_id": "14292",
+      "status": "completed",
+      "trajectory": "trajectories/train/QA/14292/seed_2/trajectory.json"
+    }
+  ],
+  "samplings": [
+    {
+      "max_new_tokens": 64,
+      "seed": 0,
+      "temperature": 0.7,
+      "top_k": 20,
+      "top_p": 0.9,
+      "trace_top_k": 20
+    },
+    {
+      "max_new_tokens": 64,
+      "seed": 1,
+      "temperature": 0.7,
+      "top_k": 20,
+      "top_p": 0.9,
+      "trace_top_k": 20
+    },
+    {
+      "max_new_tokens": 64,
+      "seed": 2,
+      "temperature": 0.7,
+      "top_k": 20,
+      "top_p": 0.9,
+      "trace_top_k": 20
+    }
+  ],
+  "schema": "constraint_control_run_v2",
+  "split": "train",
+  "summary": {
+    "completed": 3,
+    "planned": 3,
+    "rejected": 0
+  },
+  "task": "QA"
+}

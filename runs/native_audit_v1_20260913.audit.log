@@ -1,0 +1,192 @@
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:06<00:26,  6.62s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:11<00:16,  5.58s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:19<00:13,  6.88s/it]Loading checkpoint shards:  80%|████████  | 4/5 [00:26<00:06,  6.75s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:28<00:00,  5.09s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:28<00:00,  5.72s/it]
+{"status": "running", "stage": "A", "current_response": "13803", "completed_stage": 0, "total": 36}
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+`generation_config` default values have been modified to match model-specific defaults: {'do_sample': True}. If this is not desired, please set these values explicitly.
+{"status": "running", "stage": "A", "current_response": "15327", "completed_stage": 1, "total": 36}
+{"status": "running", "stage": "A", "current_response": "13801", "completed_stage": 2, "total": 36}
+{"status": "running", "stage": "A", "current_response": "15325", "completed_stage": 3, "total": 36}
+{"status": "running", "stage": "A", "current_response": "13800", "completed_stage": 4, "total": 36}
+{"status": "running", "stage": "A", "current_response": "15324", "completed_stage": 5, "total": 36}
+{"status": "running", "stage": "A", "current_response": "13804", "completed_stage": 6, "total": 36}
+{"status": "running", "stage": "A", "current_response": "15328", "completed_stage": 7, "total": 36}
+{"status": "running", "stage": "A", "current_response": "13805", "completed_stage": 8, "total": 36}
+{"status": "running", "stage": "A", "current_response": "15329", "completed_stage": 9, "total": 36}
+{"status": "running", "stage": "A", "current_response": "13802", "completed_stage": 10, "total": 36}
+{"status": "running", "stage": "A", "current_response": "15326", "completed_stage": 11, "total": 36}
+{"status": "running", "stage": "A", "current_response": "2913", "completed_stage": 12, "total": 36}
+{"status": "running", "stage": "A", "current_response": "5151", "completed_stage": 13, "total": 36}
+{"status": "running", "stage": "A", "current_response": "2911", "completed_stage": 14, "total": 36}
+{"status": "running", "stage": "A", "current_response": "5149", "completed_stage": 15, "total": 36}
+{"status": "running", "stage": "A", "current_response": "2910", "completed_stage": 16, "total": 36}
+{"status": "running", "stage": "A", "current_response": "5148", "completed_stage": 17, "total": 36}
+{"status": "running", "stage": "A", "current_response": "2914", "completed_stage": 18, "total": 36}
+{"status": "running", "stage": "A", "current_response": "5152", "completed_stage": 19, "total": 36}
+{"status": "running", "stage": "A", "current_response": "2915", "completed_stage": 20, "total": 36}
+{"status": "running", "stage": "A", "current_response": "5153", "completed_stage": 21, "total": 36}
+{"status": "running", "stage": "A", "current_response": "2912", "completed_stage": 22, "total": 36}
+{"status": "running", "stage": "A", "current_response": "5150", "completed_stage": 23, "total": 36}
+{"status": "running", "stage": "A", "current_response": "6303", "completed_stage": 24, "total": 36}
+{"status": "running", "stage": "A", "current_response": "9273", "completed_stage": 25, "total": 36}
+{"status": "running", "stage": "A", "current_response": "6301", "completed_stage": 26, "total": 36}
+{"status": "running", "stage": "A", "current_response": "9271", "completed_stage": 27, "total": 36}
+{"status": "running", "stage": "A", "current_response": "6300", "completed_stage": 28, "total": 36}
+{"status": "running", "stage": "A", "current_response": "9270", "completed_stage": 29, "total": 36}
+{"status": "running", "stage": "A", "current_response": "6304", "completed_stage": 30, "total": 36}
+{"status": "running", "stage": "A", "current_response": "9274", "completed_stage": 31, "total": 36}
+{"status": "running", "stage": "A", "current_response": "6305", "completed_stage": 32, "total": 36}
+{"status": "running", "stage": "A", "current_response": "9275", "completed_stage": 33, "total": 36}
+{"status": "running", "stage": "A", "current_response": "6302", "completed_stage": 34, "total": 36}
+{"status": "running", "stage": "A", "current_response": "9272", "completed_stage": 35, "total": 36}
+{"status": "phase_complete", "stage": "A", "completed_stage": 36, "total": 36}
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:06<00:19,  6.36s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:12<00:11,  5.95s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:17<00:05,  5.91s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:19<00:00,  4.36s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:19<00:00,  4.97s/it]
+{"status": "running", "stage": "B", "current_response": "13803", "completed_stage": 0, "total": 36}
+{"status": "running", "stage": "B", "current_response": "15327", "completed_stage": 1, "total": 36}
+{"status": "running", "stage": "B", "current_response": "13801", "completed_stage": 2, "total": 36}
+{"status": "running", "stage": "B", "current_response": "15325", "completed_stage": 3, "total": 36}
+{"status": "running", "stage": "B", "current_response": "13800", "completed_stage": 4, "total": 36}
+{"status": "running", "stage": "B", "current_response": "15324", "completed_stage": 5, "total": 36}
+{"status": "running", "stage": "B", "current_response": "13804", "completed_stage": 6, "total": 36}
+{"status": "running", "stage": "B", "current_response": "15328", "completed_stage": 7, "total": 36}
+{"status": "running", "stage": "B", "current_response": "13805", "completed_stage": 8, "total": 36}
+{"status": "running", "stage": "B", "current_response": "15329", "completed_stage": 9, "total": 36}
+{"status": "running", "stage": "B", "current_response": "13802", "completed_stage": 10, "total": 36}
+{"status": "running", "stage": "B", "current_response": "15326", "completed_stage": 11, "total": 36}
+{"status": "running", "stage": "B", "current_response": "2913", "completed_stage": 12, "total": 36}
+{"status": "running", "stage": "B", "current_response": "5151", "completed_stage": 13, "total": 36}
+{"status": "running", "stage": "B", "current_response": "2911", "completed_stage": 14, "total": 36}
+{"status": "running", "stage": "B", "current_response": "5149", "completed_stage": 15, "total": 36}
+{"status": "running", "stage": "B", "current_response": "2910", "completed_stage": 16, "total": 36}
+{"status": "running", "stage": "B", "current_response": "5148", "completed_stage": 17, "total": 36}
+{"status": "running", "stage": "B", "current_response": "2914", "completed_stage": 18, "total": 36}
+{"status": "running", "stage": "B", "current_response": "5152", "completed_stage": 19, "total": 36}
+{"status": "running", "stage": "B", "current_response": "2915", "completed_stage": 20, "total": 36}
+{"status": "running", "stage": "B", "current_response": "5153", "completed_stage": 21, "total": 36}
+{"status": "running", "stage": "B", "current_response": "2912", "completed_stage": 22, "total": 36}
+{"status": "running", "stage": "B", "current_response": "5150", "completed_stage": 23, "total": 36}
+{"status": "running", "stage": "B", "current_response": "6303", "completed_stage": 24, "total": 36}
+{"status": "running", "stage": "B", "current_response": "9273", "completed_stage": 25, "total": 36}
+{"status": "running", "stage": "B", "current_response": "6301", "completed_stage": 26, "total": 36}
+{"status": "running", "stage": "B", "current_response": "9271", "completed_stage": 27, "total": 36}
+{"status": "running", "stage": "B", "current_response": "6300", "completed_stage": 28, "total": 36}
+{"status": "running", "stage": "B", "current_response": "9270", "completed_stage": 29, "total": 36}
+{"status": "running", "stage": "B", "current_response": "6304", "completed_stage": 30, "total": 36}
+{"status": "running", "stage": "B", "current_response": "9274", "completed_stage": 31, "total": 36}
+{"status": "running", "stage": "B", "current_response": "6305", "completed_stage": 32, "total": 36}
+{"status": "running", "stage": "B", "current_response": "9275", "completed_stage": 33, "total": 36}
+{"status": "running", "stage": "B", "current_response": "6302", "completed_stage": 34, "total": 36}
+{"status": "running", "stage": "B", "current_response": "9272", "completed_stage": 35, "total": 36}
+{"status": "phase_complete", "stage": "B", "completed_stage": 36, "total": 36}
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:03,  1.23it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:01<00:02,  1.27it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:02<00:01,  1.30it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:02<00:00,  1.43it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:03<00:00,  1.89it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:03<00:00,  1.59it/s]
+{"status": "running", "stage": "C", "current_response": "13803", "completed_stage": 0, "total": 36}
+{"status": "running", "stage": "C", "current_response": "15327", "completed_stage": 1, "total": 36}
+{"status": "running", "stage": "C", "current_response": "13801", "completed_stage": 2, "total": 36}
+{"status": "running", "stage": "C", "current_response": "15325", "completed_stage": 3, "total": 36}
+{"status": "running", "stage": "C", "current_response": "13800", "completed_stage": 4, "total": 36}
+{"status": "running", "stage": "C", "current_response": "15324", "completed_stage": 5, "total": 36}
+{"status": "running", "stage": "C", "current_response": "13804", "completed_stage": 6, "total": 36}
+{"status": "running", "stage": "C", "current_response": "15328", "completed_stage": 7, "total": 36}
+{"status": "running", "stage": "C", "current_response": "13805", "completed_stage": 8, "total": 36}
+{"status": "running", "stage": "C", "current_response": "15329", "completed_stage": 9, "total": 36}
+{"status": "running", "stage": "C", "current_response": "13802", "completed_stage": 10, "total": 36}
+{"status": "running", "stage": "C", "current_response": "15326", "completed_stage": 11, "total": 36}
+{"status": "running", "stage": "C", "current_response": "2913", "completed_stage": 12, "total": 36}
+{"status": "running", "stage": "C", "current_response": "5151", "completed_stage": 13, "total": 36}
+{"status": "running", "stage": "C", "current_response": "2911", "completed_stage": 14, "total": 36}
+{"status": "running", "stage": "C", "current_response": "5149", "completed_stage": 15, "total": 36}
+{"status": "running", "stage": "C", "current_response": "2910", "completed_stage": 16, "total": 36}
+{"status": "running", "stage": "C", "current_response": "5148", "completed_stage": 17, "total": 36}
+{"status": "running", "stage": "C", "current_response": "2914", "completed_stage": 18, "total": 36}
+{"status": "running", "stage": "C", "current_response": "5152", "completed_stage": 19, "total": 36}
+{"status": "running", "stage": "C", "current_response": "2915", "completed_stage": 20, "total": 36}
+{"status": "running", "stage": "C", "current_response": "5153", "completed_stage": 21, "total": 36}
+{"status": "running", "stage": "C", "current_response": "2912", "completed_stage": 22, "total": 36}
+{"status": "running", "stage": "C", "current_response": "5150", "completed_stage": 23, "total": 36}
+{"status": "running", "stage": "C", "current_response": "6303", "completed_stage": 24, "total": 36}
+{"status": "running", "stage": "C", "current_response": "9273", "completed_stage": 25, "total": 36}
+{"status": "running", "stage": "C", "current_response": "6301", "completed_stage": 26, "total": 36}
+{"status": "running", "stage": "C", "current_response": "9271", "completed_stage": 27, "total": 36}
+{"status": "running", "stage": "C", "current_response": "6300", "completed_stage": 28, "total": 36}
+{"status": "running", "stage": "C", "current_response": "9270", "completed_stage": 29, "total": 36}
+{"status": "running", "stage": "C", "current_response": "6304", "completed_stage": 30, "total": 36}
+{"status": "running", "stage": "C", "current_response": "9274", "completed_stage": 31, "total": 36}
+{"status": "running", "stage": "C", "current_response": "6305", "completed_stage": 32, "total": 36}
+{"status": "running", "stage": "C", "current_response": "9275", "completed_stage": 33, "total": 36}
+{"status": "running", "stage": "C", "current_response": "6302", "completed_stage": 34, "total": 36}
+{"status": "running", "stage": "C", "current_response": "9272", "completed_stage": 35, "total": 36}
+{"status": "phase_complete", "stage": "C", "completed_stage": 36, "total": 36}
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:00<00:02,  1.10it/s]Loading checkpoint shards:  50%|█████     | 2/4 [00:01<00:01,  1.10it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:02<00:00,  1.11it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:02<00:00,  1.59it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:02<00:00,  1.37it/s]
+{"status": "running", "stage": "D", "current_response": "13803", "completed_stage": 0, "total": 36}
+{"status": "running", "stage": "D", "current_response": "15327", "completed_stage": 1, "total": 36}
+{"status": "running", "stage": "D", "current_response": "13801", "completed_stage": 2, "total": 36}
+{"status": "running", "stage": "D", "current_response": "15325", "completed_stage": 3, "total": 36}
+{"status": "running", "stage": "D", "current_response": "13800", "completed_stage": 4, "total": 36}
+{"status": "running", "stage": "D", "current_response": "15324", "completed_stage": 5, "total": 36}
+{"status": "running", "stage": "D", "current_response": "13804", "completed_stage": 6, "total": 36}
+{"status": "running", "stage": "D", "current_response": "15328", "completed_stage": 7, "total": 36}
+{"status": "running", "stage": "D", "current_response": "13805", "completed_stage": 8, "total": 36}
+{"status": "running", "stage": "D", "current_response": "15329", "completed_stage": 9, "total": 36}
+{"status": "running", "stage": "D", "current_response": "13802", "completed_stage": 10, "total": 36}
+{"status": "running", "stage": "D", "current_response": "15326", "completed_stage": 11, "total": 36}
+{"status": "running", "stage": "D", "current_response": "2913", "completed_stage": 12, "total": 36}
+{"status": "running", "stage": "D", "current_response": "5151", "completed_stage": 13, "total": 36}
+{"status": "running", "stage": "D", "current_response": "2911", "completed_stage": 14, "total": 36}
+{"status": "running", "stage": "D", "current_response": "5149", "completed_stage": 15, "total": 36}
+{"status": "running", "stage": "D", "current_response": "2910", "completed_stage": 16, "total": 36}
+{"status": "running", "stage": "D", "current_response": "5148", "completed_stage": 17, "total": 36}
+{"status": "running", "stage": "D", "current_response": "2914", "completed_stage": 18, "total": 36}
+{"status": "running", "stage": "D", "current_response": "5152", "completed_stage": 19, "total": 36}
+{"status": "running", "stage": "D", "current_response": "2915", "completed_stage": 20, "total": 36}
+{"status": "running", "stage": "D", "current_response": "5153", "completed_stage": 21, "total": 36}
+{"status": "running", "stage": "D", "current_response": "2912", "completed_stage": 22, "total": 36}
+{"status": "running", "stage": "D", "current_response": "5150", "completed_stage": 23, "total": 36}
+{"status": "running", "stage": "D", "current_response": "6303", "completed_stage": 24, "total": 36}
+{"status": "running", "stage": "D", "current_response": "9273", "completed_stage": 25, "total": 36}
+{"status": "running", "stage": "D", "current_response": "6301", "completed_stage": 26, "total": 36}
+{"status": "running", "stage": "D", "current_response": "9271", "completed_stage": 27, "total": 36}
+{"status": "running", "stage": "D", "current_response": "6300", "completed_stage": 28, "total": 36}
+{"status": "running", "stage": "D", "current_response": "9270", "completed_stage": 29, "total": 36}
+{"status": "running", "stage": "D", "current_response": "6304", "completed_stage": 30, "total": 36}
+{"status": "running", "stage": "D", "current_response": "9274", "completed_stage": 31, "total": 36}
+{"status": "running", "stage": "D", "current_response": "6305", "completed_stage": 32, "total": 36}
+{"status": "running", "stage": "D", "current_response": "9275", "completed_stage": 33, "total": 36}
+{"status": "running", "stage": "D", "current_response": "6302", "completed_stage": 34, "total": 36}
+{"status": "running", "stage": "D", "current_response": "9272", "completed_stage": 35, "total": 36}
+{"status": "phase_complete", "stage": "D", "completed_stage": 36, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "13803", "completed_stage": 0, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "15327", "completed_stage": 1, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "13801", "completed_stage": 2, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "15325", "completed_stage": 3, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "13800", "completed_stage": 4, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "15324", "completed_stage": 5, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "13804", "completed_stage": 6, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "15328", "completed_stage": 7, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "13805", "completed_stage": 8, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "15329", "completed_stage": 9, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "13802", "completed_stage": 10, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "15326", "completed_stage": 11, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "2913", "completed_stage": 12, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "5151", "completed_stage": 13, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "2911", "completed_stage": 14, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "5149", "completed_stage": 15, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "2910", "completed_stage": 16, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "5148", "completed_stage": 17, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "2914", "completed_stage": 18, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "5152", "completed_stage": 19, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "2915", "completed_stage": 20, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "5153", "completed_stage": 21, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "2912", "completed_stage": 22, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "5150", "completed_stage": 23, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "6303", "completed_stage": 24, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "9273", "completed_stage": 25, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "6301", "completed_stage": 26, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "9271", "completed_stage": 27, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "6300", "completed_stage": 28, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "9270", "completed_stage": 29, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "6304", "completed_stage": 30, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "9274", "completed_stage": 31, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "6305", "completed_stage": 32, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "9275", "completed_stage": 33, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "6302", "completed_stage": 34, "total": 36}
+{"status": "running", "stage": "merge", "current_response": "9272", "completed_stage": 35, "total": 36}
+{"status": "phase_complete", "stage": "merge", "completed_stage": 36, "total": 36}
+{"status": "complete", "responses": 36, "claim_supported": "not_evaluated"}

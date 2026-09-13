@@ -1,0 +1,129 @@
+{
+  "model": "/share/home/tm902089733300000/a903202310/lys/models/Meta-Llama-3.1-8B-Instruct",
+  "trace": "00012.npz",
+  "queries": [
+    96,
+    99,
+    128,
+    131,
+    145,
+    166,
+    180
+  ],
+  "history_cut": [
+    119,
+    133
+  ],
+  "earlier_cut": [
+    85,
+    99
+  ],
+  "first_affected_prediction": 134,
+  "selection": "previously inspected diagnostic case; no benchmark claim",
+  "dtype": "bfloat16",
+  "suffix_dtype": "float32",
+  "attention": "eager",
+  "candidate_rule": "native top8 union every unique alphanumeric non-special source token",
+  "torch": "2.8.0+cu126",
+  "transformers": "4.57.1",
+  "cuda": "12.6",
+  "device": "cuda:0",
+  "gpu": "NVIDIA GeForce RTX 4090",
+  "seed": 20260912,
+  "attenuation_fractions": [
+    0.01,
+    0.1,
+    1.0
+  ],
+  "code_sha256": {
+    "/share/home/tm902089733300000/a903202310/lys/research/reanchor/src/decoding/adoption_probe.py": "9c43574ee77ba9db1b92fe916a769007a7b3cb248672900c51cde0b227a6700f",
+    "/share/home/tm902089733300000/a903202310/lys/research/graph/route_graph/adoption.py": "80b30b25ccc77142a8961d7fb5b9e1e24b3b3809fccd609d7a561966c9c741ee"
+  },
+  "input_sha256": {
+    "/share/home/tm902089733300000/a903202310/lys/research/reanchor/outputs/samples_20260911_145421_235/00012.npz": "ffd0fd72515a6ff9e2e4bb46497cde60a95de3729fa876b5c47f6ff59cdc5d1d",
+    "/share/home/tm902089733300000/a903202310/lys/research/reanchor/outputs/samples_20260911_145421_235/settings.json": "f4c92b214ae58f540536ad1170856fc3638c069eea8f29c9fbd15d67de8e2e1c"
+  },
+  "source_mask_sha256": "fa4256f3d5246ddc0602dd665d52bfedc345302f131e52633b53fe65c8342619",
+  "model_files": [
+    {
+      "name": ".msc",
+      "size": 1314,
+      "mtime_ns": 1775129238596656000
+    },
+    {
+      "name": ".mv",
+      "size": 36,
+      "mtime_ns": 1775129238616625000
+    },
+    {
+      "name": "LICENSE",
+      "size": 7627,
+      "mtime_ns": 1775093875586965000
+    },
+    {
+      "name": "README.md",
+      "size": 44044,
+      "mtime_ns": 1775093877347509000
+    },
+    {
+      "name": "USE_POLICY.md",
+      "size": 4691,
+      "mtime_ns": 1775093880705859000
+    },
+    {
+      "name": "config.json",
+      "size": 855,
+      "mtime_ns": 1775093875705422000
+    },
+    {
+      "name": "configuration.json",
+      "size": 48,
+      "mtime_ns": 1775093875782526000
+    },
+    {
+      "name": "generation_config.json",
+      "size": 184,
+      "mtime_ns": 1775093875563061000
+    },
+    {
+      "name": "model-00001-of-00004.safetensors",
+      "size": 4976698672,
+      "mtime_ns": 1775102504417069000
+    },
+    {
+      "name": "model-00002-of-00004.safetensors",
+      "size": 4999802720,
+      "mtime_ns": 1775095726746509000
+    },
+    {
+      "name": "model-00003-of-00004.safetensors",
+      "size": 4915916176,
+      "mtime_ns": 1775098720432576000
+    },
+    {
+      "name": "model-00004-of-00004.safetensors",
+      "size": 1168138808,
+      "mtime_ns": 1775094705354906000
+    },
+    {
+      "name": "model.safetensors.index.json",
+      "size": 23950,
+      "mtime_ns": 1775093876763403000
+    },
+    {
+      "name": "special_tokens_map.json",
+      "size": 296,
+      "mtime_ns": 1775093877884682000
+    },
+    {
+      "name": "tokenizer.json",
+      "size": 9085657,
+      "mtime_ns": 1775093880216231000
+    },
+    {
+      "name": "tokenizer_config.json",
+      "size": 55351,
+      "mtime_ns": 1775093879092540000
+    }
+  ]
+}

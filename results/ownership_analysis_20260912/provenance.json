@@ -1,0 +1,8 @@
+{
+  "analyzer_sha256": "bcaf22763f3a02641b3167d9865cdb0f257860bc5100ccdfcc993c0d35b5a638",
+  "adoption_sha256": "80b30b25ccc77142a8961d7fb5b9e1e24b3b3809fccd609d7a561966c9c741ee",
+  "input_manifests": {
+    "outputs/ownership_factorial_20260912": "ed01e4cc59b03fc2cddd1bf37adda9b2487a5e136c8ceb54612a90cd39a7ddc8",
+    "outputs/ownership_multilayer_20260912": "c9695f39a049c830a80be215e73e34c6d8fac9ad4fe9e01507c7f27ab517bcf2"
+  }
+}

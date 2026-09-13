@@ -1,0 +1,136 @@
+{
+  "run": "/share/home/tm902089733300000/a903202310/lys/research/reanchor/outputs/adoption_pilot_20260912",
+  "manifest_sha256": "b6e87ddecce0a54b409b68d9995fd7c2412b0f9ead8183500608ed7890e62319",
+  "script_sha256": "4c75ce7958def35767d5f7126ad2925305abca1ee14260519860dfeebc3f219b",
+  "query_rows": [
+    {
+      "step": 96,
+      "saved_token": "10",
+      "native_pair": [
+        "10",
+        "5"
+      ],
+      "competition": 0.09954963447314702,
+      "absolute_mass": 2.079679946993565,
+      "reconstruction_relative_l2": 0.002407350577414036,
+      "selected_logit_mismatch": 0.052593231201171875,
+      "local_error": 0.01174030639231205,
+      "full_error": 0.06771532446146011,
+      "all_candidate_local_error": 0.044073715806007385
+    },
+    {
+      "step": 99,
+      "saved_token": "14",
+      "native_pair": [
+        "14",
+        "12"
+      ],
+      "competition": 0.20819415494478227,
+      "absolute_mass": 2.4420904071303084,
+      "reconstruction_relative_l2": 0.0018199387704953551,
+      "selected_logit_mismatch": 0.060558319091796875,
+      "local_error": 0.022101933136582375,
+      "full_error": 0.059418246150016785,
+      "all_candidate_local_error": 0.039870381355285645
+    },
+    {
+      "step": 128,
+      "saved_token": "10",
+      "native_pair": [
+        "10",
+        "1"
+      ],
+      "competition": 0.048936043739507565,
+      "absolute_mass": 1.3893418071857013,
+      "reconstruction_relative_l2": 0.0017028620932251215,
+      "selected_logit_mismatch": 0.08088302612304688,
+      "local_error": 0.04404166340827942,
+      "full_error": 0.13454732298851013,
+      "all_candidate_local_error": 0.06817375868558884
+    },
+    {
+      "step": 131,
+      "saved_token": "12",
+      "native_pair": [
+        "12",
+        " "
+      ],
+      "competition": 0.1041790641232035,
+      "absolute_mass": 3.650678882502689,
+      "reconstruction_relative_l2": 0.0018672554288059473,
+      "selected_logit_mismatch": 0.07652664184570312,
+      "local_error": 0.05195242911577225,
+      "full_error": 0.18193355202674866,
+      "all_candidate_local_error": 0.04656675085425377
+    },
+    {
+      "step": 145,
+      "saved_token": " grill",
+      "native_pair": [
+        " grill",
+        " pre"
+      ],
+      "competition": 0.32866511331824944,
+      "absolute_mass": 2.0916179872765497,
+      "reconstruction_relative_l2": 0.0023909988813102245,
+      "selected_logit_mismatch": 0.06406974792480469,
+      "local_error": 0.07928495109081268,
+      "full_error": 2.0082814693450928,
+      "all_candidate_local_error": 0.05460651218891144
+    },
+    {
+      "step": 166,
+      "saved_token": " set",
+      "native_pair": [
+        ",",
+        " unified"
+      ],
+      "competition": 0.24577894053547608,
+      "absolute_mass": 0.8265091716893949,
+      "reconstruction_relative_l2": 0.0020095789805054665,
+      "selected_logit_mismatch": 0.054813385009765625,
+      "local_error": 0.17907801270484924,
+      "full_error": 1.5463722944259644,
+      "all_candidate_local_error": 0.023424271494150162
+    },
+    {
+      "step": 180,
+      "saved_token": " above",
+      "native_pair": [
+        " above",
+        " steps"
+      ],
+      "competition": 0.7507949693149336,
+      "absolute_mass": 0.47322867284128733,
+      "reconstruction_relative_l2": 0.0019064083462581038,
+      "selected_logit_mismatch": 0.07136154174804688,
+      "local_error": 0.049970563501119614,
+      "full_error": 0.32014286518096924,
+      "all_candidate_local_error": 0.059217263013124466
+    }
+  ],
+  "conditions": {
+    "sham": {
+      "post134_mean_js": 3.9571484948866355e-09,
+      "post134_argmax_flips": 0,
+      "largest_post134_step": 185,
+      "largest_post134_js": 2.7834943239213317e-08,
+      "pre_activation_max_logit_error": 0.0
+    },
+    "history_cut": {
+      "post134_mean_js": 0.013999681907294483,
+      "post134_argmax_flips": 3,
+      "largest_post134_step": 157,
+      "largest_post134_js": 0.32045868039131165,
+      "pre_activation_max_logit_error": 0.0
+    },
+    "earlier_cut": {
+      "post134_mean_js": 0.004563790189790878,
+      "post134_argmax_flips": 3,
+      "largest_post134_step": 143,
+      "largest_post134_js": 0.08460576832294464,
+      "pre_activation_max_logit_error": 0.0
+    }
+  },
+  "interpretation": "single inspected case; mechanism/numerical diagnostics only"
+}

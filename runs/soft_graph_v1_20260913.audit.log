@@ -1,0 +1,28 @@
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:00<00:02,  1.69it/s]Loading checkpoint shards:  40%|████      | 2/5 [00:01<00:01,  1.74it/s]Loading checkpoint shards:  60%|██████    | 3/5 [00:01<00:01,  1.76it/s]Loading checkpoint shards:  80%|████████  | 4/5 [00:02<00:00,  1.92it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:02<00:00,  2.52it/s]Loading checkpoint shards: 100%|██████████| 5/5 [00:02<00:00,  2.14it/s]
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+`generation_config` default values have been modified to match model-specific defaults: {'do_sample': True}. If this is not desired, please set these values explicitly.
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:08,  3.00s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:05<00:05,  2.96s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:09<00:03,  3.13s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:10<00:00,  2.25s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:10<00:00,  2.54s/it]
+Loading checkpoint shards:   0%|          | 0/5 [00:00<?, ?it/s]Loading checkpoint shards:  20%|██        | 1/5 [00:03<00:14,  3.55s/it]Loading checkpoint shards:  40%|████      | 2/5 [00:06<00:09,  3.16s/it]Loading checkpoint shards:  60%|██████    | 3/5 [00:09<00:05,  2.96s/it]Loading checkpoint shards:  80%|████████  | 4/5 [00:11<00:02,  2.70s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:12<00:00,  2.07s/it]Loading checkpoint shards: 100%|██████████| 5/5 [00:12<00:00,  2.48s/it]
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/share/home/tm902089733300000/a903202310/lys/research/graph/route_graph/soft_graph_runner.py", line 224, in <module>
+    main()
+  File "/share/home/tm902089733300000/a903202310/lys/research/graph/route_graph/soft_graph_runner.py", line 215, in main
+    execute_stage(args, frozen, inputs)
+  File "/share/home/tm902089733300000/a903202310/lys/research/graph/route_graph/soft_graph_runner.py", line 174, in execute_stage
+    data = semantic_phase(reader, row, prior["B"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/share/home/tm902089733300000/a903202310/lys/research/graph/route_graph/soft_graph_phases.py", line 188, in semantic_phase
+    scores, pred = finite(reader, LOCAL_PROMPT,
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/share/home/tm902089733300000/a903202310/lys/research/graph/route_graph/soft_graph_phases.py", line 58, in finite
+    prediction = reader.ask(instruction, payload, labels=list(mapping), max_new_tokens=1)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/share/home/tm902089733300000/a903202310/lys/conda_envs/research/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/share/home/tm902089733300000/a903202310/lys/research/graph/route_graph/frozen_reader.py", line 136, in ask
+    probabilities = chosen.softmax(-1).cpu().tolist()
+                    ^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

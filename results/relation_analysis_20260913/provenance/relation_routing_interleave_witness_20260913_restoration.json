@@ -1,0 +1,81 @@
+{
+  "journal": {
+    "status": "population_resume_started",
+    "previous_progress": {
+      "status": "running",
+      "pid": 19668,
+      "total": 17790,
+      "completed": 5057,
+      "failed": 0,
+      "remaining": 12733,
+      "current_response": "12530",
+      "condition": "history_01",
+      "last_response_seconds": 1.1729528959840536,
+      "elapsed_seconds_this_process": 896.3521619718522,
+      "updated_unix": 1789234357.5885322,
+      "by_task": {
+        "QA": 5934,
+        "Summary": 5658,
+        "Data2txt": 6198
+      }
+    },
+    "started_unix": 1789234357.6469436,
+    "mechanism_output": "outputs/relation_routing_20260913",
+    "population_output": "/share/home/tm902089733300000/a903202310/lys/research/reanchor/outputs/ragtruth_population_20260912",
+    "stopped_unix": 1789234359.6611726,
+    "mechanism_pid": 20315,
+    "mechanism_exit_code": 0,
+    "resumed_pid": 20383,
+    "resume_log": "/share/home/tm902089733300000/a903202310/lys/research/reanchor/runs/ragtruth_population_resume_relation_routing_20260913.log",
+    "resumed_unix": 1789234436.0998843
+  },
+  "first_running": {
+    "status": "running",
+    "pid": 20383,
+    "total": 17790,
+    "completed": 5057,
+    "failed": 0,
+    "remaining": 12733,
+    "current_response": "12530",
+    "condition": "base",
+    "last_response_seconds": null,
+    "elapsed_seconds_this_process": 117.91230650804937,
+    "updated_unix": 1789234577.9876566,
+    "by_task": {
+      "QA": 5934,
+      "Summary": 5658,
+      "Data2txt": 6198
+    }
+  },
+  "later_running": {
+    "status": "running",
+    "pid": 20383,
+    "total": 17790,
+    "completed": 5101,
+    "failed": 0,
+    "remaining": 12689,
+    "current_response": "12794",
+    "condition": "mlp_01",
+    "last_response_seconds": 1.3797997739166021,
+    "elapsed_seconds_this_process": 178.60315188020468,
+    "updated_unix": 1789234638.6785016,
+    "by_task": {
+      "QA": 5934,
+      "Summary": 5658,
+      "Data2txt": 6198
+    }
+  },
+  "new_manifest_count": 44,
+  "first_new_manifest": {
+    "response_id": "12530",
+    "manifest_mtime": 1789234579.648227,
+    "manifest_sha256": "1cd3483baa364e5e84418f43abf6832023338d2e17d1c2463839d5d94a358b86"
+  },
+  "latest_new_manifest": {
+    "response_id": "12788",
+    "manifest_mtime": 1789234637.102879,
+    "manifest_sha256": "9b17705a1cca455ee01db0f6e6520bf9bf18d5dc2bf2dfdbe6245eedd1a90b06"
+  },
+  "latest_new_response_files_verified": 4,
+  "verified_unix": 1789234639.3723152
+}

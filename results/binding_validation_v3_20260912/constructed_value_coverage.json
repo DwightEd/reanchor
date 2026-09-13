@@ -1,0 +1,1947 @@
+{
+  "schema": "binding/constructed-value-coverage@1",
+  "stage": "evaluation_only_after_frozen_predictions",
+  "scope": "both constructed values, not merely two source-matching tokens",
+  "conditions": 128,
+  "both_values_in_top4": 62,
+  "layouts": {
+    "clean": {
+      "conditions": 32,
+      "both_values_in_top4": 5
+    },
+    "reverse": {
+      "conditions": 32,
+      "both_values_in_top4": 6
+    },
+    "distractor": {
+      "conditions": 32,
+      "both_values_in_top4": 28
+    },
+    "misbound": {
+      "conditions": 32,
+      "both_values_in_top4": 23
+    }
+  },
+  "rows": [
+    {
+      "file": "cooking_vegetables_clean_0_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        " **",
+        " ("
+      ]
+    },
+    {
+      "file": "cooking_vegetables_clean_0_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        " x"
+      ]
+    },
+    {
+      "file": "cooking_vegetables_clean_1_0.json",
+      "layout": "clean",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        "2",
+        " ",
+        "10"
+      ]
+    },
+    {
+      "file": "cooking_vegetables_clean_1_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        " x",
+        " ("
+      ]
+    },
+    {
+      "file": "cooking_vegetables_reverse_0_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        " (",
+        " x"
+      ]
+    },
+    {
+      "file": "cooking_vegetables_reverse_0_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        "2",
+        " ("
+      ]
+    },
+    {
+      "file": "cooking_vegetables_reverse_1_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        "10"
+      ]
+    },
+    {
+      "file": "cooking_vegetables_reverse_1_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        " **",
+        " ("
+      ]
+    },
+    {
+      "file": "cooking_vegetables_distractor_0_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        "20",
+        " ",
+        "0"
+      ]
+    },
+    {
+      "file": "cooking_vegetables_distractor_0_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        "10",
+        " ",
+        " **"
+      ]
+    },
+    {
+      "file": "cooking_vegetables_distractor_1_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        "10",
+        " ",
+        "30"
+      ]
+    },
+    {
+      "file": "cooking_vegetables_distractor_1_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        "0",
+        "9"
+      ]
+    },
+    {
+      "file": "cooking_vegetables_misbound_0_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        "0",
+        " The"
+      ]
+    },
+    {
+      "file": "cooking_vegetables_misbound_0_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        "10",
+        " ",
+        "0"
+      ]
+    },
+    {
+      "file": "cooking_vegetables_misbound_1_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        "10",
+        " The"
+      ]
+    },
+    {
+      "file": "cooking_vegetables_misbound_1_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        "20",
+        " ",
+        "30"
+      ]
+    },
+    {
+      "file": "cooking_meat_clean_0_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " x",
+        " ("
+      ]
+    },
+    {
+      "file": "cooking_meat_clean_0_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " (",
+        " x"
+      ]
+    },
+    {
+      "file": "cooking_meat_clean_1_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " (",
+        " x"
+      ]
+    },
+    {
+      "file": "cooking_meat_clean_1_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " x",
+        " ("
+      ]
+    },
+    {
+      "file": "cooking_meat_reverse_0_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " x",
+        " ("
+      ]
+    },
+    {
+      "file": "cooking_meat_reverse_0_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " (",
+        "2"
+      ]
+    },
+    {
+      "file": "cooking_meat_reverse_1_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " x",
+        " **"
+      ]
+    },
+    {
+      "file": "cooking_meat_reverse_1_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " x",
+        "10"
+      ]
+    },
+    {
+      "file": "cooking_meat_distractor_0_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        "30",
+        "5"
+      ]
+    },
+    {
+      "file": "cooking_meat_distractor_0_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        "15",
+        " ",
+        " ("
+      ]
+    },
+    {
+      "file": "cooking_meat_distractor_1_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        "15",
+        " ",
+        "25"
+      ]
+    },
+    {
+      "file": "cooking_meat_distractor_1_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        "5",
+        "30"
+      ]
+    },
+    {
+      "file": "cooking_meat_misbound_0_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        "30",
+        " The"
+      ]
+    },
+    {
+      "file": "cooking_meat_misbound_0_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        "15",
+        " ",
+        "10"
+      ]
+    },
+    {
+      "file": "cooking_meat_misbound_1_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " The",
+        " ("
+      ]
+    },
+    {
+      "file": "cooking_meat_misbound_1_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        "30",
+        " ",
+        "45"
+      ]
+    },
+    {
+      "file": "resting_dough_clean_0_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        " *"
+      ]
+    },
+    {
+      "file": "resting_dough_clean_0_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        " *",
+        " **"
+      ]
+    },
+    {
+      "file": "resting_dough_clean_1_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        " (",
+        "2"
+      ]
+    },
+    {
+      "file": "resting_dough_clean_1_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " (",
+        " *"
+      ]
+    },
+    {
+      "file": "resting_dough_reverse_0_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " (",
+        "40"
+      ]
+    },
+    {
+      "file": "resting_dough_reverse_0_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        "2",
+        " ("
+      ]
+    },
+    {
+      "file": "resting_dough_reverse_1_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        " *",
+        " x"
+      ]
+    },
+    {
+      "file": "resting_dough_reverse_1_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        " *"
+      ]
+    },
+    {
+      "file": "resting_dough_distractor_0_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        "40",
+        " ("
+      ]
+    },
+    {
+      "file": "resting_dough_distractor_0_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        "20",
+        " ",
+        "30"
+      ]
+    },
+    {
+      "file": "resting_dough_distractor_1_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        "20",
+        " ("
+      ]
+    },
+    {
+      "file": "resting_dough_distractor_1_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        "40",
+        " ("
+      ]
+    },
+    {
+      "file": "resting_dough_misbound_0_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        "40",
+        " The"
+      ]
+    },
+    {
+      "file": "resting_dough_misbound_0_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        "20",
+        " ",
+        " The"
+      ]
+    },
+    {
+      "file": "resting_dough_misbound_1_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        " The",
+        " the"
+      ]
+    },
+    {
+      "file": "resting_dough_misbound_1_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        "40",
+        " ",
+        " The"
+      ]
+    },
+    {
+      "file": "storage_boxes_clean_0_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        "0",
+        " ("
+      ]
+    },
+    {
+      "file": "storage_boxes_clean_0_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        " ("
+      ]
+    },
+    {
+      "file": "storage_boxes_clean_1_0.json",
+      "layout": "clean",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        "10",
+        " **"
+      ]
+    },
+    {
+      "file": "storage_boxes_clean_1_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        " (",
+        "0"
+      ]
+    },
+    {
+      "file": "storage_boxes_reverse_0_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        " (",
+        "0"
+      ]
+    },
+    {
+      "file": "storage_boxes_reverse_0_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        "10",
+        " **"
+      ]
+    },
+    {
+      "file": "storage_boxes_reverse_1_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        " ("
+      ]
+    },
+    {
+      "file": "storage_boxes_reverse_1_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        "0",
+        " ("
+      ]
+    },
+    {
+      "file": "storage_boxes_distractor_0_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        "20",
+        "0"
+      ]
+    },
+    {
+      "file": "storage_boxes_distractor_0_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        "10",
+        " ",
+        " ("
+      ]
+    },
+    {
+      "file": "storage_boxes_distractor_1_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        "10",
+        " ",
+        "1"
+      ]
+    },
+    {
+      "file": "storage_boxes_distractor_1_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        "20",
+        " ",
+        "1"
+      ]
+    },
+    {
+      "file": "storage_boxes_misbound_0_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        "0",
+        "1"
+      ]
+    },
+    {
+      "file": "storage_boxes_misbound_0_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        "10",
+        "0",
+        " "
+      ]
+    },
+    {
+      "file": "storage_boxes_misbound_1_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        "10",
+        "1"
+      ]
+    },
+    {
+      "file": "storage_boxes_misbound_1_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        "20",
+        " ",
+        "0"
+      ]
+    },
+    {
+      "file": "waiting_trains_clean_0_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " _",
+        "5"
+      ]
+    },
+    {
+      "file": "waiting_trains_clean_0_1.json",
+      "layout": "clean",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " **",
+        "15"
+      ]
+    },
+    {
+      "file": "waiting_trains_clean_1_0.json",
+      "layout": "clean",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        "15",
+        " ("
+      ]
+    },
+    {
+      "file": "waiting_trains_clean_1_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " x",
+        " X"
+      ]
+    },
+    {
+      "file": "waiting_trains_reverse_0_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " x",
+        " X"
+      ]
+    },
+    {
+      "file": "waiting_trains_reverse_0_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        "15",
+        " ("
+      ]
+    },
+    {
+      "file": "waiting_trains_reverse_1_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " **",
+        "15"
+      ]
+    },
+    {
+      "file": "waiting_trains_reverse_1_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        "5",
+        " **"
+      ]
+    },
+    {
+      "file": "waiting_trains_distractor_0_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        "30",
+        " **"
+      ]
+    },
+    {
+      "file": "waiting_trains_distractor_0_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        "15",
+        " ("
+      ]
+    },
+    {
+      "file": "waiting_trains_distractor_1_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        "15",
+        " ",
+        "45"
+      ]
+    },
+    {
+      "file": "waiting_trains_distractor_1_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        "30",
+        " ("
+      ]
+    },
+    {
+      "file": "waiting_trains_misbound_0_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " The",
+        "30"
+      ]
+    },
+    {
+      "file": "waiting_trains_misbound_0_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        "15",
+        " ",
+        "0"
+      ]
+    },
+    {
+      "file": "waiting_trains_misbound_1_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " The",
+        "0"
+      ]
+    },
+    {
+      "file": "waiting_trains_misbound_1_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        "30",
+        " ",
+        "45"
+      ]
+    },
+    {
+      "file": "mixing_materials_clean_0_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        " **",
+        " x"
+      ]
+    },
+    {
+      "file": "mixing_materials_clean_0_1.json",
+      "layout": "clean",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        "10"
+      ]
+    },
+    {
+      "file": "mixing_materials_clean_1_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        "2"
+      ]
+    },
+    {
+      "file": "mixing_materials_clean_1_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        " **",
+        " x"
+      ]
+    },
+    {
+      "file": "mixing_materials_reverse_0_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        " x",
+        " **"
+      ]
+    },
+    {
+      "file": "mixing_materials_reverse_0_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        "10"
+      ]
+    },
+    {
+      "file": "mixing_materials_reverse_1_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        " x"
+      ]
+    },
+    {
+      "file": "mixing_materials_reverse_1_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        " **",
+        " x"
+      ]
+    },
+    {
+      "file": "mixing_materials_distractor_0_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        "20",
+        " **"
+      ]
+    },
+    {
+      "file": "mixing_materials_distractor_0_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        "10"
+      ]
+    },
+    {
+      "file": "mixing_materials_distractor_1_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        "10",
+        " **"
+      ]
+    },
+    {
+      "file": "mixing_materials_distractor_1_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        " (",
+        "5"
+      ]
+    },
+    {
+      "file": "mixing_materials_misbound_0_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        " ",
+        " The",
+        "20"
+      ]
+    },
+    {
+      "file": "mixing_materials_misbound_0_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        "10",
+        " ",
+        "0"
+      ]
+    },
+    {
+      "file": "mixing_materials_misbound_1_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " The",
+        " ("
+      ]
+    },
+    {
+      "file": "mixing_materials_misbound_1_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        605,
+        508
+      ],
+      "candidate_text": [
+        "10",
+        "20",
+        " ",
+        " The"
+      ]
+    },
+    {
+      "file": "laboratory_samples_clean_0_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        " _"
+      ]
+    },
+    {
+      "file": "laboratory_samples_clean_0_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        " **",
+        " _"
+      ]
+    },
+    {
+      "file": "laboratory_samples_clean_1_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        " x",
+        " **"
+      ]
+    },
+    {
+      "file": "laboratory_samples_clean_1_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " x",
+        " **"
+      ]
+    },
+    {
+      "file": "laboratory_samples_reverse_0_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " x",
+        " **"
+      ]
+    },
+    {
+      "file": "laboratory_samples_reverse_0_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        " x",
+        " **"
+      ]
+    },
+    {
+      "file": "laboratory_samples_reverse_1_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        " **",
+        " x"
+      ]
+    },
+    {
+      "file": "laboratory_samples_reverse_1_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " **",
+        " _"
+      ]
+    },
+    {
+      "file": "laboratory_samples_distractor_0_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        "40",
+        " **"
+      ]
+    },
+    {
+      "file": "laboratory_samples_distractor_0_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        "20",
+        " ("
+      ]
+    },
+    {
+      "file": "laboratory_samples_distractor_1_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        "20",
+        " ("
+      ]
+    },
+    {
+      "file": "laboratory_samples_distractor_1_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " (",
+        "40"
+      ]
+    },
+    {
+      "file": "laboratory_samples_misbound_0_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        " ",
+        " The",
+        "40"
+      ]
+    },
+    {
+      "file": "laboratory_samples_misbound_0_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        "20",
+        " ",
+        "0"
+      ]
+    },
+    {
+      "file": "laboratory_samples_misbound_1_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "40",
+        " ",
+        " The",
+        " the"
+      ]
+    },
+    {
+      "file": "laboratory_samples_misbound_1_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        508,
+        1272
+      ],
+      "candidate_text": [
+        "20",
+        "40",
+        " ",
+        " The"
+      ]
+    },
+    {
+      "file": "watering_plants_clean_0_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " (",
+        " $"
+      ]
+    },
+    {
+      "file": "watering_plants_clean_0_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " (",
+        "3"
+      ]
+    },
+    {
+      "file": "watering_plants_clean_1_0.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " (",
+        "2"
+      ]
+    },
+    {
+      "file": "watering_plants_clean_1_1.json",
+      "layout": "clean",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " (",
+        "1"
+      ]
+    },
+    {
+      "file": "watering_plants_reverse_0_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " (",
+        " a"
+      ]
+    },
+    {
+      "file": "watering_plants_reverse_0_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " (",
+        " the"
+      ]
+    },
+    {
+      "file": "watering_plants_reverse_1_0.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " (",
+        " $"
+      ]
+    },
+    {
+      "file": "watering_plants_reverse_1_1.json",
+      "layout": "reverse",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " (",
+        " $"
+      ]
+    },
+    {
+      "file": "watering_plants_distractor_0_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " **",
+        " ("
+      ]
+    },
+    {
+      "file": "watering_plants_distractor_0_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " (",
+        " **"
+      ]
+    },
+    {
+      "file": "watering_plants_distractor_1_0.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        "15",
+        " ("
+      ]
+    },
+    {
+      "file": "watering_plants_distractor_1_1.json",
+      "layout": "distractor",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " (",
+        "30"
+      ]
+    },
+    {
+      "file": "watering_plants_misbound_0_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        " ",
+        " The",
+        "1"
+      ]
+    },
+    {
+      "file": "watering_plants_misbound_0_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        "15",
+        " ",
+        "20"
+      ]
+    },
+    {
+      "file": "watering_plants_misbound_1_0.json",
+      "layout": "misbound",
+      "both_values_in_top4": false,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "30",
+        " ",
+        " The",
+        " ("
+      ]
+    },
+    {
+      "file": "watering_plants_misbound_1_1.json",
+      "layout": "misbound",
+      "both_values_in_top4": true,
+      "value_tokens": [
+        868,
+        966
+      ],
+      "candidate_text": [
+        "15",
+        "30",
+        " ",
+        " ("
+      ]
+    }
+  ]
+}

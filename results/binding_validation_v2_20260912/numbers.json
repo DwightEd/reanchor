@@ -1,0 +1,1188 @@
+{
+  "conditions": 128,
+  "layouts": {
+    "clean": {
+      "conditions": 32,
+      "templates": 8,
+      "model_correct": 32,
+      "layers": {
+        "16": {
+          "common_valid": 32,
+          "actual_errors": 0,
+          "methods": {
+            "context": {
+              "valid": 32,
+              "correct": 32,
+              "common_correct": 32,
+              "error_correct": 0
+            },
+            "direct": {
+              "valid": 32,
+              "correct": 32,
+              "common_correct": 32,
+              "error_correct": 0
+            },
+            "shuffled": {
+              "valid": 32,
+              "correct": 32,
+              "common_correct": 32,
+              "error_correct": 0
+            },
+            "count": {
+              "valid": 32,
+              "correct": 0,
+              "common_correct": 0,
+              "error_correct": 0
+            }
+          },
+          "template_pairs": [
+            {
+              "template": "cooking_meat",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "cooking_vegetables",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "laboratory_samples",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "mixing_materials",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "resting_dough",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "storage_boxes",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "waiting_trains",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "watering_plants",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            }
+          ]
+        },
+        "31": {
+          "common_valid": 32,
+          "actual_errors": 0,
+          "methods": {
+            "context": {
+              "valid": 32,
+              "correct": 32,
+              "common_correct": 32,
+              "error_correct": 0
+            },
+            "direct": {
+              "valid": 32,
+              "correct": 32,
+              "common_correct": 32,
+              "error_correct": 0
+            },
+            "shuffled": {
+              "valid": 32,
+              "correct": 23,
+              "common_correct": 23,
+              "error_correct": 0
+            },
+            "count": {
+              "valid": 32,
+              "correct": 0,
+              "common_correct": 0,
+              "error_correct": 0
+            }
+          },
+          "template_pairs": [
+            {
+              "template": "cooking_meat",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 0.25,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.75
+            },
+            {
+              "template": "cooking_vegetables",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 0.5,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.5
+            },
+            {
+              "template": "laboratory_samples",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 0.75,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.25
+            },
+            {
+              "template": "mixing_materials",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 0.5,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.5
+            },
+            {
+              "template": "resting_dough",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 0.75,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.25
+            },
+            {
+              "template": "storage_boxes",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "waiting_trains",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "watering_plants",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            }
+          ]
+        }
+      }
+    },
+    "distractor": {
+      "conditions": 32,
+      "templates": 8,
+      "model_correct": 32,
+      "layers": {
+        "16": {
+          "common_valid": 32,
+          "actual_errors": 0,
+          "methods": {
+            "context": {
+              "valid": 32,
+              "correct": 32,
+              "common_correct": 32,
+              "error_correct": 0
+            },
+            "direct": {
+              "valid": 32,
+              "correct": 32,
+              "common_correct": 32,
+              "error_correct": 0
+            },
+            "shuffled": {
+              "valid": 32,
+              "correct": 32,
+              "common_correct": 32,
+              "error_correct": 0
+            },
+            "count": {
+              "valid": 32,
+              "correct": 0,
+              "common_correct": 0,
+              "error_correct": 0
+            }
+          },
+          "template_pairs": [
+            {
+              "template": "cooking_meat",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "cooking_vegetables",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "laboratory_samples",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "mixing_materials",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "resting_dough",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "storage_boxes",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "waiting_trains",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "watering_plants",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            }
+          ]
+        },
+        "31": {
+          "common_valid": 32,
+          "actual_errors": 0,
+          "methods": {
+            "context": {
+              "valid": 32,
+              "correct": 24,
+              "common_correct": 24,
+              "error_correct": 0
+            },
+            "direct": {
+              "valid": 32,
+              "correct": 19,
+              "common_correct": 19,
+              "error_correct": 0
+            },
+            "shuffled": {
+              "valid": 32,
+              "correct": 17,
+              "common_correct": 17,
+              "error_correct": 0
+            },
+            "count": {
+              "valid": 32,
+              "correct": 0,
+              "common_correct": 0,
+              "error_correct": 0
+            }
+          },
+          "template_pairs": [
+            {
+              "template": "cooking_meat",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.25,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.5
+            },
+            {
+              "template": "cooking_vegetables",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.25,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.25,
+              "context_minus_shuffled": 0.75
+            },
+            {
+              "template": "laboratory_samples",
+              "conditions": 4,
+              "context": 0.5,
+              "context_all_pairs_correct": false,
+              "direct": 0.5,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.5,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "mixing_materials",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.5,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.25,
+              "context_minus_shuffled": 0.5
+            },
+            {
+              "template": "resting_dough",
+              "conditions": 4,
+              "context": 0.5,
+              "context_all_pairs_correct": false,
+              "direct": 0.5,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.5,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "storage_boxes",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 0.5,
+              "direct_all_pairs_correct": false,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.5,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "waiting_trains",
+              "conditions": 4,
+              "context": 0.5,
+              "context_all_pairs_correct": false,
+              "direct": 0.25,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.5,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.25,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "watering_plants",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.75,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            }
+          ]
+        }
+      }
+    },
+    "misbound": {
+      "conditions": 32,
+      "templates": 8,
+      "model_correct": 32,
+      "layers": {
+        "16": {
+          "common_valid": 32,
+          "actual_errors": 0,
+          "methods": {
+            "context": {
+              "valid": 32,
+              "correct": 26,
+              "common_correct": 26,
+              "error_correct": 0
+            },
+            "direct": {
+              "valid": 32,
+              "correct": 27,
+              "common_correct": 27,
+              "error_correct": 0
+            },
+            "shuffled": {
+              "valid": 32,
+              "correct": 27,
+              "common_correct": 27,
+              "error_correct": 0
+            },
+            "count": {
+              "valid": 32,
+              "correct": 0,
+              "common_correct": 0,
+              "error_correct": 0
+            }
+          },
+          "template_pairs": [
+            {
+              "template": "cooking_meat",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.75,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "cooking_vegetables",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "laboratory_samples",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.75,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "mixing_materials",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.75,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "resting_dough",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.75,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "storage_boxes",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "waiting_trains",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.75,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "watering_plants",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": -0.25,
+              "context_minus_shuffled": -0.25
+            }
+          ]
+        },
+        "31": {
+          "common_valid": 32,
+          "actual_errors": 0,
+          "methods": {
+            "context": {
+              "valid": 32,
+              "correct": 23,
+              "common_correct": 23,
+              "error_correct": 0
+            },
+            "direct": {
+              "valid": 32,
+              "correct": 19,
+              "common_correct": 19,
+              "error_correct": 0
+            },
+            "shuffled": {
+              "valid": 32,
+              "correct": 16,
+              "common_correct": 16,
+              "error_correct": 0
+            },
+            "count": {
+              "valid": 32,
+              "correct": 0,
+              "common_correct": 0,
+              "error_correct": 0
+            }
+          },
+          "template_pairs": [
+            {
+              "template": "cooking_meat",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.5,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.25,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.25,
+              "context_minus_shuffled": 0.5
+            },
+            {
+              "template": "cooking_vegetables",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.5,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.5,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.25,
+              "context_minus_shuffled": 0.25
+            },
+            {
+              "template": "laboratory_samples",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.5,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.5,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.25,
+              "context_minus_shuffled": 0.25
+            },
+            {
+              "template": "mixing_materials",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 0.25,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.75
+            },
+            {
+              "template": "resting_dough",
+              "conditions": 4,
+              "context": 0.5,
+              "context_all_pairs_correct": false,
+              "direct": 0.5,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.5,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "storage_boxes",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": -0.25
+            },
+            {
+              "template": "waiting_trains",
+              "conditions": 4,
+              "context": 0.5,
+              "context_all_pairs_correct": false,
+              "direct": 0.5,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.25,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.25
+            },
+            {
+              "template": "watering_plants",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.5,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.75,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.25,
+              "context_minus_shuffled": 0.0
+            }
+          ]
+        }
+      }
+    },
+    "reverse": {
+      "conditions": 32,
+      "templates": 8,
+      "model_correct": 32,
+      "layers": {
+        "16": {
+          "common_valid": 32,
+          "actual_errors": 0,
+          "methods": {
+            "context": {
+              "valid": 32,
+              "correct": 32,
+              "common_correct": 32,
+              "error_correct": 0
+            },
+            "direct": {
+              "valid": 32,
+              "correct": 32,
+              "common_correct": 32,
+              "error_correct": 0
+            },
+            "shuffled": {
+              "valid": 32,
+              "correct": 32,
+              "common_correct": 32,
+              "error_correct": 0
+            },
+            "count": {
+              "valid": 32,
+              "correct": 0,
+              "common_correct": 0,
+              "error_correct": 0
+            }
+          },
+          "template_pairs": [
+            {
+              "template": "cooking_meat",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "cooking_vegetables",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "laboratory_samples",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "mixing_materials",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "resting_dough",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "storage_boxes",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "waiting_trains",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "watering_plants",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            }
+          ]
+        },
+        "31": {
+          "common_valid": 32,
+          "actual_errors": 0,
+          "methods": {
+            "context": {
+              "valid": 32,
+              "correct": 30,
+              "common_correct": 30,
+              "error_correct": 0
+            },
+            "direct": {
+              "valid": 32,
+              "correct": 29,
+              "common_correct": 29,
+              "error_correct": 0
+            },
+            "shuffled": {
+              "valid": 32,
+              "correct": 23,
+              "common_correct": 23,
+              "error_correct": 0
+            },
+            "count": {
+              "valid": 32,
+              "correct": 0,
+              "common_correct": 0,
+              "error_correct": 0
+            }
+          },
+          "template_pairs": [
+            {
+              "template": "cooking_meat",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 0.25,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.75
+            },
+            {
+              "template": "cooking_vegetables",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.25,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.25,
+              "context_minus_shuffled": 0.75
+            },
+            {
+              "template": "laboratory_samples",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 0.75,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.25
+            },
+            {
+              "template": "mixing_materials",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.75,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "resting_dough",
+              "conditions": 4,
+              "context": 0.75,
+              "context_all_pairs_correct": false,
+              "direct": 0.75,
+              "direct_all_pairs_correct": false,
+              "shuffled": 0.75,
+              "shuffled_all_pairs_correct": false,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "storage_boxes",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "waiting_trains",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            },
+            {
+              "template": "watering_plants",
+              "conditions": 4,
+              "context": 1.0,
+              "context_all_pairs_correct": true,
+              "direct": 1.0,
+              "direct_all_pairs_correct": true,
+              "shuffled": 1.0,
+              "shuffled_all_pairs_correct": true,
+              "count": 0.0,
+              "count_all_pairs_correct": false,
+              "context_minus_direct": 0.0,
+              "context_minus_shuffled": 0.0
+            }
+          ]
+        }
+      }
+    }
+  },
+  "independent_unit": "template",
+  "error_detection_tested": false,
+  "scope": "controlled next-token decisions; independent coverage and paired templates; no natural detection claim"
+}

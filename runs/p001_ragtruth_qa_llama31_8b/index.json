@@ -1,0 +1,469 @@
+{
+  "input": "/share/home/tm902089733300000/a903202310/lys/data/RAGTruth/dataset",
+  "input_format": "ragtruth",
+  "labels_used_for_capture": false,
+  "model": {
+    "attention_implementation": "eager",
+    "device": "cuda:0",
+    "dtype": "bfloat16",
+    "model": "/share/home/tm902089733300000/a903202310/lys/models/Meta-Llama-3.1-8B-Instruct",
+    "revision": "unresolved"
+  },
+  "replay_atol": 0.05,
+  "samples": [
+    {
+      "reason": "train/QA/14292: replay max logit error 0.25 exceeds 0.05",
+      "sample_key": "train/QA/14292",
+      "seed": 0,
+      "source_id": "14292",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14292: replay max logit error 0.3125 exceeds 0.05",
+      "sample_key": "train/QA/14292",
+      "seed": 1,
+      "source_id": "14292",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14292: replay max logit error 0.25 exceeds 0.05",
+      "sample_key": "train/QA/14292",
+      "seed": 2,
+      "source_id": "14292",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14293: replay max logit error 0.84375 exceeds 0.05",
+      "sample_key": "train/QA/14293",
+      "seed": 0,
+      "source_id": "14293",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14293: replay max logit error 0.5625 exceeds 0.05",
+      "sample_key": "train/QA/14293",
+      "seed": 1,
+      "source_id": "14293",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14293: replay max logit error 0.5625 exceeds 0.05",
+      "sample_key": "train/QA/14293",
+      "seed": 2,
+      "source_id": "14293",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14294: replay max logit error 0.5625 exceeds 0.05",
+      "sample_key": "train/QA/14294",
+      "seed": 0,
+      "source_id": "14294",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14294: replay max logit error 0.546875 exceeds 0.05",
+      "sample_key": "train/QA/14294",
+      "seed": 1,
+      "source_id": "14294",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14294: replay max logit error 0.570312 exceeds 0.05",
+      "sample_key": "train/QA/14294",
+      "seed": 2,
+      "source_id": "14294",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14295: replay max logit error 0.546875 exceeds 0.05",
+      "sample_key": "train/QA/14295",
+      "seed": 0,
+      "source_id": "14295",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14295: replay max logit error 0.5 exceeds 0.05",
+      "sample_key": "train/QA/14295",
+      "seed": 1,
+      "source_id": "14295",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14295: replay max logit error 0.4375 exceeds 0.05",
+      "sample_key": "train/QA/14295",
+      "seed": 2,
+      "source_id": "14295",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14296: replay max logit error 0.5625 exceeds 0.05",
+      "sample_key": "train/QA/14296",
+      "seed": 0,
+      "source_id": "14296",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14296: replay max logit error 1.15625 exceeds 0.05",
+      "sample_key": "train/QA/14296",
+      "seed": 1,
+      "source_id": "14296",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14296: replay max logit error 0.5625 exceeds 0.05",
+      "sample_key": "train/QA/14296",
+      "seed": 2,
+      "source_id": "14296",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14297: replay max logit error 0.625 exceeds 0.05",
+      "sample_key": "train/QA/14297",
+      "seed": 0,
+      "source_id": "14297",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14297: replay max logit error 0.75 exceeds 0.05",
+      "sample_key": "train/QA/14297",
+      "seed": 1,
+      "source_id": "14297",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14297: replay max logit error 0.640625 exceeds 0.05",
+      "sample_key": "train/QA/14297",
+      "seed": 2,
+      "source_id": "14297",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14298: replay max logit error 0.5625 exceeds 0.05",
+      "sample_key": "train/QA/14298",
+      "seed": 0,
+      "source_id": "14298",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14298: replay max logit error 1.5 exceeds 0.05",
+      "sample_key": "train/QA/14298",
+      "seed": 1,
+      "source_id": "14298",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14298: replay max logit error 0.859375 exceeds 0.05",
+      "sample_key": "train/QA/14298",
+      "seed": 2,
+      "source_id": "14298",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14299: replay max logit error 0.4375 exceeds 0.05",
+      "sample_key": "train/QA/14299",
+      "seed": 0,
+      "source_id": "14299",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14299: replay max logit error 0.40625 exceeds 0.05",
+      "sample_key": "train/QA/14299",
+      "seed": 1,
+      "source_id": "14299",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14299: replay max logit error 0.4375 exceeds 0.05",
+      "sample_key": "train/QA/14299",
+      "seed": 2,
+      "source_id": "14299",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14301: replay max logit error 0.976562 exceeds 0.05",
+      "sample_key": "train/QA/14301",
+      "seed": 0,
+      "source_id": "14301",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14301: replay max logit error 0.976562 exceeds 0.05",
+      "sample_key": "train/QA/14301",
+      "seed": 1,
+      "source_id": "14301",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14301: replay max logit error 0.5 exceeds 0.05",
+      "sample_key": "train/QA/14301",
+      "seed": 2,
+      "source_id": "14301",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14302: replay max logit error 0.570312 exceeds 0.05",
+      "sample_key": "train/QA/14302",
+      "seed": 0,
+      "source_id": "14302",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14302: replay max logit error 0.570312 exceeds 0.05",
+      "sample_key": "train/QA/14302",
+      "seed": 1,
+      "source_id": "14302",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14302: replay max logit error 0.625 exceeds 0.05",
+      "sample_key": "train/QA/14302",
+      "seed": 2,
+      "source_id": "14302",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14303: replay max logit error 0.5 exceeds 0.05",
+      "sample_key": "train/QA/14303",
+      "seed": 0,
+      "source_id": "14303",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14303: replay max logit error 0.5 exceeds 0.05",
+      "sample_key": "train/QA/14303",
+      "seed": 1,
+      "source_id": "14303",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14303: replay max logit error 0.75 exceeds 0.05",
+      "sample_key": "train/QA/14303",
+      "seed": 2,
+      "source_id": "14303",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14304: replay max logit error 0.59375 exceeds 0.05",
+      "sample_key": "train/QA/14304",
+      "seed": 0,
+      "source_id": "14304",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14304: replay max logit error 0.59375 exceeds 0.05",
+      "sample_key": "train/QA/14304",
+      "seed": 1,
+      "source_id": "14304",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14304: replay max logit error 0.75 exceeds 0.05",
+      "sample_key": "train/QA/14304",
+      "seed": 2,
+      "source_id": "14304",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14305: replay max logit error 0.625 exceeds 0.05",
+      "sample_key": "train/QA/14305",
+      "seed": 0,
+      "source_id": "14305",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14305: replay max logit error 0.5 exceeds 0.05",
+      "sample_key": "train/QA/14305",
+      "seed": 1,
+      "source_id": "14305",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14305: replay max logit error 0.375 exceeds 0.05",
+      "sample_key": "train/QA/14305",
+      "seed": 2,
+      "source_id": "14305",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14306: replay max logit error 0.867188 exceeds 0.05",
+      "sample_key": "train/QA/14306",
+      "seed": 0,
+      "source_id": "14306",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14306: replay max logit error 0.875 exceeds 0.05",
+      "sample_key": "train/QA/14306",
+      "seed": 1,
+      "source_id": "14306",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14306: replay max logit error 0.867188 exceeds 0.05",
+      "sample_key": "train/QA/14306",
+      "seed": 2,
+      "source_id": "14306",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14307: replay max logit error 0.390625 exceeds 0.05",
+      "sample_key": "train/QA/14307",
+      "seed": 0,
+      "source_id": "14307",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14307: replay max logit error 0.4375 exceeds 0.05",
+      "sample_key": "train/QA/14307",
+      "seed": 1,
+      "source_id": "14307",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14307: replay max logit error 0.4375 exceeds 0.05",
+      "sample_key": "train/QA/14307",
+      "seed": 2,
+      "source_id": "14307",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14308: replay max logit error 0.5625 exceeds 0.05",
+      "sample_key": "train/QA/14308",
+      "seed": 0,
+      "source_id": "14308",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14308: replay max logit error 0.4375 exceeds 0.05",
+      "sample_key": "train/QA/14308",
+      "seed": 1,
+      "source_id": "14308",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14308: replay max logit error 0.375 exceeds 0.05",
+      "sample_key": "train/QA/14308",
+      "seed": 2,
+      "source_id": "14308",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14309: replay max logit error 3.5625 exceeds 0.05",
+      "sample_key": "train/QA/14309",
+      "seed": 0,
+      "source_id": "14309",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14309: replay max logit error 5.75 exceeds 0.05",
+      "sample_key": "train/QA/14309",
+      "seed": 1,
+      "source_id": "14309",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14309: replay max logit error 3.5625 exceeds 0.05",
+      "sample_key": "train/QA/14309",
+      "seed": 2,
+      "source_id": "14309",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14310: replay max logit error 0.796875 exceeds 0.05",
+      "sample_key": "train/QA/14310",
+      "seed": 0,
+      "source_id": "14310",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14310: replay max logit error 7.54688 exceeds 0.05",
+      "sample_key": "train/QA/14310",
+      "seed": 1,
+      "source_id": "14310",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14310: replay max logit error 0.578125 exceeds 0.05",
+      "sample_key": "train/QA/14310",
+      "seed": 2,
+      "source_id": "14310",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14311: replay max logit error 0.6875 exceeds 0.05",
+      "sample_key": "train/QA/14311",
+      "seed": 0,
+      "source_id": "14311",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14311: replay max logit error 2.35156 exceeds 0.05",
+      "sample_key": "train/QA/14311",
+      "seed": 1,
+      "source_id": "14311",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14311: replay max logit error 0.6875 exceeds 0.05",
+      "sample_key": "train/QA/14311",
+      "seed": 2,
+      "source_id": "14311",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14312: replay max logit error 0.6875 exceeds 0.05",
+      "sample_key": "train/QA/14312",
+      "seed": 0,
+      "source_id": "14312",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14312: replay max logit error 0.5625 exceeds 0.05",
+      "sample_key": "train/QA/14312",
+      "seed": 1,
+      "source_id": "14312",
+      "status": "rejected"
+    },
+    {
+      "reason": "train/QA/14312: replay max logit error 0.4375 exceeds 0.05",
+      "sample_key": "train/QA/14312",
+      "seed": 2,
+      "source_id": "14312",
+      "status": "rejected"
+    }
+  ],
+  "samplings": [
+    {
+      "max_new_tokens": 64,
+      "seed": 0,
+      "temperature": 0.7,
+      "top_k": 20,
+      "top_p": 0.9,
+      "trace_top_k": 20
+    },
+    {
+      "max_new_tokens": 64,
+      "seed": 1,
+      "temperature": 0.7,
+      "top_k": 20,
+      "top_p": 0.9,
+      "trace_top_k": 20
+    },
+    {
+      "max_new_tokens": 64,
+      "seed": 2,
+      "temperature": 0.7,
+      "top_k": 20,
+      "top_p": 0.9,
+      "trace_top_k": 20
+    }
+  ],
+  "schema": "constraint_control_run_v1",
+  "split": "train",
+  "summary": {
+    "completed": 0,
+    "planned": 60,
+    "rejected": 60
+  },
+  "task": "QA"
+}

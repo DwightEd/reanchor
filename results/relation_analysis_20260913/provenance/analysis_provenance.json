@@ -1,0 +1,24 @@
+{
+  "analyzed_at": "2026-09-13T01:46:22+08:00",
+  "script_sha256": "be12003379d6ff3e9011597c018c4720621b4683029e37067d901af8372cb4cd",
+  "execution": "research Python scripts/analyze_relation.py --output results/relation_analysis_20260913",
+  "scope": "CPU raw manifest/logit verification only; O4/O5 frozen files unchanged",
+  "population_at_document_update": {
+    "status": "running",
+    "pid": 20383,
+    "total": 17790,
+    "completed": 5514,
+    "failed": 0,
+    "remaining": 12276,
+    "current_response": "15272",
+    "condition": "history_01",
+    "last_response_seconds": 1.082405822351575,
+    "elapsed_seconds_this_process": 722.3661526236683,
+    "updated_unix": 1789235182.4415026,
+    "by_task": {
+      "QA": 5934,
+      "Summary": 5658,
+      "Data2txt": 6198
+    }
+  }
+}

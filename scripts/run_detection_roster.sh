@@ -5,7 +5,7 @@ shared=/share/home/tm902089733300000/a903202310/lys
 project="$shared/research/reanchor"
 python="$shared/conda_envs/research/bin/python"
 output="${1:?Usage: bash scripts/run_detection_roster.sh /absolute/fresh/output}"
-export PYTHONPATH="$project/src:$shared/research/graph"
+export PYTHONPATH="$project/src"
 export OMP_NUM_THREADS=4 OPENBLAS_NUM_THREADS=4 MKL_NUM_THREADS=4
 export HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false CUDA_VISIBLE_DEVICES=""
 cd "$project"

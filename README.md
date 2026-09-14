@@ -1,5 +1,19 @@
 # Reanchor：出错前在回看什么
 
+## 当前分工：原始测量与结构特征导出
+
+主检测器已收敛为 graph 的结构—熵组合。这里保留原生测量能力，新增无标签导出：
+
+```bash
+bash scripts/export_structural_features.sh sanity
+bash scripts/export_structural_features.sh full
+```
+
+从已有完整RAGTruth observer缓存导出989条QA回答，包含预测熵、margin、来源注意力、排除最近16token的远历史注意力和跨头分歧。没有标签读取和新GPUforward。导出后由graph训练/校准/冻结预测并评价。
+
+原本位于graph的8个活跃原生测量模块已迁入`src/route_graph/`，保持Python API，相关测试一同迁入；底层测量不再依赖graph旧检测代码。历史一次性方法见归档分支`archive/pre-structural-20260914`。下方机制工具仍可用于追溯与独立测量，不代表当前检测器已经证明因果关系。
+
+
 新会话先读 [项目进展与后续方向](docs/PROJECT_HANDOFF.md)：已完成工作、真实结果、
 尚未验证的假设、两个仓库的版本和下一轮实验顺序。
 

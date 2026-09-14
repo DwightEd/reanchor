@@ -1,3 +1,7 @@
+## 2026-09-14 S10重构
+
+graph当前主线为自然RAGTruth结构—熵组合。reanchor新增decoding.structural_export与scripts/export_structural_features.sh；活跃底层route_graph 8模块从graph迁入src/route_graph，相关7测试一起迁移；run_ragtruth_population的源码清单路径已修复。旧结果完整保留。当前实验状态请读取共享codex/research最新S10记录，不重启下方历史PID。
+
 ## A2-v1完整负结果与v2受控迭代（2026-09-13T15:46:56.948789+08:00）
 
 v1训练/自然预测/评价/48来源实际擦除均完成。固定graph差分source-balanced AUROC全词0.505927、首错后0.512073，base NLL分别0.535477/0.516545；36答/6源/4733词是反复使用的开发集，6答来源进source-only预训练，30source-unseen同样无改善。结果/实现/完整分母见 graph/docs/GROUNDED_GRAPH_V1_RESULTS_20260913.md。

@@ -4,8 +4,7 @@ repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 cd "$repo_root"
 base=/share/home/tm902089733300000/a903202310/lys
 python_bin=${PYTHON_BIN:-$base/conda_envs/research/bin/python}
-graph_root=${GRAPH_ROOT:-$repo_root/../graph}
-export PYTHONPATH="$repo_root/src:$graph_root${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONPATH="$repo_root/src${PYTHONPATH:+:$PYTHONPATH}"
 export HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-4}
 export OPENBLAS_NUM_THREADS=${OPENBLAS_NUM_THREADS:-4}

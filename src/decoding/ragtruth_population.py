@@ -36,8 +36,8 @@ def contract(args):
         Path(adoption_probe.__file__),
         ROOT / "scripts/run_ragtruth_population.sh",
         ROOT / "src/decoding/ragtruth_population_evaluate.py",
-        ROOT.parent / "graph/route_graph/metrics.py",
-        ROOT.parent / "graph/docs/RAGTRUTH_POPULATION_MECHANISM_PLAN_20260912.md",
+        ROOT / "src/route_graph/metrics.py",
+        ROOT / "docs/RAGTRUTH_POPULATION_MECHANISM_PLAN_20260912.md",
     ]
     settings = dict(
         schema="ragtruth-population-mechanism@1",

@@ -1,0 +1,13 @@
+{
+  "command": "python -m pytest experiments/lookback_beliefs/tests/test_routing_readout.py -q",
+  "passed": 29,
+  "skipped": 0,
+  "coverage": "numeric readout, full-vocabulary vs candidate ranking, later sites, foreign V target, paired controls, partial exports, identity/prefix checks, both CLI entrypoints, no model import",
+  "user_metadata_check": {
+    "cases": 172,
+    "intervention_index_rows": 92,
+    "raw_npz_available": false,
+    "missing_reported_without_invented_results": true
+  },
+  "not_run": "No real 8B forward or new natural RAGTruth experiment; original caches stay unchanged."
+}

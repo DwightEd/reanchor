@@ -222,8 +222,11 @@ def test_native_case_end_to_end_cache_and_finite_arms(tmp_path,monkeypatch):
     monkeypatch.setitem(sys.modules,'transformers',fake)
     cases=tmp_path/'cases.json';cases.write_text(json.dumps([c]))
     out=tmp_path/'out'
+    # This legacy fixture has no KV-capable Model.forward. New KV tests use a
+    # separate real cached-attention model in test_replay.py.
     args=parser().parse_args(['--samples',str(s),'--states',str(st),'--cases',str(cases),
-                             '--output',str(out),'--layers','1','2','--device','cpu','--context','4'])
+                             '--output',str(out),'--layers','1','2','--device','cpu','--context','4',
+                             '--execution','full'])
     before={k:v.detach().clone() for k,v in m.state_dict().items()}
     run(args)
     folder=out/'fixture'

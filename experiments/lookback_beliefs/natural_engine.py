@@ -1,9 +1,4 @@
-"""Finite message cuts and carrier restoration on the ORIGINAL fixed token stream.
-
-Cut is V-path removal: subtract W_O sum_{j in group} A[q,j] V[j] without
-renormalizing attention. QK remains native in that layer; downstream layers adapt.
-This is not source deletion, a complete information erasure, JVP, or truth scoring.
-"""
+"""Finite V/WO message cuts; replay schedule is explicit, not a changed tolerance."""
 import inspect
 
 import numpy as np
@@ -53,15 +48,26 @@ def _attention_rows(module, storage, args, kwargs, config, queries):
     return a, v[0], rel
 
 
-@torch.inference_mode()
 def forward(model, item, layers, *, cut_keys=(), cut_start=None, patch=None, strength=1.):
-    """One teacher-forced replay, collecting small carrier states and score windows.
+    """The CLI explicitly selects incremental_kv; legacy direct callers keep full.
 
-    patch=(layer, tensor[1,1,D], optional_site) defaults to item['carrier'].
-    A control site precedes the target but lies inside the perturbed region; it is not
-    assumed to be semantically irrelevant or exactly distance matched.
-    No old KV cache is reused across intervention worlds. Hooks always removed.
+    No silent fallback between schedules. Baseline, cuts and all state patches
+    MUST use the same item['execution'] and a new KV cache in each world.
     """
+    execution = item.get('execution', 'full')
+    if execution == 'incremental_kv':
+        from .natural_replay import forward_incremental
+        return forward_incremental(model, item, layers, cut_keys=cut_keys,
+                                   cut_start=cut_start, patch=patch, strength=strength)
+    if execution != 'full':
+        raise ValueError('unknown replay execution: ' + str(execution))
+    return _forward_full(model, item, layers, cut_keys=cut_keys,
+                         cut_start=cut_start, patch=patch, strength=strength)
+
+
+@torch.inference_mode()
+def _forward_full(model, item, layers, *, cut_keys=(), cut_start=None, patch=None, strength=1.):
+    """Legacy full-prefix reference. Not numerically identical to KV decoding."""
     cfg = model.config
     if (cfg.model_type != 'llama' or getattr(cfg, 'pretraining_tp', 1) != 1
             or getattr(cfg, 'sliding_window', None) or not 0 <= strength <= 1):
@@ -110,7 +116,6 @@ def forward(model, item, layers, *, cut_keys=(), cut_start=None, patch=None, str
                         delta, code = projected_cut(a, v, list(cut_keys), module.o_proj.weight)
                         changed[0, qr] -= strength*delta.to(changed)
                         replay_errors.append(err)
-                        # Small exact pre-WO per-head codes at the carrier and first fact query.
                         first = item['prompt_length']+min(item['target_steps'])-1
                         for j, query in enumerate(qr):
                             if query in (carrier, first):
@@ -139,7 +144,7 @@ def forward(model, item, layers, *, cut_keys=(), cut_start=None, patch=None, str
         z = torch.cat([model.lm_head(h[q[i:i+16]]).float().cpu()
                        for i in range(0, len(q), 16)])
         return dict(logits=z, states=states, control_states=control_states, replay_error=max(replay_errors, default=0.),
-                    removed_codes=removed_codes)
+                    removed_codes=removed_codes, execution='full')
     finally:
         for handle in handles:
             handle.remove()
@@ -162,8 +167,6 @@ def score(logits, saved_ids, alternatives, baseline=None):
 
 
 def cache_carrier(trace, layer, carrier, model_layers):
-    # HF Llama output_hidden_states stores embeddings, pre-next-block states,
-    # and final RMSNorm output. hidden[L] CANNOT patch block L-1.
     if not 0 <= layer < model_layers-1 or trace['hidden'].shape[0] != model_layers+1:
         raise ValueError('cached block index is invalid or refers to normalized final hidden')
     return torch.from_numpy(trace['hidden'][layer+1, carrier].copy())[None, None]

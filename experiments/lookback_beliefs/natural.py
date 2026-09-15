@@ -8,6 +8,7 @@ import csv
 import gc
 import html
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -16,6 +17,7 @@ from .natural_data import (DEFAULT_SAMPLES, cache_measurements, jsonl,
                            load_trace, prepare_case, resolve_samples)
 
 
+# Output schema is unchanged; config.execution distinguishes numerical protocols.
 VERSION = 'natural-lookback-audit-v1'
 
 
@@ -87,31 +89,43 @@ def inspect_case(item, trace, directory):
                   cached_hidden_convention='hidden[0]=embedding; hidden[l+1]=block l for l<L-1; hidden[L]=final normalized',
                   geometry='cosine diagnostic, NOT a pointer decoder or causal contribution')
     write_json(directory/'case.json', detail)
-    local_report(directory, detail, [])
+    local_report(directory,detail,[])
     return detail
 
 
 def mechanism_case(model, tokenizer, item, trace, directory, args):
     import torch
     from .natural_engine import cache_carrier, forward, score
+    from .replay_checks import compare_replay
     layers = args.layers
-    base = forward(model, item, layers)
+    print(f'  baseline: {item["execution"]}; exact saved token IDs', flush=True)
+    check_item = dict(item)
+    if item['execution'] == 'incremental_kv':
+        check_item['cached_attention'] = trace['attention']
+    base = forward(model, check_item, layers)
     z0 = base['logits']
     steps, p = item['steps'], item['prompt_length']
     originals = np.asarray(item['original_ids'])[p+steps]
-    # A frozen strongest alternative is diagnostic only, NEVER named the correct answer.
     top = z0.topk(2, -1).indices.numpy()
     alternatives = np.where(top[:,0] == originals, top[:,1], top[:,0])
-    cached_top = trace['top_ids'][steps]
-    error = float(np.max(np.abs(z0.gather(1,torch.as_tensor(cached_top).long()).numpy()-trace['top_logits'][steps])))
-    lse_error = float(np.max(np.abs(z0.logsumexp(-1).numpy()-trace['log_normalizer'][steps])))
-    checks = dict(saved_top_logit_error=error, saved_log_normalizer_error=lse_error,
-                  replay_atol=args.replay_atol, layers=layers, no_answer_injection=True,
-                  original_tokens_preserved=True, history_is_teacher_forced=True)
+    diagnostics, token_checks = compare_replay(base, trace, item)
+    checks = dict(**diagnostics, replay_atol=args.replay_atol,
+                  replay_attention_atol=args.replay_attention_atol, layers=layers,
+                  no_answer_injection=True, original_tokens_preserved=True,
+                  history_is_teacher_forced=True, torch_version=torch.__version__,
+                  cuda_version=torch.version.cuda,
+                  transformers_version=getattr(sys.modules.get('transformers'), '__version__', None),
+                  model_dtype=str(next(model.parameters()).dtype),
+                  attention_implementation=getattr(model.config, '_attn_implementation', None))
+    save_csv(directory/'replay_tokens.csv', token_checks)
     write_json(directory/'checks.json', checks)
-    if max(error,lse_error) > args.replay_atol:
-        raise ValueError(f'{item["case"]["id"]}: replay differs from original cache by {max(error,lse_error):.6g}; '
-                         'checks.json saved. Verify model/dtype before interpreting interventions.')
+    if (not diagnostics['finite'] or max(diagnostics['saved_top_logit_error'],
+            diagnostics['saved_log_normalizer_error']) > args.replay_atol
+            or (diagnostics['saved_attention_error'] is not None
+                and diagnostics['saved_attention_error'] > args.replay_attention_atol)):
+        raise ValueError(f'{item["case"]["id"]}: {item["execution"]} replay failed original-cache checks; '
+                         'see checks.json and replay_tokens.csv. No intervention executed. '
+                         'Verify weights/dtype/PyTorch/Transformers; do not raise tolerances to bypass this check.')
     scores, effects = {}, []
     def save_arm(name, result, layer=None):
         measured = score(result['logits'], originals, alternatives, z0)
@@ -134,7 +148,6 @@ def mechanism_case(model, tokenizer, item, trace, directory, args):
         save_csv(directory/'effects.csv', effects)
     save_arm('baseline', base)
     g = item['groups']; qstart = item['source_query_start']
-    # Per-head V codes are removed without softmax redistribution. Source facts stay in the input.
     all_source = np.union1d(g['constraint'], g['payload'])
     sham = forward(model,item,layers,cut_keys=all_source,cut_start=qstart,strength=0.)
     checks['zero_cut_max_logit_error'] = float((sham['logits']-z0).abs().max())
@@ -146,6 +159,7 @@ def mechanism_case(model, tokenizer, item, trace, directory, args):
                        ('control_constraint',g['control_constraint']), ('control_payload',g['control_payload']),
                        ('constraint_and_payload',all_source),
                        ('history_seed',g['history_seed']), ('history_control',g['history_control'])):
+        print(f'  cut {name}', flush=True)
         start = item['history_query_start'] if name.startswith('history') else qstart
         result = forward(model,item,layers,cut_keys=keys,cut_start=start)
         save_arm('cut_'+name,result)
@@ -166,7 +180,6 @@ def mechanism_case(model, tokenizer, item, trace, directory, args):
         saved = cache_carrier(trace,layer,item['carrier'],len(model.model.layers))
         cached_sham = forward(model,item,layers,patch=(layer,saved))
         cache_error = float((cached_sham['logits']-z0).abs().max())
-        # Quantized old states used only after an actual same-world replay check.
         use_cache = cache_error <= args.cache_atol
         state = saved if use_cache else base['states'][layer]
         checks['carrier_cache'][layer] = dict(max_logit_error=cache_error, reused=use_cache,
@@ -175,7 +188,6 @@ def mechanism_case(model, tokenizer, item, trace, directory, args):
         del live_sham,cached_sham
         rescued = forward(model,item,layers,cut_keys=g['constraint'],cut_start=qstart,patch=(layer,state))
         save_arm(f'restore_carrier_l{layer}',rescued,layer)
-        # Reverse swap: introduce the constraint-cut carrier into the intact run.
         reverse = forward(model,item,layers,patch=(layer,cut_constraint['states'][layer]))
         save_arm(f'cut_carrier_into_base_l{layer}',reverse,layer)
         control = forward(model,item,layers,cut_keys=g['constraint'],cut_start=qstart,
@@ -188,10 +200,10 @@ def mechanism_case(model, tokenizer, item, trace, directory, args):
     c,v,cv = (scores['cut_'+k]['saved_logp'] for k in ('constraint','payload','constraint_and_payload'))
     interaction = b-c-v+cv
     np.savez_compressed(directory/'interaction.npz', steps=steps, finite_nonadditivity_nats=interaction)
-    # Only interpret effects larger than the observed numerical baseline/patch discrepancies.
     floor = max(checks['zero_cut_max_logit_error'], *(x['max_logit_error'] if x['reused'] else x['live_sham_error']
                                                      for x in checks['carrier_cache'].values()))*2
     checks['diagnostic_numeric_floor_logp'] = floor
+    checks['intervention_complete'] = True
     comparisons = []
     focus = np.isin(steps,item['target_steps'])
     cdelta = scores['cut_constraint']['saved_logp']-b
@@ -224,8 +236,8 @@ def mechanism_case(model, tokenizer, item, trace, directory, args):
 def run(args):
     if (args.context < 0 or not args.layers or len(set(args.layers)) != len(args.layers)
             or any(l < 0 for l in args.layers)
-            or not np.isfinite([args.replay_atol,args.cache_atol]).all()
-            or min(args.replay_atol,args.cache_atol) < 0):
+            or not np.isfinite([args.replay_atol,args.cache_atol,args.replay_attention_atol]).all()
+            or min(args.replay_atol,args.cache_atol,args.replay_attention_atol) < 0):
         raise ValueError('invalid context, layers or numeric tolerance')
     cases = json.loads(Path(args.cases).read_text(encoding='utf8'))
     if len({c['id'] for c in cases}) != len(cases):
@@ -250,15 +262,15 @@ def run(args):
     config = dict(version=VERSION, input_stamps=stamps, device=args.device, samples=str(samples.resolve()), states=str(states.resolve()),
                   model=settings['model'], dtype=settings['dtype'], cases=cases, layers=args.layers,
                   context=args.context, replay_atol=args.replay_atol, cache_atol=args.cache_atol,
+                  execution=args.execution, replay_attention_atol=args.replay_attention_atol,
                   inputs='regenerated answers from RAGTruth source passages; manually selected diagnosis',
                   trained_parameters=0, use_gold_hallucination_labels=False)
     output = Path(args.output)
     if output.exists():
         if not args.resume or not (output/'config.json').is_file() or json.loads((output/'config.json').read_text())!=config:
-            raise ValueError('use a new output directory or --resume with the same case/configuration')
+            raise ValueError('use a new output directory or --resume with the same case/configuration; v1 full and v2 KV results cannot be mixed')
     else:
         output.mkdir(parents=True);write_json(output/'config.json',config)
-    # No changes to tokenizer/template: it is used to verify and display original IDs only.
     from transformers import AutoTokenizer
     tokenizer = AutoTokenizer.from_pretrained(settings['model'],local_files_only=True)
     model = None
@@ -272,6 +284,7 @@ def run(args):
             print(f'{case["id"]}: source={case["source_id"]}, seed={case["seed"]}',flush=True)
             row,trace=load_trace(samples,states,case['source_id'],case['seed'])
             item=prepare_case(case,row,trace,tokenizer,args.context)
+            item['execution'] = args.execution
             detail=inspect_case(item,trace,directory)
             write_json(directory/'inspect_complete.json',dict(complete=True,new_model_forwards=0))
             if args.phase in ('all','mechanism'):
@@ -282,7 +295,7 @@ def run(args):
                         torch_dtype=getattr(torch,settings['dtype']),attn_implementation='eager').to(args.device).eval().requires_grad_(False)
                 effects=mechanism_case(model,tokenizer,item,trace,directory,args)
                 local_report(directory,detail,effects)
-                write_json(marker,dict(complete=True,trained_parameters=0,method='finite message cuts + carrier swaps'))
+                write_json(marker,dict(complete=True,trained_parameters=0,method='finite message cuts + carrier swaps', execution=args.execution))
             reports.append(dict(case=case['id'],trace=row['trace'],status=case['status']))
             del trace,item;gc.collect()
         write_json(output/'summary.json',dict(cases=reports,phase=args.phase,independent_sources=len({c['source_id'] for c in cases}),
@@ -300,19 +313,20 @@ def parser():
     p.add_argument('--states',default=None,help='default: outputs/states_<sample directory name>')
     p.add_argument('--cases',default=str(Path(__file__).with_name('natural_cases.json')))
     p.add_argument('--select',nargs='+')
-    p.add_argument('--output',default='outputs/lookback_beliefs_natural_v1')
+    p.add_argument('--output',default='outputs/lookback_beliefs_natural_v2')
     p.add_argument('--phase',choices=('inspect','mechanism','all'),default='all')
     p.add_argument('--layers',type=int,nargs='+',default=[15,19,22,26],help='predeclared exploratory layers, not universally valid pointer layers')
+    p.add_argument('--execution',choices=('incremental_kv','full'),default='incremental_kv',help='match original generation schedule; full is legacy diagnostic only')
     p.add_argument('--context',type=int,default=8)
-    p.add_argument('--replay-atol',type=float,default=.1,help='original saved top logits/log-normalizer vs same-model prefill')
+    p.add_argument('--replay-atol',type=float,default=.1,help='unchanged absolute tolerance for original top logits/log-normalizer')
+    p.add_argument('--replay-attention-atol',type=float,default=1e-4,help='old float16 attention vs identically quantized KV replay')
     p.add_argument('--cache-atol',type=float,default=.02,help='max same-world patch logit error to reuse quantized carrier')
     p.add_argument('--device',default='cuda:0');p.add_argument('--resume',action='store_true')
     return p
 
 
 def main():
-    args=parser().parse_args()
-    run(args)
+    run(parser().parse_args())
 
 
 if __name__=='__main__':main()

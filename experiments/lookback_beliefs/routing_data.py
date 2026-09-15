@@ -163,7 +163,7 @@ def natural(tokenizer,samples,states=None,select=None):
             if begin<0 or response.count(spec['target'])!=1:raise ValueError('target missing/ambiguous in ORIGINAL response')
             offsets=np.asarray(encoded['offset_mapping']);queries=[]
             for word in spec['sites']:
-                start=full.index(spec['target'])+spec['target'].index(word);end=start+len(word)
+                start=len(prefix)+begin+spec['target'].index(word);end=start+len(word)
                 hit=np.flatnonzero((offsets[:,0]<end)&(offsets[:,1]>start)&(offsets[:,1]>offsets[:,0]))
                 queries.append(int(hit[0]-1))
             steps=np.asarray(queries)-p+1

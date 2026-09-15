@@ -1,10 +1,10 @@
 {
   "command": "python -m pytest experiments/lookback_beliefs/tests -q",
-  "passed": 55,
+  "passed": 56,
   "skipped": 2,
-  "new_tests_passed": 37,
+  "new_tests_passed": 38,
   "original_lookback_passed": 18,
   "skips": "Optional Hugging Face tiny-Llama tests; transformers unavailable and network installation failed",
-  "actual_validation": "CPU PyTorch FP32/BF16 GQA/RoPE/KV, head-local interventions, subspaces, channel information, synthetic end-to-end",
+  "actual_validation": "CPU PyTorch FP32/BF16 GQA/RoPE/KV, head-local interventions, subspaces, channel information, synthetic end-to-end; original-response alignment when source repeats the target phrase",
   "not_run": "User 8B weights and original natural caches are unavailable locally; no efficacy or mechanism claim"
 }

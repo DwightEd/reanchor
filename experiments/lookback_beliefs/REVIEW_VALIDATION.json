@@ -1,0 +1,16 @@
+{
+  "base_commit": "350247a9e5c1f2c7f5da89a262e96117c209f791",
+  "scope": "CPU effect algebra and frozen-output schema; independent of natural GPU runs",
+  "tests": [
+    "tests/test_mechanism_review.py",
+    "tests/test_lookback.py"
+  ],
+  "passed": 37,
+  "new_review_tests": 19,
+  "existing_lookback_tests": 18,
+  "skipped": 1,
+  "skip_reason": "transformers is not installed; optional existing tiny-Llama test skipped",
+  "natural_gpu_run": false,
+  "changed_existing_scoring": false,
+  "annotations_used": false
+}

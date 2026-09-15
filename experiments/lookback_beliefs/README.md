@@ -144,3 +144,22 @@ python -m pytest experiments/lookback_beliefs/tests -q
 
 只复用所述实验思想与公式，未复制作者完整数据和脚本；简化模板、自制 SVD 基、单样本
 PyTorch hooks、结果保存是本实现的适配。作者的硬编码token位置、NDIF和隐藏依赖没有照搬。
+
+
+## 7. 已保存的烹饪／穿衣自然案例
+
+新增独立入口，不改上述受控故事实验：
+
+```bash
+python -m experiments.lookback_beliefs.natural \
+  --samples outputs/samples_20260911_145421_235 \
+  --states outputs/states_samples_20260911_145421_235 \
+  --output outputs/lookback_beliefs_natural_v1 --device cuda:0 --resume
+```
+
+复用 `14375/seed0` 与 `14315/seed2,3` 的原 token、attention 和 hidden 缓存。
+只读分析用 `--phase inspect`；完整流程比较限定条件、描述载荷和历史端点的实际
+WV/WO 消息切断，并在目标之前的承载位置进行双向恢复／替换。
+这些是 RAGTruth 材料上重新采样的回答，不借用原数据集 token 标签，不报告 AUROC。
+膝长／踝长有原文支持，作为范围省略对照，不能预先标成错误。
+细节、数据边界及结果读法见 [NATURAL_CASES.md](NATURAL_CASES.md)。

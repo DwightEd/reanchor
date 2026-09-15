@@ -1,3 +1,23 @@
+# 当前主线：约束编码与 QK 匹配的分离审计
+
+**运行入口已经改为 `routing_audit`，不是旧 `natural` 的来源消息删除。**
+
+```bash
+python -m experiments.lookback_beliefs.routing_audit --resume
+python -m pytest experiments/lookback_beliefs/tests -q
+```
+
+默认复用原烹饪/穿衣样本并生成独立的reference/heldout关系标尺。检验约束可读性、
+Q/K匹配子空间、正确方向和最终语义选择；只改变一个物理head，包含Q/K/QK/V、
+同绑定、随机方向及上游写入对照。无幻觉标签训练，但语义探针使用构造事实的监督。
+**未验证自然检测有效性，不预设错误样本已有正确指针。**
+
+[完整方法与一键命令](ROUTING_AUDIT.md) · [逐篇文献依据](RESEARCH_BASIS.md)。
+删除的旧文件见 `REFACTOR_MANIFEST.json`，均可由 `6184c25` 恢复；旧结果和缓存不动。
+下方保留原论文的独立scan/DCM基准，而不是将其冒充新审计或无监督检测。
+
+---
+
 # Lookbacks to Track Beliefs：指针、载荷与绑定干预
 
 **这是论文核心机制实验的独立 PyTorch 实现，不是 RAGTruth 幻觉检测器，也不是官方代码的完整复现。**
@@ -144,22 +164,3 @@ python -m pytest experiments/lookback_beliefs/tests -q
 
 只复用所述实验思想与公式，未复制作者完整数据和脚本；简化模板、自制 SVD 基、单样本
 PyTorch hooks、结果保存是本实现的适配。作者的硬编码token位置、NDIF和隐藏依赖没有照搬。
-
-
-## 7. 已保存的烹饪／穿衣自然案例
-
-新增独立入口，不改上述受控故事实验：
-
-```bash
-python -m experiments.lookback_beliefs.natural \
-  --samples outputs/samples_20260911_145421_235 \
-  --states outputs/states_samples_20260911_145421_235 \
-  --output outputs/lookback_beliefs_natural_v1 --device cuda:0 --resume
-```
-
-复用 `14375/seed0` 与 `14315/seed2,3` 的原 token、attention 和 hidden 缓存。
-只读分析用 `--phase inspect`；完整流程比较限定条件、描述载荷和历史端点的实际
-WV/WO 消息切断，并在目标之前的承载位置进行双向恢复／替换。
-这些是 RAGTruth 材料上重新采样的回答，不借用原数据集 token 标签，不报告 AUROC。
-膝长／踝长有原文支持，作为范围省略对照，不能预先标成错误。
-细节、数据边界及结果读法见 [NATURAL_CASES.md](NATURAL_CASES.md)。

@@ -1,0 +1,12 @@
+{
+  "base_commit": "6eece0406b1efe87548ebb686cbc8e730e65bea8",
+  "tests": {
+    "passed": 18,
+    "skipped": 1,
+    "skip_reason": "transformers not installed; optional tiny-Llama integration test"
+  },
+  "python": "3.13.5",
+  "torch": "2.10.0+cpu",
+  "natural_or_large_model_runs": 0,
+  "scope": "independent controlled mechanism experiments; no efficacy claim"
+}

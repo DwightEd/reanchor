@@ -1,0 +1,31 @@
+{
+  "previous_commit": "6184c25e1d1767c3867a75198a7270b01b38278f",
+  "deleted": [
+    "natural.py",
+    "natural_engine.py",
+    "natural_replay.py",
+    "natural_data.py",
+    "natural_cases.json",
+    "replay_checks.py",
+    "mechanism_review.py",
+    "tests/test_natural.py",
+    "tests/test_replay.py",
+    "tests/test_mechanism_review.py",
+    "NATURAL_CASES.md",
+    "NATURAL_VALIDATION.json",
+    "MECHANISM_REVIEW.md",
+    "REVIEW_VALIDATION.json",
+    "REPLAY_FIX.md",
+    "REPLAY_VALIDATION.json"
+  ],
+  "reason": "Supersede natural source-V deletions and carrier sign review with separated Q/K/V constraint audit",
+  "preserved": [
+    "run.py",
+    "data.py",
+    "patching.py",
+    "subspace.py",
+    "tests/test_lookback.py",
+    "all outputs/results/original caches"
+  ],
+  "new_entry": "experiments.lookback_beliefs.routing_audit"
+}
